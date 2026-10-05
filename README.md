@@ -406,10 +406,14 @@ otras ramas y pull requests -> Preview Deployment en Vercel
 Antes del primer `push`, crear un repositorio privado en GitHub, añadirlo como `origin` y conectarlo al proyecto Vercel existente `sslconf`:
 
 ```bash
-git remote add origin https://github.com/termithe/sslconf.git
+git remote add origin git@github.com:termithe/sslconf.git
 git push -u origin main
 vercel git connect https://github.com/termithe/sslconf.git
 ```
+
+El repositorio local usa SSH para publicar cambios en GitHub. La integración de
+Vercel se conecta al mismo repositorio mediante la aplicación de GitHub de
+Vercel; no reutiliza ni expone la clave SSH local.
 
 `.gitignore` excluye secretos y artefactos locales: `.env.local`, `.vercel/`, `node_modules/`, `.next*` y `.snapshots/`. El fichero `.env.example` se mantiene en Git como plantilla sin valores reales. Una vez conectado, cada `git push origin main` crea el despliegue de producción; para rollback se puede promover un deployment previo en Vercel o revertir el commit y volver a hacer push.
 
