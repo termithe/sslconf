@@ -382,17 +382,15 @@ Despliegue recomendado para `sslconf.com`.
 
 ### Estado de despliegue
 
-El proyecto Vercel `sslconf` ya está creado en el equipo `vcancela-2529s-projects` y la versión corregida del Server Test está publicada en:
+El proyecto Vercel `sslconf` está creado en el equipo `vcancela-2529s-projects` y está conectado al repositorio privado `termithe/sslconf` desde el 2026-10-05. La rama `main` es la fuente de los despliegues de producción.
+
+La URL de producción es:
 
 ```text
 https://sslconf.vercel.app
 ```
 
-Deployment de producción verificado el 2026-09-21:
-
-```text
-dpl_CaBnV2ASi6JxEVcHJ3Fm7d6XNZYn
-```
+El primer despliegue basado en Git se dispara con el commit que registra esta integración. Las verificaciones de producción se deben ejecutar tras quedar en estado `Ready`.
 
 ### Flujo Git y Vercel
 
@@ -403,7 +401,7 @@ main -> Production en Vercel
 otras ramas y pull requests -> Preview Deployment en Vercel
 ```
 
-Antes del primer `push`, crear un repositorio privado en GitHub, añadirlo como `origin` y conectarlo al proyecto Vercel existente `sslconf`:
+El repositorio privado ya está creado y conectado. Para clonar o reconstruir el flujo en otro equipo:
 
 ```bash
 git remote add origin git@github.com:termithe/sslconf.git
