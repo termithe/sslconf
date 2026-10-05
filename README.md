@@ -390,7 +390,7 @@ La URL de producción es:
 https://sslconf.vercel.app
 ```
 
-El primer despliegue basado en Git se dispara con el commit que registra esta integración. Las verificaciones de producción se deben ejecutar tras quedar en estado `Ready`.
+El primer despliegue basado en Git quedó verificado el 2026-10-05: el alias estable, las rutas `/`, `/scan`, `/check` y `GET /api/health` respondieron correctamente. Cada nuevo `push` a `main` crea una nueva producción.
 
 ### Flujo Git y Vercel
 
