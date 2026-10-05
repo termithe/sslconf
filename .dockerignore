@@ -1,0 +1,9 @@
+node_modules
+.next
+.snapshots
+.next.dev-corrupt-*
+npm-debug.log*
+README.md
+.git
+.gitignore
+tsconfig.tsbuildinfo

@@ -1,0 +1,86 @@
+import { ArrowRight, FileKey2, Gauge, LockKeyhole, Route, ShieldCheck, type LucideIcon } from "lucide-react";
+import { copy, type Locale } from "@/lib/i18n";
+
+const checkIcons = [ShieldCheck, Route, LockKeyhole] as const;
+const toolIcons = [Gauge, FileKey2] as const;
+
+export function HomeContent({ locale }: { locale: Locale }) {
+  const text = copy[locale];
+  const prefix = locale === "es" ? "/es" : "";
+  const toolLinks = [`${prefix}/scan`, `${prefix}/check`];
+
+  return (
+    <main className="px-4 py-12 sm:py-16">
+      <div className="mx-auto max-w-6xl">
+        <section className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
+          <div>
+            <div className="inline-flex items-center gap-2 border-l-2 border-signal pl-3 text-xs font-black uppercase tracking-[0.18em] text-signal">
+              <span className="h-2 w-2 bg-secure" />
+              SSL/TLS Diagnostics
+            </div>
+            <h1 className="mt-5 max-w-4xl font-serif text-[2.6rem] font-semibold leading-[1.04] text-night sm:text-6xl">
+              {text.homeTitle}
+            </h1>
+            <p className="mt-5 max-w-2xl text-lg font-semibold leading-relaxed text-ink/70">
+              {text.homeDescription}
+            </p>
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+              <a href={`${prefix}/scan`} className="inline-flex h-13 items-center justify-center gap-2 bg-signal px-5 py-4 font-black text-white transition hover:bg-night">
+                {text.homePrimaryAction}
+                <ArrowRight size={18} />
+              </a>
+              <a href={`${prefix}/check`} className="inline-flex h-13 items-center justify-center gap-2 border border-line bg-white px-5 py-4 font-black text-night transition hover:border-signal hover:text-signal">
+                {text.homeSecondaryAction}
+                <ArrowRight size={18} />
+              </a>
+            </div>
+          </div>
+
+          <aside className="report-aside">
+            <h2 className="font-black text-night">{text.checksTitle}</h2>
+            <div className="mt-5 space-y-4">
+              {text.checks.map(([title, description], index) => {
+                const Icon = checkIcons[index] as LucideIcon;
+                return (
+                  <div key={title} className="flex gap-3 border-t border-line pt-4 first:border-0 first:pt-0">
+                    <span className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center bg-mint text-signal">
+                      <Icon size={18} />
+                    </span>
+                    <div>
+                      <h3 className="font-black text-night">{title}</h3>
+                      <p className="mt-1 text-sm font-semibold leading-6 text-ink/65">{description}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </aside>
+        </section>
+
+        <section className="mt-14 border-t border-night pt-5">
+          <h2 className="text-sm font-black uppercase tracking-[0.16em] text-ink/55">{text.homeToolsTitle}</h2>
+          <div className="mt-4 divide-y divide-line border-y border-line">
+            {text.homeTools.map(([title, description, action], index) => {
+              const Icon = toolIcons[index] as LucideIcon;
+              return (
+                <a key={title} href={toolLinks[index]} className="group grid gap-5 px-1 py-6 transition hover:bg-white/65 md:grid-cols-[48px_minmax(0,1fr)_auto] md:items-center md:px-5">
+                  <span className={`grid h-12 w-12 shrink-0 place-items-center ${index === 0 ? "bg-secure/10 text-secure" : "bg-mint text-signal"}`}>
+                    <Icon size={22} />
+                  </span>
+                  <div>
+                    <h3 className="text-xl font-black text-night">{title}</h3>
+                    <p className="mt-2 max-w-2xl text-sm font-semibold leading-7 text-ink/65">{description}</p>
+                  </div>
+                  <span className="flex items-center gap-3 text-xs font-black uppercase tracking-[0.14em] text-signal">
+                    {action}
+                    <ArrowRight className="text-ink/35 transition group-hover:translate-x-1 group-hover:text-signal" size={19} />
+                  </span>
+                </a>
+              );
+            })}
+          </div>
+        </section>
+      </div>
+    </main>
+  );
+}
