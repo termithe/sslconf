@@ -1,6 +1,6 @@
 "use client";
 
-import { Braces, FileSearch, ShieldCheck } from "lucide-react";
+import { Braces, FileSearch, ShieldCheck, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { ErrorState } from "@/components/ErrorState";
 import { LoadingState } from "@/components/LoadingState";
@@ -42,19 +42,38 @@ export function CertificateDecoderClient({ locale }: { locale: Locale }) {
     }
   }
 
+  function clearCertificate() {
+    setCertificate("");
+    setError("");
+    setResult(null);
+  }
+
   return (
     <div>
       <form onSubmit={onSubmit} className="tool-form p-5 sm:p-6">
-        <label className="block">
-          <span className="mb-2 block text-xs font-black uppercase tracking-[0.2em] text-ink/55">{text.decoderInputLabel}</span>
-          <textarea
-            value={certificate}
-            onChange={(event) => setCertificate(event.target.value)}
-            placeholder={text.decoderPlaceholder}
-            spellCheck={false}
-            className="min-h-56 w-full resize-y border border-line bg-white px-4 py-3 font-mono text-sm leading-6 text-night outline-none transition focus:border-signal focus:ring-4 focus:ring-signal/15"
-          />
-        </label>
+        <div>
+          <label htmlFor="certificate-input" className="mb-2 block text-xs font-black uppercase tracking-[0.2em] text-ink/55">{text.decoderInputLabel}</label>
+          <div className="relative">
+            <textarea
+              id="certificate-input"
+              value={certificate}
+              onChange={(event) => setCertificate(event.target.value)}
+              placeholder={text.decoderPlaceholder}
+              spellCheck={false}
+              className="min-h-56 w-full resize-y border border-line bg-white px-4 pb-3 pr-14 pt-3 font-mono text-sm leading-6 text-night outline-none transition focus:border-signal focus:ring-4 focus:ring-signal/15"
+            />
+            <button
+              type="button"
+              onClick={clearCertificate}
+              disabled={!certificate && !error && !result}
+              title={text.decoderClear}
+              aria-label={text.decoderClear}
+              className="absolute right-3 top-3 grid h-9 w-9 place-items-center border border-line bg-white text-ink/55 transition hover:border-fault hover:text-fault disabled:cursor-not-allowed disabled:opacity-35"
+            >
+              <Trash2 size={17} />
+            </button>
+          </div>
+        </div>
         <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="max-w-2xl text-sm font-semibold leading-6 text-ink/60">{text.decoderPrivacy}</p>
           <button disabled={loading} className="inline-flex h-12 shrink-0 items-center justify-center gap-2 bg-night px-5 font-black text-white transition hover:bg-signal disabled:cursor-not-allowed disabled:opacity-60">

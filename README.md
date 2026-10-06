@@ -233,6 +233,8 @@ Payload:
 
 El body máximo es `CERTIFICATE_DECODE_BODY_MAX_BYTES=70000` bytes. El endpoint aplica `RATE_LIMIT_DECODE_MAX=30` peticiones por cliente y ventana, no registra el contenido del certificado y responde con `Cache-Control: no-store`.
 
+El área PEM incluye un botón de papelera con tooltip para limpiar el certificado, el error y el resultado anterior antes de realizar otra prueba.
+
 ## Herramienta 2: CA Bundle Generator
 
 El CA Bundle Generator no copia ciegamente la cadena instalada en el servidor. El flujo actual es:
