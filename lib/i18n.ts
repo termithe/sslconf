@@ -225,7 +225,7 @@ export const copy = {
     ],
     checksTitle: "Qué analiza",
     checks: [
-      ["Postura TLS", "Puntúa protocolos, ciphers y el certificado expuesto."],
+      ["Seguridad TLS", "Puntúa protocolos, ciphers y el certificado expuesto."],
       ["Señales de transporte", "Comprueba redirecciones, HSTS, HTTP/2, OCSP stapling y CAA."],
       ["Fixes accionables", "Explica la nota y ordena las mejoras de configuración."]
     ],

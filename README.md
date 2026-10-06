@@ -93,6 +93,8 @@ Los contenedores de formulario usan un fondo verde muy suave para diferenciar el
 
 Los nombres visibles se mantienen unificados en cabecera, botones de home, tarjetas, títulos, estados de carga y metadatos. Se evita mezclar `Server Test`, `Test de servidor` y `Análisis SSL/TLS`, así como `Chain Builder`, `Generador de cadena` y `Generar CA bundle` para la misma utilidad.
 
+La tarjeta informativa de la portada usa `Seguridad TLS` en español, una formulación más directa que `Postura TLS` para resumir protocolos, ciphers y certificado expuesto.
+
 En `SSL/TLS Server Test` / `Análisis SSL/TLS`, cuando hay resultados, el informe se renderiza a ancho completo debajo del bloque introductorio. Esto evita que métricas, protocolos, certificado y findings queden encerrados en una columna estrecha. Los errores crudos de OpenSSL en protocolos no soportados se resumen en mensajes legibles para no romper la maquetación.
 
 El panel principal de nota usa color semántico:
