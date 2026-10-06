@@ -21,7 +21,7 @@ export default function SpanishScanPage({ searchParams }: { searchParams: { host
               <span className="h-2 w-2 bg-secure" />
               SSL/TLS Diagnostics
             </div>
-            <h1 className="mt-5 max-w-4xl font-serif text-[2.6rem] font-semibold leading-[1.04] text-night sm:text-6xl">
+            <h1 className="mt-5 max-w-4xl text-balance font-serif text-[2.6rem] font-semibold leading-[1.04] text-night sm:text-6xl">
               {text.scanTitle}
             </h1>
             <p className="mt-5 max-w-2xl text-lg font-semibold leading-relaxed text-ink/70">
