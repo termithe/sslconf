@@ -196,6 +196,15 @@ export type TlsEndpointProfile = {
   differences: string[];
 };
 
+export type TlsClientCompatibilityProfile = {
+  id: "modern" | "tls13" | "tls12-modern" | "tls12-legacy";
+  supported: boolean;
+  protocol?: string;
+  cipher?: string;
+  alpn?: string;
+  error?: string;
+};
+
 export type TlsScanResponse = {
   queryId: string;
   host: string;
@@ -218,6 +227,7 @@ export type TlsScanResponse = {
     hasErrors: boolean;
     endpoints: TlsEndpointProfile[];
   };
+  clientCompatibility: TlsClientCompatibilityProfile[];
   certificate: TlsScanCertificate;
   chain: {
     verified: boolean;

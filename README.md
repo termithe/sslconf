@@ -826,6 +826,7 @@ TLS 1.0, TLS 1.1, TLS 1.2 y TLS 1.3
 cipher negociado por versión soportada
 enumeración de suites TLS 1.2 soportadas desde catálogo curado
 detección básica de orden de preferencia de ciphers TLS 1.2
+compatibilidad indicativa con perfiles de cliente TLS 1.3, TLS 1.2 moderno y TLS 1.2 amplio
 detalles avanzados de protocolo TLS 1.2
 compresión TLS
 renegociación iniciada por cliente
@@ -861,6 +862,19 @@ M = mismatch de hostname
 ```
 
 La puntuación actual es propia de SSLConf. No pretende ser byte a byte equivalente a SSL Labs todavía. Faltan fases más profundas como simulación completa de clientes antiguos, checks exhaustivos de vulnerabilidades históricas, downgrade tests con bajo nivel de OpenSSL y análisis PQC.
+
+### Compatibilidad de clientes
+
+El informe incluye cuatro handshakes indicativos, realizados desde el runtime del escáner y conservando SNI y ALPN:
+
+```text
+cliente actual: TLS 1.2 a TLS 1.3 con capacidades por defecto del runtime
+cliente solo TLS 1.3: comprueba que el endpoint no depende de TLS 1.2
+cliente TLS 1.2 moderno: restringido a ECDHE con AEAD
+cliente TLS 1.2 amplio: incluye GCM, CBC y RSA para representar una capacidad TLS 1.2 más tolerante
+```
+
+El resultado muestra protocolo, cipher y ALPN negociados. Es una señal de interoperabilidad técnica, no una simulación certificada de versiones concretas de Chrome, Safari, Firefox, Android, Java o Windows; esas matrices requieren huellas TLS y políticas criptográficas específicas por versión. No modifica la nota global.
 
 La nota representa seguridad TLS, no una política universal de compatibilidad. Un endpoint que ofrece solo TLS 1.3 mantiene un aviso de compatibilidad para clientes heredados, pero no pierde puntos ni baja de letra por ese único motivo. `A+` exige `100/100`; HSTS ausente o corto resta 5 puntos y deja el resultado en `A`, alineando este caso con el criterio práctico de SSL Labs.
 
@@ -1100,6 +1114,7 @@ TLS_SCAN_MAX_REDIRECTS=6
 TLS_SCAN_USER_AGENT="SSLConf/0.1 (+https://sslconf.com)"
 TLS_SCAN_CIPHER_TIMEOUT_MS=3500
 TLS_SCAN_CIPHER_CONCURRENCY=6
+TLS_SCAN_CLIENT_PROFILE_TIMEOUT_MS=3500
 TLS_SCAN_OCSP_TIMEOUT_MS=6000
 TLS_SCAN_OCSP_MAX_BYTES=250000
 TLS_SCAN_HSTS_PRELOAD_TIMEOUT_MS=5000

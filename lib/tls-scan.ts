@@ -8,7 +8,7 @@ import forge from "node-forge";
 import type { Locale } from "./i18n";
 import { getServerCertificates, inspectTlsChain, verifyServerTrust } from "./tls";
 import { assertPublicHostname, publicLookupFor, publicLookupForUrl, resolvePublicHostname } from "./validation";
-import type { Tls12CipherSuite, TlsEndpointProfile, TlsGradeItem, TlsProtocolDetails, TlsProtocolName, TlsProtocolProbe, TlsRecommendation, TlsRedirectCheck, TlsScanFinding, TlsScanResponse } from "./types";
+import type { Tls12CipherSuite, TlsClientCompatibilityProfile, TlsEndpointProfile, TlsGradeItem, TlsProtocolDetails, TlsProtocolName, TlsProtocolProbe, TlsRecommendation, TlsRedirectCheck, TlsScanFinding, TlsScanResponse } from "./types";
 
 const scanTimeoutMs = Number(process.env.TLS_SCAN_TIMEOUT_MS ?? 8000);
 const httpTimeoutMs = Number(process.env.TLS_SCAN_HTTP_TIMEOUT_MS ?? 6000);
@@ -16,6 +16,7 @@ const maxRedirects = Number(process.env.TLS_SCAN_MAX_REDIRECTS ?? 6);
 const userAgent = process.env.TLS_SCAN_USER_AGENT ?? "SSLConf/0.1 (+https://sslconf.com)";
 const cipherProbeConcurrency = Number(process.env.TLS_SCAN_CIPHER_CONCURRENCY ?? 6);
 const cipherProbeTimeoutMs = Number(process.env.TLS_SCAN_CIPHER_TIMEOUT_MS ?? 3500);
+const clientProfileTimeoutMs = Number(process.env.TLS_SCAN_CLIENT_PROFILE_TIMEOUT_MS ?? 3500);
 const ocspTimeoutMs = Number(process.env.TLS_SCAN_OCSP_TIMEOUT_MS ?? 6000);
 const maxOcspBytes = Number(process.env.TLS_SCAN_OCSP_MAX_BYTES ?? 250_000);
 const hstsPreloadTimeoutMs = Number(process.env.TLS_SCAN_HSTS_PRELOAD_TIMEOUT_MS ?? 5000);
@@ -253,6 +254,69 @@ async function protocolProbe(host: string, port: number, version: { minVersion: 
       resolve({ name: version.name, supported: false, error: error.message });
     });
   });
+}
+
+const clientProfiles: Array<{
+  id: TlsClientCompatibilityProfile["id"];
+  minVersion: tls.SecureVersion;
+  maxVersion: tls.SecureVersion;
+  ciphers?: string;
+}> = [
+  { id: "modern", minVersion: "TLSv1.2", maxVersion: "TLSv1.3" },
+  { id: "tls13", minVersion: "TLSv1.3", maxVersion: "TLSv1.3" },
+  {
+    id: "tls12-modern",
+    minVersion: "TLSv1.2",
+    maxVersion: "TLSv1.2",
+    ciphers: "ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-CHACHA20-POLY1305"
+  },
+  {
+    id: "tls12-legacy",
+    minVersion: "TLSv1.2",
+    maxVersion: "TLSv1.2",
+    ciphers: "ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA"
+  }
+];
+
+async function probeClientCompatibility(host: string, port: number): Promise<TlsClientCompatibilityProfile[]> {
+  const lookup = await publicLookupFor(host, "client compatibility probe target");
+  return Promise.all(clientProfiles.map((profile) => new Promise<TlsClientCompatibilityProfile>((resolve) => {
+    let settled = false;
+    function finish(result: TlsClientCompatibilityProfile) {
+      if (settled) return;
+      settled = true;
+      resolve(result);
+    }
+
+    try {
+      const socket = tls.connect({
+        host,
+        port,
+        servername: isIP(host) ? undefined : host,
+        rejectUnauthorized: false,
+        timeout: clientProfileTimeoutMs,
+        minVersion: profile.minVersion,
+        maxVersion: profile.maxVersion,
+        ALPNProtocols: ["h2", "http/1.1"],
+        ...(profile.ciphers ? { ciphers: profile.ciphers } : {}),
+        lookup
+      });
+      socket.once("secureConnect", () => {
+        const cipher = socket.getCipher();
+        const alpn = socket.alpnProtocol;
+        const protocol = socket.getProtocol() ?? undefined;
+        socket.end();
+        finish({ id: profile.id, supported: true, protocol, cipher: cipher?.standardName ?? cipher?.name, alpn: alpn || undefined });
+      });
+      socket.once("timeout", () => {
+        socket.destroy();
+        finish({ id: profile.id, supported: false, error: "timeout" });
+      });
+      socket.once("error", (error) => finish({ id: profile.id, supported: false, error: error.message }));
+    } catch (error) {
+      finish({ id: profile.id, supported: false, error: error instanceof Error ? error.message : "connection failed" });
+    }
+  })));
 }
 
 type PublicEndpointAddress = { address: string; family: number };
@@ -1334,13 +1398,14 @@ export async function scanTlsServer(host: string, port: number, locale: Locale =
   const queryId = crypto.randomUUID();
   const text = scanText(locale);
   await assertPublicHostname(host, "scan target");
-  const [addresses, serverCerts, chain, trust, protocols, tls12Ciphers, hsts, hstsPreload, caa, alpn, ocspStapling, redirects] = await Promise.all([
+  const [addresses, serverCerts, chain, trust, protocols, tls12Ciphers, clientCompatibility, hsts, hstsPreload, caa, alpn, ocspStapling, redirects] = await Promise.all([
     resolvePublicHostname(host, "scan target").catch(() => []),
     getServerCertificates(host, port),
     inspectTlsChain(host, port, false, locale),
     verifyServerTrust(host, port),
     Promise.all(protocolVersions.map((version) => protocolProbe(host, port, version))),
     enumerateTls12Ciphers(host, port),
+    probeClientCompatibility(host, port),
     fetchHsts(host, port),
     checkHstsPreload(host),
     resolveCaaRecords(host),
@@ -1388,6 +1453,7 @@ export async function scanTlsServer(host: string, port: number, locale: Locale =
       assessedAt: new Date().toISOString(),
       ipAddresses: addresses.map((address) => address.address),
       endpointCoverage: { totalAddresses: 0, scannedAddresses: 0, truncated: false, consistent: false, hasErrors: false, endpoints: [] },
+      clientCompatibility,
       certificate: certificateDto(leaf),
       chain: {
         verified: trust.verified,
@@ -1706,6 +1772,7 @@ export async function scanTlsServer(host: string, port: number, locale: Locale =
     assessedAt: new Date().toISOString(),
     ipAddresses: addresses.map((address) => address.address),
     endpointCoverage: { totalAddresses: 0, scannedAddresses: 0, truncated: false, consistent: false, hasErrors: false, endpoints: [] },
+    clientCompatibility,
     certificate: certificateDto(leaf),
     chain: {
         verified: trust.verified,
