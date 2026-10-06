@@ -45,7 +45,7 @@ export function TLSServerScanClient({ host, locale = "en" }: { host: string; loc
 }
 
 function copyLabel(locale: Locale) {
-  return locale === "es" ? "Ejecutando test TLS del servidor" : "Running TLS server test";
+  return locale === "es" ? "Analizando configuración SSL/TLS" : "Running SSL/TLS analysis";
 }
 
 function parseJson(text: string) {

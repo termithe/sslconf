@@ -27,7 +27,7 @@ curl -sS -I http://127.0.0.1:3017/scan
 
 Regla de mantenimiento: cada cambio importante debe actualizar este README para conservar el hilo de decisiones, comportamiento y despliegue.
 
-Ultima verificación correcta tras añadir Server Test, ajustar su maquetación, añadir el desglose `Why this grade?`, aceptar URLs `https://`, agrupar recomendaciones accionables por severidad, añadir `How to improve this grade`, copiar fixes accionables, exportar informe HTML imprimible, guardar escaneos recientes en localStorage, reforzar SSRF/rangos reservados/puertos por fase/body limit, añadir telemetría mínima de API con `requestId`, añadir `/api/health` y healthcheck Docker, comprobar redirecciones HTTP/HTTPS, detectar OCSP stapling, convertir HTTP/2/ALPN en check explícito, enumerar ciphers TLS 1.2, recalibrar TLS 1.2 como compatibilidad heredada sin penalización, colorear el panel de nota por severidad y convertir la home en una suite de herramientas:
+Ultima verificación correcta tras añadir SSL/TLS Server Test, ajustar su maquetación, añadir el desglose `Why this grade?`, aceptar URLs `https://`, agrupar recomendaciones accionables por severidad, añadir `How to improve this grade`, copiar fixes accionables, exportar informe HTML imprimible, guardar escaneos recientes en localStorage, reforzar SSRF/rangos reservados/puertos por fase/body limit, añadir telemetría mínima de API con `requestId`, añadir `/api/health` y healthcheck Docker, comprobar redirecciones HTTP/HTTPS, detectar OCSP stapling, convertir HTTP/2/ALPN en check explícito, enumerar ciphers TLS 1.2, recalibrar TLS 1.2 como compatibilidad heredada sin penalización, colorear el panel de nota por severidad, convertir la home en una suite de herramientas y destacar `SSL/TLS Server Test` / `Análisis SSL/TLS` como utilidad principal:
 
 ```bash
 npm run typecheck
@@ -63,22 +63,22 @@ Los formularios y reportes usan jerarquía de documento: introducción, bloque d
 La cabecera funciona como suite de herramientas e incluye nombres unificados:
 
 ```text
-Server Test / Test de servidor
+SSL/TLS Server Test / Análisis SSL/TLS
 CA Bundle Generator / Generador de CA bundle
 ```
 
 La home (`/` y `/es`) no abre ya directamente el generador de CA bundle. Ahora funciona como consola de herramientas con dos accesos principales:
 
 ```text
-Server Test / Test de servidor
+SSL/TLS Server Test / Análisis SSL/TLS
 CA Bundle Generator / Generador de CA bundle
 ```
 
-`Server Test` se muestra como acción principal porque es la utilidad más general para diagnosticar un sitio público. `CA Bundle Generator` queda en `/check` y `/es/check`.
+`SSL/TLS Server Test` / `Análisis SSL/TLS` se muestra como la herramienta destacada porque es la utilidad más general para diagnosticar un sitio público. La portada adapta el bloque lateral a sus comprobaciones reales: postura TLS, señales de transporte y fixes accionables. `CA Bundle Generator` queda como herramienta secundaria en `/check` y `/es/check`.
 
-Los nombres visibles se mantienen unificados en cabecera, botones de home, tarjetas y títulos de herramienta. Se evita mezclar `Chain Builder`, `Generador de cadena` y `Generar CA bundle` para la misma utilidad.
+Los nombres visibles se mantienen unificados en cabecera, botones de home, tarjetas, títulos, estados de carga y metadatos. Se evita mezclar `Server Test`, `Test de servidor` y `Análisis SSL/TLS`, así como `Chain Builder`, `Generador de cadena` y `Generar CA bundle` para la misma utilidad.
 
-En `Server Test`, cuando hay resultados, el informe se renderiza a ancho completo debajo del bloque introductorio. Esto evita que métricas, protocolos, certificado y findings queden encerrados en una columna estrecha. Los errores crudos de OpenSSL en protocolos no soportados se resumen en mensajes legibles para no romper la maquetación.
+En `SSL/TLS Server Test` / `Análisis SSL/TLS`, cuando hay resultados, el informe se renderiza a ancho completo debajo del bloque introductorio. Esto evita que métricas, protocolos, certificado y findings queden encerrados en una columna estrecha. Los errores crudos de OpenSSL en protocolos no soportados se resumen en mensajes legibles para no romper la maquetación.
 
 El panel principal de nota usa color semántico:
 
@@ -131,7 +131,7 @@ ssl_protocols TLSv1.2 TLSv1.3
 CAA DNS de ejemplo
 ```
 
-El panel de acciones del Server Test permite:
+El panel de acciones de SSL/TLS Server Test permite:
 
 ```text
 copiar informe resumido
@@ -142,7 +142,7 @@ copiar enlace compartible
 nuevo escaneo
 ```
 
-El formulario de Server Test muestra `Recent scans` / `Escaneos recientes` cuando existen consultas previas en el navegador. El historial:
+El formulario de SSL/TLS Server Test muestra `Recent scans` / `Escaneos recientes` cuando existen consultas previas en el navegador. El historial:
 
 ```text
 se guarda en localStorage
@@ -192,9 +192,9 @@ http2.alpnProtocols
 
 Si no negocia `h2`, genera recomendación de baja severidad con snippets nginx/Apache. De momento no penaliza la nota.
 
-## Herramienta 1: Chain Builder
+## Herramienta 1: CA Bundle Generator
 
-El Chain Builder no copia ciegamente la cadena instalada en el servidor. El flujo actual es:
+El CA Bundle Generator no copia ciegamente la cadena instalada en el servidor. El flujo actual es:
 
 1. Conecta al host por TLS con SNI y obtiene el certificado leaf.
 2. Lee la extensión `Authority Information Access` del leaf.
@@ -478,7 +478,7 @@ Los límites evitan que los timeouts internos de TLS, HTTP, AIA y OCSP acumulen 
 2. Crear una base Redis REST compatible con Upstash y copiar URL/token como secretos de producción.
 3. Copiar `.env.example` a las variables del proyecto, sustituyendo `RATE_LIMIT_KEY_SALT` y `SSLCONF_LOG_SALT` por dos valores aleatorios distintos. Nunca subir `.env.local` ni tokens al repositorio.
 4. Configurar `NEXT_PUBLIC_SITE_URL` con la URL Preview para pruebas, y con `https://sslconf.com` solo en Production.
-5. Desplegar primero un Preview. Validar `GET /api/health`, un Server Test, un CA Bundle Generator y que los endpoints devuelvan `X-SSLConf-Request-Id` y `X-RateLimit-Source: redis`.
+5. Desplegar primero un Preview. Validar `GET /api/health`, un SSL/TLS Server Test, un CA Bundle Generator y que los endpoints devuelvan `X-SSLConf-Request-Id` y `X-RateLimit-Source: redis`.
 6. Asociar `sslconf.com`, comprobar el certificado emitido por Vercel y desplegar Production.
 7. Configurar monitorización externa contra `https://sslconf.com/api/health`.
 
@@ -572,7 +572,7 @@ La API bloquea IPs privadas/reservadas antes de conectar por TLS y antes de desc
 Los destinos se validan por fase:
 
 ```text
-entrada Server Test: 443, 8443
+entrada SSL/TLS Server Test: 443, 8443
 entrada CA Bundle Generator: 443, 465, 636, 8443, 993, 995
 AIA / CA Issuers: http/https en 80 o 443
 OCSP responder: http/https en 80 o 443
@@ -685,7 +685,7 @@ X-SSLConf-Cache-TTL
 Los resultados tienen acciones de exportación en cliente:
 
 ```text
-Server Test:
+SSL/TLS Server Test:
 - copiar informe resumido
 - copiar fixes accionables
 - descargar JSON completo
@@ -695,7 +695,7 @@ Server Test:
 - copiar baseline nginx
 - copiar baseline Apache
 
-Chain Builder:
+CA Bundle Generator:
 - copiar PEM
 - descargar PEM
 - copiar informe resumido
@@ -709,7 +709,7 @@ Puertos permitidos actualmente:
 443, 465, 636, 8443, 993, 995
 ```
 
-## Herramienta 2: Server Test
+## Herramienta 2: SSL/TLS Server Test
 
 La segunda utilidad pública vive en:
 
@@ -776,7 +776,7 @@ SSLConf: A / 95
 SSL Labs: A
 ```
 
-La confianza usada por el `Server Test` se valida mediante un handshake TLS nativo con `rejectUnauthorized: true`, usando el almacén de confianza efectivo del runtime Node/OpenSSL. La reconstrucción propia por AIA se conserva para generar el CA bundle y mostrar su ruta, pero no fuerza una nota `T` cuando su inventario manual de raíces difiere del almacén efectivo del runtime.
+La confianza usada por el `SSL/TLS Server Test` se valida mediante un handshake TLS nativo con `rejectUnauthorized: true`, usando el almacén de confianza efectivo del runtime Node/OpenSSL. La reconstrucción propia por AIA se conserva para generar el CA bundle y mostrar su ruta, pero no fuerza una nota `T` cuando su inventario manual de raíces difiere del almacén efectivo del runtime.
 
 Penalizaciones actuales:
 
@@ -951,7 +951,7 @@ Payload:
 }
 ```
 
-El campo `host` de Server Test acepta tanto hostname limpio como URL HTTPS completa. La API extrae hostname y puerto e ignora path/query:
+El campo `host` de SSL/TLS Server Test acepta tanto hostname limpio como URL HTTPS completa. La API extrae hostname y puerto e ignora path/query:
 
 ```text
 conasi.eu
@@ -961,7 +961,7 @@ https://www.conasi.eu/es/?utm_source=test
 https://www.conasi.eu:8443/
 ```
 
-Puertos permitidos actualmente para Server Test:
+Puertos permitidos actualmente para SSL/TLS Server Test:
 
 ```text
 443, 8443
@@ -1001,7 +1001,7 @@ NEXT_PUBLIC_SITE_URL=https://sslconf.com
 El rate limit se aplica tanto por cliente como por destino. El segundo límite usa una clave hash de `host:puerto`, por lo que evita que varios clientes puedan concentrar demasiados escaneos sobre un tercero. Valores iniciales recomendados:
 
 ```text
-Server Test: 12 comprobaciones por destino/minuto
+SSL/TLS Server Test: 12 comprobaciones por destino/minuto
 CA Bundle Generator: 30 comprobaciones por destino/minuto
 ```
 

@@ -24,6 +24,10 @@ export function HomeContent({ locale }: { locale: Locale }) {
             <p className="mt-5 max-w-2xl text-lg font-semibold leading-relaxed text-ink/70">
               {text.homeDescription}
             </p>
+            <div className="mt-7 border-l-4 border-secure bg-white px-5 py-4">
+              <p className="text-[11px] font-black uppercase tracking-[0.18em] text-secure">{text.homeFeaturedLabel}</p>
+              <p className="mt-1 text-xl font-black text-night">{text.homeFeaturedTool}</p>
+            </div>
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <a href={`${prefix}/scan`} className="inline-flex h-13 items-center justify-center gap-2 bg-signal px-5 py-4 font-black text-white transition hover:bg-night">
                 {text.homePrimaryAction}
@@ -36,7 +40,7 @@ export function HomeContent({ locale }: { locale: Locale }) {
             </div>
           </div>
 
-          <aside className="report-aside">
+          <aside className="report-aside lg:mt-20">
             <h2 className="font-black text-night">{text.checksTitle}</h2>
             <div className="mt-5 space-y-4">
               {text.checks.map(([title, description], index) => {
@@ -60,11 +64,12 @@ export function HomeContent({ locale }: { locale: Locale }) {
         <section className="mt-14 border-t border-night pt-5">
           <h2 className="text-sm font-black uppercase tracking-[0.16em] text-ink/55">{text.homeToolsTitle}</h2>
           <div className="mt-4 divide-y divide-line border-y border-line">
-            {text.homeTools.map(([title, description, action], index) => {
-              const Icon = toolIcons[index] as LucideIcon;
+            {text.homeTools.slice(1).map(([title, description, action], index) => {
+              const toolIndex = index + 1;
+              const Icon = toolIcons[toolIndex] as LucideIcon;
               return (
-                <a key={title} href={toolLinks[index]} className="group grid gap-5 px-1 py-6 transition hover:bg-white/65 md:grid-cols-[48px_minmax(0,1fr)_auto] md:items-center md:px-5">
-                  <span className={`grid h-12 w-12 shrink-0 place-items-center ${index === 0 ? "bg-secure/10 text-secure" : "bg-mint text-signal"}`}>
+                <a key={title} href={toolLinks[toolIndex]} className="group grid gap-5 px-1 py-6 transition hover:bg-white/65 md:grid-cols-[48px_minmax(0,1fr)_auto] md:items-center md:px-5">
+                  <span className="grid h-12 w-12 shrink-0 place-items-center bg-mint text-signal">
                     <Icon size={22} />
                   </span>
                   <div>

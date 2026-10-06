@@ -4,7 +4,7 @@ import { TLSServerScanForm } from "@/components/TLSServerScanForm";
 import { copy } from "@/lib/i18n";
 
 export const metadata: Metadata = {
-  title: "Test de servidor SSL/TLS",
+  title: "Análisis SSL/TLS",
   description: "Escanea un endpoint HTTPS público y puntúa su certificado TLS, protocolos, HSTS y CAA."
 };
 
