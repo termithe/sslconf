@@ -68,6 +68,8 @@ CA Bundle Generator / Generador de CA bundle
 CSR Decoder / Decodificador de CSR
 ```
 
+Solo se muestran accesos accionables: el rótulo informativo `TLS tools` / `Herramientas TLS` se eliminó para no aparentar un enlace sin destino. La marca conserva un margen explícito respecto a la navegación y vuelve a la portada del idioma activo.
+
 La home (`/` y `/es`) no abre ya directamente el generador de CA bundle. Ahora funciona como consola de herramientas con una utilidad principal y dos herramientas secundarias:
 
 ```text
