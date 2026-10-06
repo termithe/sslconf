@@ -22,13 +22,9 @@ export function HomeContent({ locale }: { locale: Locale }) {
             <h1 className="mt-5 max-w-4xl font-serif text-[2.6rem] font-semibold leading-[1.04] text-night sm:text-6xl">
               {text.homeTitle}
             </h1>
-            <p className="mt-5 max-w-2xl text-lg font-semibold leading-relaxed text-ink/70">
+            <p className="mt-4 max-w-2xl text-lg font-semibold leading-relaxed text-ink/70">
               {text.homeDescription}
             </p>
-            <div className="mt-7 border-l-4 border-secure bg-white px-5 py-4">
-              <p className="text-[11px] font-black uppercase tracking-[0.18em] text-secure">{text.homeFeaturedLabel}</p>
-              <p className="mt-1 text-xl font-black text-night">{text.homeFeaturedTool}</p>
-            </div>
             <div className="mt-6">
               <TLSServerScanForm locale={locale} />
             </div>
