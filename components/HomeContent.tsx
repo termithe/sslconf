@@ -1,4 +1,5 @@
 import { ArrowRight, FileKey2, FilePenLine, FileSearch, Gauge, LockKeyhole, Route, ShieldCheck, type LucideIcon } from "lucide-react";
+import { TLSServerScanForm } from "@/components/TLSServerScanForm";
 import { copy, type Locale } from "@/lib/i18n";
 
 const checkIcons = [ShieldCheck, Route, LockKeyhole] as const;
@@ -28,15 +29,14 @@ export function HomeContent({ locale }: { locale: Locale }) {
               <p className="text-[11px] font-black uppercase tracking-[0.18em] text-secure">{text.homeFeaturedLabel}</p>
               <p className="mt-1 text-xl font-black text-night">{text.homeFeaturedTool}</p>
             </div>
-            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <a href={`${prefix}/scan`} className="inline-flex h-13 items-center justify-center gap-2 bg-signal px-5 py-4 font-black text-white transition hover:bg-night">
-                {text.homePrimaryAction}
-                <ArrowRight size={18} />
-              </a>
-              <a href={`${prefix}/check`} className="inline-flex h-13 items-center justify-center gap-2 border border-line bg-white px-5 py-4 font-black text-night transition hover:border-signal hover:text-signal">
-                {text.homeSecondaryAction}
-                <ArrowRight size={18} />
-              </a>
+            <div className="mt-6">
+              <TLSServerScanForm locale={locale} />
+              <div className="mt-3 flex">
+                <a href={`${prefix}/check`} className="inline-flex h-11 items-center justify-center gap-2 border border-line bg-white px-4 font-black text-night transition hover:border-signal hover:text-signal">
+                  {text.homeSecondaryAction}
+                  <ArrowRight size={17} />
+                </a>
+              </div>
             </div>
           </div>
 
