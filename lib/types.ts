@@ -56,6 +56,23 @@ export type DecodedCertificateResponse = {
   extendedKeyUsage: string[];
 };
 
+export type DecodedCsrResponse = {
+  subject: string;
+  signatureAlgorithm?: string;
+  signatureValid: boolean;
+  key: {
+    type?: string;
+    bits?: number;
+  };
+  subjectAltNames: string[];
+  requestedExtensions: string[];
+  findings: Array<{
+    level: "pass" | "warning" | "fail" | "info";
+    title: string;
+    detail: string;
+  }>;
+};
+
 export type TlsProtocolName = "SSLv3" | "TLSv1" | "TLSv1.1" | "TLSv1.2" | "TLSv1.3";
 
 export type TlsProtocolProbe = {

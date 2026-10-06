@@ -1,13 +1,13 @@
-import { ArrowRight, FileKey2, FileSearch, Gauge, LockKeyhole, Route, ShieldCheck, type LucideIcon } from "lucide-react";
+import { ArrowRight, FileKey2, FilePenLine, FileSearch, Gauge, LockKeyhole, Route, ShieldCheck, type LucideIcon } from "lucide-react";
 import { copy, type Locale } from "@/lib/i18n";
 
 const checkIcons = [ShieldCheck, Route, LockKeyhole] as const;
-const toolIcons = [Gauge, FileKey2, FileSearch] as const;
+const toolIcons = [Gauge, FileKey2, FileSearch, FilePenLine] as const;
 
 export function HomeContent({ locale }: { locale: Locale }) {
   const text = copy[locale];
   const prefix = locale === "es" ? "/es" : "";
-  const toolLinks = [`${prefix}/scan`, `${prefix}/check`, `${prefix}/decode`];
+  const toolLinks = [`${prefix}/scan`, `${prefix}/check`, `${prefix}/decode`, `${prefix}/csr`];
 
   return (
     <main className="px-4 py-12 sm:py-16">

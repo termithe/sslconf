@@ -65,6 +65,7 @@ La cabecera funciona como suite de herramientas e incluye nombres unificados:
 ```text
 SSL/TLS Server Test / Análisis SSL/TLS
 CA Bundle Generator / Generador de CA bundle
+CSR Decoder / Decodificador de CSR
 ```
 
 La home (`/` y `/es`) no abre ya directamente el generador de CA bundle. Ahora funciona como consola de herramientas con una utilidad principal y dos herramientas secundarias:
@@ -73,9 +74,10 @@ La home (`/` y `/es`) no abre ya directamente el generador de CA bundle. Ahora f
 SSL/TLS Server Test / Análisis SSL/TLS
 CA Bundle Generator / Generador de CA bundle
 Certificate Decoder / Decodificador de certificados
+CSR Decoder / Decodificador de CSR
 ```
 
-`SSL/TLS Server Test` / `Análisis SSL/TLS` se muestra como la herramienta destacada porque es la utilidad más general para diagnosticar un sitio público. La portada adapta el bloque lateral a sus comprobaciones reales: postura TLS, señales de transporte y fixes accionables. `CA Bundle Generator` queda como herramienta secundaria en `/check` y `/es/check`.
+`SSL/TLS Server Test` / `Análisis SSL/TLS` se muestra como la herramienta destacada porque es la utilidad más general para diagnosticar un sitio público. La portada adapta el bloque lateral a sus comprobaciones reales: postura TLS, señales de transporte y fixes accionables. `Certificate Decoder`, `CSR Decoder` y `CA Bundle Generator` quedan como herramientas secundarias.
 
 Los nombres visibles se mantienen unificados en cabecera, botones de home, tarjetas, títulos, estados de carga y metadatos. Se evita mezclar `Server Test`, `Test de servidor` y `Análisis SSL/TLS`, así como `Chain Builder`, `Generador de cadena` y `Generar CA bundle` para la misma utilidad.
 
@@ -235,7 +237,45 @@ El body máximo es `CERTIFICATE_DECODE_BODY_MAX_BYTES=70000` bytes. El endpoint 
 
 El área PEM incluye un botón de papelera con tooltip para limpiar el certificado, el error y el resultado anterior antes de realizar otra prueba.
 
-## Herramienta 2: CA Bundle Generator
+## Herramienta 2: CSR Decoder / Decodificador de CSR
+
+La utilidad vive en:
+
+```text
+/csr
+/es/csr
+```
+
+Acepta una única solicitud PKCS#10 en PEM o DER codificado en Base64. Se rechazan claves privadas antes del parser. El análisis se realiza solo en memoria, sin ficheros temporales, caché, DNS ni consultas a CA externas.
+
+La validación comprueba la firma contra la clave pública incluida en la propia CSR y presenta:
+
+```text
+subject
+clave RSA y tamaño cuando está disponible
+algoritmo y validez de la firma PKCS#10
+SAN y extensiones solicitadas mediante extensionRequest
+hallazgos sobre SAN ausentes, SHA-1 y tamaño RSA menor de 2048 bits
+```
+
+Endpoint:
+
+```text
+POST /api/csr/decode
+```
+
+Payload:
+
+```json
+{
+  "csr": "-----BEGIN CERTIFICATE REQUEST-----\\n...\\n-----END CERTIFICATE REQUEST-----",
+  "locale": "es"
+}
+```
+
+El body máximo es `CSR_DECODE_BODY_MAX_BYTES=70000` bytes. El endpoint aplica `RATE_LIMIT_CSR_MAX=30` peticiones por cliente y ventana, no registra el contenido y responde con `Cache-Control: no-store`.
+
+## Herramienta 3: CA Bundle Generator
 
 El CA Bundle Generator no copia ciegamente la cadena instalada en el servidor. El flujo actual es:
 
@@ -295,6 +335,7 @@ El idioma por defecto es inglés:
 /
 /check
 /decode
+/csr
 ```
 
 La versión española vive en:
@@ -303,6 +344,7 @@ La versión española vive en:
 /es
 /es/check
 /es/decode
+/es/csr
 /es/scan
 ```
 
@@ -754,7 +796,7 @@ Puertos permitidos actualmente:
 443, 465, 636, 8443, 993, 995
 ```
 
-## Herramienta 3: SSL/TLS Server Test
+## Herramienta 4: SSL/TLS Server Test
 
 La segunda utilidad pública vive en:
 
@@ -1039,6 +1081,7 @@ TLS_SCAN_OCSP_MAX_BYTES=250000
 TLS_SCAN_HSTS_PRELOAD_TIMEOUT_MS=5000
 TLS_SCAN_HSTS_PRELOAD_MAX_BYTES=50000
 CERTIFICATE_DECODE_BODY_MAX_BYTES=70000
+CSR_DECODE_BODY_MAX_BYTES=70000
 NEXT_PUBLIC_SITE_URL=https://sslconf.com
 ```
 
@@ -1050,6 +1093,7 @@ El rate limit se aplica tanto por cliente como por destino. El segundo límite u
 SSL/TLS Server Test: 12 comprobaciones por destino/minuto
 CA Bundle Generator: 30 comprobaciones por destino/minuto
 Certificate Decoder: 30 comprobaciones por cliente/minuto
+CSR Decoder: 30 comprobaciones por cliente/minuto
 ```
 
 El límite por destino se evalúa solo después de validar el hostname y puerto. En despliegue con varias instancias Vercel requiere `RATE_LIMIT_REDIS_REST_URL` y `RATE_LIMIT_REDIS_REST_TOKEN` para ser compartido entre instancias.

@@ -201,3 +201,10 @@ export const certificateDecodeSchema = z.object({
   }),
   locale: z.enum(["en", "es"]).optional().default("en")
 });
+
+export const csrDecodeSchema = z.object({
+  csr: z.string().min(1).max(65_536).refine((value) => !/-----BEGIN (?:RSA |EC |ENCRYPTED )?PRIVATE KEY-----/i.test(value), {
+    message: "Invalid CSR."
+  }),
+  locale: z.enum(["en", "es"]).optional().default("en")
+});

@@ -32,6 +32,9 @@ export function apiErrorMessage(error: unknown, locale: Locale, fallback: string
   if (lower.includes("invalid certificate")) {
     return locale === "es" ? "El certificado no tiene un formato válido." : "The certificate has an invalid format.";
   }
+  if (lower.includes("invalid csr")) {
+    return locale === "es" ? "La solicitud CSR no tiene un formato válido." : "The CSR has an invalid format.";
+  }
   if (lower.includes("private or reserved ip")) {
     return locale === "es" ? "El destino resuelve a una IP privada o reservada y no se permite escanearlo." : "The target resolves to a private or reserved IP address and cannot be scanned.";
   }
@@ -65,6 +68,7 @@ export function apiErrorStatus(error: unknown) {
   if (
     message.includes("body too large") ||
     message.includes("invalid certificate") ||
+    message.includes("invalid csr") ||
     message.includes("private or reserved ip") ||
     message.includes("does not resolve in dns") ||
     message.includes("port is not allowed") ||

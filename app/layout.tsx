@@ -10,14 +10,14 @@ export const metadata: Metadata = {
     default: "SSLConf",
     template: "%s | SSLConf"
   },
-  description: "Inspect TLS certificates, rebuild certificate chains and generate server-ready CA bundle PEM files.",
+  description: "Test public SSL/TLS servers, decode certificates and CSRs, rebuild certificate chains and generate server-ready CA bundle PEM files.",
   applicationName: "SSLConf",
   category: "technology",
   openGraph: {
     type: "website",
     siteName: "SSLConf",
     title: "SSLConf",
-    description: "SSL/TLS configuration tools, certificate chain checker and CA bundle generator.",
+    description: "SSL/TLS server testing, certificate and CSR decoding, certificate chain checking and CA bundle generation.",
     url: "/"
   },
   icons: { icon: "/icon.svg" }
@@ -47,6 +47,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <a href={`${prefix || ""}/scan`} className="px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-ink/60 transition hover:bg-mint hover:text-signal">
                   {copy[locale].navScan}
                 </a>
+                <a href={`${prefix || ""}/csr`} className="px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-ink/60 transition hover:bg-mint hover:text-signal">
+                  {copy[locale].navCsr}
+                </a>
                 <a href={`${prefix || ""}/decode`} className="px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-ink/60 transition hover:bg-mint hover:text-signal">
                   {copy[locale].navDecoder}
                 </a>
@@ -54,7 +57,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   {copy[locale].navChain}
                 </a>
               </div>
-              <span className="hidden text-xs font-black uppercase tracking-[0.16em] text-ink/55 sm:block">{copy[locale].navTag}</span>
+              <span className="hidden text-xs font-black uppercase tracking-[0.16em] text-ink/55 xl:block">{copy[locale].navTag}</span>
               <LanguageSwitcher />
             </div>
           </nav>

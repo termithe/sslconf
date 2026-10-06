@@ -2,7 +2,7 @@ import { createHash, randomUUID } from "node:crypto";
 
 type ApiLogEvent = {
   requestId: string;
-  tool: "scan" | "chain" | "decode";
+  tool: "scan" | "chain" | "decode" | "csr";
   status: number;
   durationMs: number;
   clientIp?: string;

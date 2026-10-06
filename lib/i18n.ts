@@ -29,6 +29,7 @@ export function localeFromAcceptLanguage(header: string | null) {
 export const copy = {
   en: {
     navTag: "TLS tools",
+    navCsr: "CSR Decoder",
     navDecoder: "Certificate Decoder",
     navChain: "CA Bundle Generator",
     navScan: "SSL/TLS Server Test",
@@ -42,7 +43,8 @@ export const copy = {
     homeTools: [
       ["SSL/TLS Server Test", "Grade a public HTTPS endpoint and review certificate trust, protocols, redirects, HSTS, OCSP, HTTP/2 and recommendations.", "Run SSL/TLS Server Test"],
       ["CA Bundle Generator", "Rebuild the correct intermediate CA bundle from the leaf certificate, AIA issuers and trusted CA paths.", "Open CA Bundle Generator"],
-      ["Certificate Decoder", "Inspect a PEM certificate or Base64-encoded DER without sending it to any external certificate authority.", "Open Certificate Decoder"]
+      ["Certificate Decoder", "Inspect a PEM certificate or Base64-encoded DER without sending it to any external certificate authority.", "Open Certificate Decoder"],
+      ["CSR Decoder", "Validate a PKCS#10 certificate request, its public key, signature and requested subject alternative names.", "Open CSR Decoder"]
     ],
     checksTitle: "What the analysis covers",
     checks: [
@@ -165,11 +167,25 @@ export const copy = {
     decoderNoValues: "Not present",
     decoderYes: "Yes",
     decoderNo: "No",
+    csrTitle: "CSR Decoder and Validator.",
+    csrDescription: "Inspect a PKCS#10 certificate signing request before submitting it to a certificate authority.",
+    csrInputLabel: "PEM CSR or Base64-encoded DER",
+    csrPlaceholder: "-----BEGIN CERTIFICATE REQUEST-----\n...\n-----END CERTIFICATE REQUEST-----",
+    csrSubmit: "Validate CSR",
+    csrClear: "Clear CSR",
+    csrPrivacy: "Processed in memory only. The CSR is not stored or sent to a certificate authority.",
+    csrLoading: "Validating CSR",
+    csrResultTitle: "CSR details",
+    csrSignature: "Request signature",
+    csrPublicKey: "Public key",
+    csrRequestedExtensions: "Requested extensions",
+    csrFindings: "Validation findings",
     supported: "Supported",
     notSupported: "Not supported"
   },
   es: {
     navTag: "Herramientas TLS",
+    navCsr: "Decodificador de CSR",
     navDecoder: "Decodificador de certificados",
     navChain: "Generador de CA bundle",
     navScan: "Análisis SSL/TLS",
@@ -183,7 +199,8 @@ export const copy = {
     homeTools: [
       ["Análisis SSL/TLS", "Calcula una nota para un endpoint HTTPS público y revisa confianza, protocolos, redirecciones, HSTS, OCSP, HTTP/2 y recomendaciones.", "Analizar dominio"],
       ["Generador de CA bundle", "Reconstruye el CA bundle intermedio correcto desde el certificado leaf, AIA issuers y rutas CA confiables.", "Abrir generador de CA bundle"],
-      ["Decodificador de certificados", "Inspecciona un certificado PEM o DER codificado en Base64 sin enviarlo a ninguna autoridad certificadora externa.", "Abrir decodificador"]
+      ["Decodificador de certificados", "Inspecciona un certificado PEM o DER codificado en Base64 sin enviarlo a ninguna autoridad certificadora externa.", "Abrir decodificador"],
+      ["Decodificador de CSR", "Valida una solicitud de certificado PKCS#10, su clave pública, firma y nombres alternativos solicitados.", "Abrir decodificador de CSR"]
     ],
     checksTitle: "Qué analiza",
     checks: [
@@ -305,6 +322,19 @@ export const copy = {
     decoderNoValues: "No presente",
     decoderYes: "Sí",
     decoderNo: "No",
+    csrTitle: "Decodificador y validador de CSR.",
+    csrDescription: "Inspecciona una solicitud de firma de certificado PKCS#10 antes de enviarla a una autoridad certificadora.",
+    csrInputLabel: "CSR PEM o DER codificado en Base64",
+    csrPlaceholder: "-----BEGIN CERTIFICATE REQUEST-----\n...\n-----END CERTIFICATE REQUEST-----",
+    csrSubmit: "Validar CSR",
+    csrClear: "Limpiar CSR",
+    csrPrivacy: "Procesado solo en memoria. La CSR no se guarda ni se envía a ninguna autoridad certificadora.",
+    csrLoading: "Validando CSR",
+    csrResultTitle: "Detalles de la CSR",
+    csrSignature: "Firma de la solicitud",
+    csrPublicKey: "Clave pública",
+    csrRequestedExtensions: "Extensiones solicitadas",
+    csrFindings: "Hallazgos de validación",
     supported: "Soportado",
     notSupported: "No soportado"
   }
