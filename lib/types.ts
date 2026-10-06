@@ -73,6 +73,21 @@ export type DecodedCsrResponse = {
   }>;
 };
 
+export type CertificateKeyMatchResponse = {
+  matches: boolean;
+  certificate: {
+    subject: string;
+    issuer: string;
+    fingerprint256: string;
+    keyType?: string;
+    keyDetails?: string;
+  };
+  privateKey: {
+    keyType?: string;
+    keyDetails?: string;
+  };
+};
+
 export type TlsProtocolName = "SSLv3" | "TLSv1" | "TLSv1.1" | "TLSv1.2" | "TLSv1.3";
 
 export type TlsProtocolProbe = {

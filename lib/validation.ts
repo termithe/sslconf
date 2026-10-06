@@ -208,3 +208,9 @@ export const csrDecodeSchema = z.object({
   }),
   locale: z.enum(["en", "es"]).optional().default("en")
 });
+
+export const certificateKeyMatchSchema = z.object({
+  certificate: z.string().min(1).max(180_000),
+  privateKey: z.string().min(1).max(180_000),
+  locale: z.enum(["en", "es"]).optional().default("en")
+});

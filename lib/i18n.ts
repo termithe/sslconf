@@ -43,7 +43,9 @@ export const copy = {
       ["SSL/TLS Server Test", "Assess an HTTPS endpoint: certificate, protocols, HSTS and CAA.", "Run SSL/TLS Server Test"],
       ["CA Bundle Generator", "Generate the correct CA bundle from the leaf certificate.", "Open CA Bundle Generator"],
       ["Certificate Decoder", "Inspect PEM or Base64 DER certificates: identity, validity and extensions.", "Open Certificate Decoder"],
-      ["CSR Decoder", "Validate PKCS#10 CSRs: public key, signature and alternative names.", "Open CSR Decoder"]
+      ["CSR Decoder", "Validate PKCS#10 CSRs: public key, signature and alternative names.", "Open CSR Decoder"],
+      ["Certificate & Key Matcher", "Confirm whether a PEM certificate matches a PEM private key.", "Open matcher"],
+      ["CSR Generator", "Create a PKCS#10 request and private key in your browser.", "Open CSR Generator"]
     ],
     checksTitle: "What the analysis covers",
     checks: [
@@ -221,7 +223,9 @@ export const copy = {
       ["Análisis SSL/TLS", "Evalúa un endpoint HTTPS: certificado, protocolos, HSTS y CAA.", "Analizar dominio"],
       ["Generador de CA bundle", "Genera el CA bundle correcto desde el certificado leaf.", "Abrir generador de CA bundle"],
       ["Decodificador de certificados", "Inspecciona certificados PEM o DER: identidad, validez y extensiones.", "Abrir decodificador"],
-      ["Decodificador de CSR", "Valida CSRs PKCS#10: clave pública, firma y nombres alternativos.", "Abrir decodificador de CSR"]
+      ["Decodificador de CSR", "Valida CSRs PKCS#10: clave pública, firma y nombres alternativos.", "Abrir decodificador de CSR"],
+      ["Comprobador de certificado y clave", "Confirma si un certificado PEM coincide con una clave privada PEM.", "Abrir comprobador"],
+      ["Generador de CSR", "Crea una solicitud PKCS#10 y una clave privada en el navegador.", "Abrir generador de CSR"]
     ],
     checksTitle: "Qué analiza",
     checks: [

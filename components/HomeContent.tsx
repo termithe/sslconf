@@ -1,14 +1,14 @@
-import { ArrowRight, FileKey2, FilePenLine, FileSearch, Gauge, LockKeyhole, Route, ShieldCheck, type LucideIcon } from "lucide-react";
+import { ArrowRight, FileKey2, FilePenLine, FilePlus2, FileSearch, Gauge, KeyRound, LockKeyhole, Route, ShieldCheck, type LucideIcon } from "lucide-react";
 import { TLSServerScanForm } from "@/components/TLSServerScanForm";
 import { copy, type Locale } from "@/lib/i18n";
 
 const checkIcons = [ShieldCheck, Route, LockKeyhole] as const;
-const toolIcons = [Gauge, FileKey2, FileSearch, FilePenLine] as const;
+const toolIcons = [Gauge, FileKey2, FileSearch, FilePenLine, KeyRound, FilePlus2] as const;
 
 export function HomeContent({ locale }: { locale: Locale }) {
   const text = copy[locale];
   const prefix = locale === "es" ? "/es" : "";
-  const toolLinks = [`${prefix}/scan`, `${prefix}/check`, `${prefix}/decode`, `${prefix}/csr`];
+  const toolLinks = [`${prefix}/scan`, `${prefix}/check`, `${prefix}/decode`, `${prefix}/csr`, `${prefix}/match`, `${prefix}/csr/generate`];
 
   return (
     <main className="px-4 py-12 sm:py-16">

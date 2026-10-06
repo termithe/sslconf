@@ -70,6 +70,17 @@ CSR Decoder / Decodificador de CSR
 
 Solo se muestran accesos accionables: el rótulo informativo `TLS tools` / `Herramientas TLS` se eliminó para no aparentar un enlace sin destino. La marca conserva un margen explícito respecto a la navegación y vuelve a la portada del idioma activo.
 
+La suite incluye además dos utilidades criptográficas:
+
+```text
+Certificate & Key Matcher / Comprobador de certificado y clave
+CSR Generator / Generador de CSR
+```
+
+El comprobador recibe un certificado PEM y una clave privada PEM, deriva ambas claves públicas en memoria y compara su representación SPKI. La solicitud usa `no-store`, no se cachea y el contenido de certificado o clave no se registra en la telemetría. Admite claves PEM RSA, EC y Ed25519 que soporte el runtime Node; las claves PEM cifradas requieren una herramienta local y no se aceptan.
+
+El generador de CSR usa Web Crypto en el navegador: crea RSA 2048/3072 o ECDSA P-256/P-384, permite Subject y SAN DNS, y genera una solicitud PKCS#10 junto con una clave privada PKCS#8 PEM. La clave privada no pasa por ninguna API de SSLConf. El usuario debe descargarla y custodiarla antes de cerrar la página, ya que no se puede recuperar.
+
 La home (`/` y `/es`) no abre ya directamente el generador de CA bundle. Ahora funciona como consola de herramientas con una utilidad principal y dos herramientas secundarias:
 
 ```text
@@ -535,6 +546,7 @@ RATE_LIMIT_WINDOW_SECONDS=60
 RATE_LIMIT_MAX=20
 RATE_LIMIT_SCAN_MAX=12
 RATE_LIMIT_CHAIN_MAX=20
+RATE_LIMIT_KEY_MATCH_MAX=20
 RATE_LIMIT_TARGET_WINDOW_SECONDS=60
 RATE_LIMIT_TARGET_MAX=30
 RATE_LIMIT_TARGET_SCAN_MAX=12
@@ -548,6 +560,7 @@ TLS_SCAN_CACHE_TTL_SECONDS=300
 TLS_CHAIN_CACHE_TTL_SECONDS=600
 TLS_CACHE_MAX_ENTRIES=500
 API_JSON_BODY_MAX_BYTES=4096
+CERTIFICATE_KEY_MATCH_BODY_MAX_BYTES=180000
 SSLCONF_LOG_LEVEL=info
 SSLCONF_LOG_SALT=<secreto-propio>
 TLS_TIMEOUT_MS=8000
@@ -749,6 +762,7 @@ RATE_LIMIT_WINDOW_SECONDS=60
 RATE_LIMIT_MAX=20
 RATE_LIMIT_SCAN_MAX=12
 RATE_LIMIT_CHAIN_MAX=20
+RATE_LIMIT_KEY_MATCH_MAX=20
 RATE_LIMIT_KEY_SALT=change-me-in-production
 RATE_LIMIT_REDIS_REST_URL=
 RATE_LIMIT_REDIS_REST_TOKEN=
@@ -1102,6 +1116,7 @@ RATE_LIMIT_WINDOW_SECONDS=60
 RATE_LIMIT_MAX=20
 RATE_LIMIT_SCAN_MAX=12
 RATE_LIMIT_CHAIN_MAX=20
+RATE_LIMIT_KEY_MATCH_MAX=20
 TLS_SCAN_CACHE_TTL_SECONDS=300
 TLS_CHAIN_CACHE_TTL_SECONDS=600
 TLS_CACHE_MAX_ENTRIES=500
