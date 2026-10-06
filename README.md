@@ -87,6 +87,8 @@ Las cabeceras y tarjetas de las cuatro herramientas también usan descripciones 
 
 Todos los títulos de herramienta usan equilibrio de líneas (`text-wrap: balance`). El CSR se presenta como `Validador de CSR` / `CSR Validator`, evitando que la sigla quede aislada por el título anterior.
 
+Los contenedores de formulario usan un fondo verde muy suave para diferenciar el área de acción. Los campos de texto y las áreas de PEM/CSR se mantienen blancos, de modo que el contenido editable conserva el máximo contraste visual.
+
 Los nombres visibles se mantienen unificados en cabecera, botones de home, tarjetas, títulos, estados de carga y metadatos. Se evita mezclar `Server Test`, `Test de servidor` y `Análisis SSL/TLS`, así como `Chain Builder`, `Generador de cadena` y `Generar CA bundle` para la misma utilidad.
 
 En `SSL/TLS Server Test` / `Análisis SSL/TLS`, cuando hay resultados, el informe se renderiza a ancho completo debajo del bloque introductorio. Esto evita que métricas, protocolos, certificado y findings queden encerrados en una columna estrecha. Los errores crudos de OpenSSL en protocolos no soportados se resumen en mensajes legibles para no romper la maquetación.
