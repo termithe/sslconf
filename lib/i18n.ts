@@ -41,10 +41,10 @@ export const copy = {
     homeSecondaryAction: "Open CA Bundle Generator",
     homeToolsTitle: "More tools",
     homeTools: [
-      ["SSL/TLS Server Test", "Grade a public HTTPS endpoint and review certificate trust, protocols, redirects, HSTS, OCSP, HTTP/2 and recommendations.", "Run SSL/TLS Server Test"],
-      ["CA Bundle Generator", "Rebuild the correct intermediate CA bundle from the leaf certificate, AIA issuers and trusted CA paths.", "Open CA Bundle Generator"],
-      ["Certificate Decoder", "Inspect a PEM certificate or Base64-encoded DER without sending it to any external certificate authority.", "Open Certificate Decoder"],
-      ["CSR Decoder", "Validate a PKCS#10 certificate request, its public key, signature and requested subject alternative names.", "Open CSR Decoder"]
+      ["SSL/TLS Server Test", "Assess an HTTPS endpoint: certificate, protocols, HSTS and CAA.", "Run SSL/TLS Server Test"],
+      ["CA Bundle Generator", "Generate the correct CA bundle from the leaf certificate.", "Open CA Bundle Generator"],
+      ["Certificate Decoder", "Inspect PEM or Base64 DER certificates: identity, validity and extensions.", "Open Certificate Decoder"],
+      ["CSR Decoder", "Validate PKCS#10 CSRs: public key, signature and alternative names.", "Open CSR Decoder"]
     ],
     checksTitle: "What the analysis covers",
     checks: [
@@ -82,7 +82,7 @@ export const copy = {
     issuer: "Issuer"
     ,
     scanTitle: "SSL/TLS Server Test.",
-    scanDescription: "Scan a public HTTPS endpoint, grade its TLS posture and surface the certificate, protocol, HSTS and CAA checks that matter most.",
+    scanDescription: "Assess an HTTPS endpoint: certificate, protocols, HSTS and CAA.",
     scanFormLabel: "Domain or HTTPS URL",
     scanFormPlaceholder: "Enter a domain or https:// URL",
     scanSubmit: "Run analysis",
@@ -147,7 +147,7 @@ export const copy = {
     scanFinalUrl: "Final URL",
     scanSkipped: "Skipped",
     decoderTitle: "Certificate Decoder.",
-    decoderDescription: "Inspect a PEM certificate or Base64-encoded DER and review its identity, validity, key material and relevant X.509 extensions.",
+    decoderDescription: "Inspect PEM or Base64 DER certificates: identity, validity, key and X.509 extensions.",
     decoderInputLabel: "PEM certificate or Base64-encoded DER",
     decoderPlaceholder: "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----",
     decoderSubmit: "Decode certificate",
@@ -168,7 +168,7 @@ export const copy = {
     decoderYes: "Yes",
     decoderNo: "No",
     csrTitle: "CSR Decoder and Validator.",
-    csrDescription: "Inspect a PKCS#10 certificate signing request before submitting it to a certificate authority.",
+    csrDescription: "Validate a PKCS#10 certificate request before submitting it to a certificate authority.",
     csrInputLabel: "PEM CSR or Base64-encoded DER",
     csrPlaceholder: "-----BEGIN CERTIFICATE REQUEST-----\n...\n-----END CERTIFICATE REQUEST-----",
     csrSubmit: "Validate CSR",
@@ -197,10 +197,10 @@ export const copy = {
     homeSecondaryAction: "Abrir generador de CA bundle",
     homeToolsTitle: "Más herramientas",
     homeTools: [
-      ["Análisis SSL/TLS", "Calcula una nota para un endpoint HTTPS público y revisa confianza, protocolos, redirecciones, HSTS, OCSP, HTTP/2 y recomendaciones.", "Analizar dominio"],
-      ["Generador de CA bundle", "Reconstruye el CA bundle intermedio correcto desde el certificado leaf, AIA issuers y rutas CA confiables.", "Abrir generador de CA bundle"],
-      ["Decodificador de certificados", "Inspecciona un certificado PEM o DER codificado en Base64 sin enviarlo a ninguna autoridad certificadora externa.", "Abrir decodificador"],
-      ["Decodificador de CSR", "Valida una solicitud de certificado PKCS#10, su clave pública, firma y nombres alternativos solicitados.", "Abrir decodificador de CSR"]
+      ["Análisis SSL/TLS", "Evalúa un endpoint HTTPS: certificado, protocolos, HSTS y CAA.", "Analizar dominio"],
+      ["Generador de CA bundle", "Genera el CA bundle correcto desde el certificado leaf.", "Abrir generador de CA bundle"],
+      ["Decodificador de certificados", "Inspecciona certificados PEM o DER: identidad, validez y extensiones.", "Abrir decodificador"],
+      ["Decodificador de CSR", "Valida CSRs PKCS#10: clave pública, firma y nombres alternativos.", "Abrir decodificador de CSR"]
     ],
     checksTitle: "Qué analiza",
     checks: [
@@ -237,7 +237,7 @@ export const copy = {
     validity: "Validez",
     issuer: "Issuer",
     scanTitle: "Análisis SSL/TLS.",
-    scanDescription: "Escanea un endpoint HTTPS público, calcula una nota TLS y muestra las comprobaciones principales de certificado, protocolos, HSTS y CAA.",
+    scanDescription: "Evalúa un endpoint HTTPS: certificado, protocolos, HSTS y CAA.",
     scanFormLabel: "Dominio o URL HTTPS",
     scanFormPlaceholder: "Introduce un dominio o URL https://",
     scanSubmit: "Analizar dominio",
@@ -302,7 +302,7 @@ export const copy = {
     scanFinalUrl: "URL final",
     scanSkipped: "Omitido",
     decoderTitle: "Decodificador de certificados.",
-    decoderDescription: "Inspecciona un certificado PEM o DER codificado en Base64 y revisa identidad, validez, clave y extensiones X.509 relevantes.",
+    decoderDescription: "Inspecciona certificados PEM o DER: identidad, validez, clave y extensiones X.509.",
     decoderInputLabel: "Certificado PEM o DER codificado en Base64",
     decoderPlaceholder: "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----",
     decoderSubmit: "Decodificar certificado",
@@ -323,7 +323,7 @@ export const copy = {
     decoderYes: "Sí",
     decoderNo: "No",
     csrTitle: "Decodificador y validador de CSR.",
-    csrDescription: "Inspecciona una solicitud de firma de certificado PKCS#10 antes de enviarla a una autoridad certificadora.",
+    csrDescription: "Valida una solicitud PKCS#10 antes de enviarla a una autoridad certificadora.",
     csrInputLabel: "CSR PEM o DER codificado en Base64",
     csrPlaceholder: "-----BEGIN CERTIFICATE REQUEST-----\n...\n-----END CERTIFICATE REQUEST-----",
     csrSubmit: "Validar CSR",
