@@ -79,6 +79,8 @@ CSR Decoder / Decodificador de CSR
 
 `SSL/TLS Server Test` / `Análisis SSL/TLS` se muestra como la herramienta destacada porque es la utilidad más general para diagnosticar un sitio público. El formulario de análisis está integrado directamente en la portada, inmediatamente después de un título abreviado para mantenerlo visible: al enviar un dominio redirige a `/scan?host=...` o `/es/scan?host=...` para mostrar el informe completo. La portada no añade acciones secundarias ni un bloque redundante de herramienta destacada bajo ese formulario; `Certificate Decoder`, `CSR Decoder` y `CA Bundle Generator` quedan disponibles como herramientas secundarias en sus tarjetas.
 
+La cabecera usa una composición de una columna hasta pantallas `xl`, antes de mostrar el panel lateral de comprobaciones. Así el título y el formulario principal conservan suficiente anchura y se evita dejar palabras aisladas en líneas separadas en portátiles y tablets.
+
 Los nombres visibles se mantienen unificados en cabecera, botones de home, tarjetas, títulos, estados de carga y metadatos. Se evita mezclar `Server Test`, `Test de servidor` y `Análisis SSL/TLS`, así como `Chain Builder`, `Generador de cadena` y `Generar CA bundle` para la misma utilidad.
 
 En `SSL/TLS Server Test` / `Análisis SSL/TLS`, cuando hay resultados, el informe se renderiza a ancho completo debajo del bloque introductorio. Esto evita que métricas, protocolos, certificado y findings queden encerrados en una columna estrecha. Los errores crudos de OpenSSL en protocolos no soportados se resumen en mensajes legibles para no romper la maquetación.
