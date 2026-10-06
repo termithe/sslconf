@@ -218,7 +218,7 @@ export function TLSServerScanResult({ result, locale = "en" }: { result: TlsScan
           <Panel title={text.scanTls12Ciphers}>
             <div className="grid gap-3 sm:grid-cols-2">
               <Metric label={text.scanPreferredCipher} value={result.tls12Ciphers.preferredCipher ?? "-"} />
-              <Metric label={text.scanServerOrder} value={result.tls12Ciphers.serverOrder} />
+              <Metric label={text.scanServerOrder} value={cipherOrderValue(result.tls12Ciphers.serverOrder, locale)} />
             </div>
             <div className="mt-4 overflow-hidden rounded-md border border-line bg-white/70">
               <div className="grid grid-cols-[minmax(0,1fr)_120px] border-b border-line bg-mint/60 px-4 py-3 text-[11px] font-black uppercase tracking-[0.14em] text-ink/50">
@@ -537,7 +537,7 @@ function printableHtmlReport(result: TlsScanResponse, locale: Locale) {
           ${htmlMetric(text.scanChain, result.chain.verified ? text.scanTrusted : text.scanNotTrusted)}
           ${htmlMetric("IPs", result.ipAddresses.join(", ") || "-")}
           ${htmlMetric(text.scanAlpn, result.alpn.join(", ") || "-")}
-          ${htmlMetric(text.scanServerOrder, result.tls12Ciphers.serverOrder)}
+          ${htmlMetric(text.scanServerOrder, cipherOrderValue(result.tls12Ciphers.serverOrder, locale))}
         </div>
       </div>
     </header>
@@ -802,6 +802,13 @@ function FindingRow({ finding }: { finding: TlsScanFinding }) {
       </div>
     </div>
   );
+}
+
+function cipherOrderValue(order: TlsScanResponse["tls12Ciphers"]["serverOrder"], locale: Locale) {
+  const text = copy[locale];
+  if (order === "server") return text.scanServerOrderServer;
+  if (order === "client") return text.scanServerOrderClient;
+  return text.scanServerOrderUnknown;
 }
 
 function KeyValue({ label, value }: { label: string; value?: string }) {

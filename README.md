@@ -976,6 +976,8 @@ weak
 weakness
 ```
 
+La enumeración resuelve el hostname una sola vez mediante la ruta DNS pública validada y reutiliza esa resolución en todas las pruebas de suites y de orden. `TLS_SCAN_CIPHER_TIMEOUT_MS` limita cada handshake del catálogo de forma independiente; `TLS_SCAN_CIPHER_CONCURRENCY` limita su paralelismo. Esto evita repetir resoluciones DNS y mantiene acotada la duración del análisis sin alterar la puntuación: solo las suites débiles que se confirman como aceptadas restan puntos.
+
 `serverOrder` se estima comparando la negociación con el catálogo en orden normal e inverso. Si ambos handshakes seleccionan la misma suite, se marca `server`; si cambian, se marca `client`; si no hay datos suficientes, `unknown`.
 
 Los aliases del catálogo que no existen o están deshabilitados en la versión local de OpenSSL se tratan como no disponibles. Esto evita que una suite heredada no soportada por el runtime rompa el escaneo completo.
@@ -1096,6 +1098,7 @@ ENABLE_CRTSH_RUNTIME_LOOKUP=0
 TLS_SCAN_HTTP_TIMEOUT_MS=6000
 TLS_SCAN_MAX_REDIRECTS=6
 TLS_SCAN_USER_AGENT="SSLConf/0.1 (+https://sslconf.com)"
+TLS_SCAN_CIPHER_TIMEOUT_MS=3500
 TLS_SCAN_CIPHER_CONCURRENCY=6
 TLS_SCAN_OCSP_TIMEOUT_MS=6000
 TLS_SCAN_OCSP_MAX_BYTES=250000

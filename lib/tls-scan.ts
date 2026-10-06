@@ -15,6 +15,7 @@ const httpTimeoutMs = Number(process.env.TLS_SCAN_HTTP_TIMEOUT_MS ?? 6000);
 const maxRedirects = Number(process.env.TLS_SCAN_MAX_REDIRECTS ?? 6);
 const userAgent = process.env.TLS_SCAN_USER_AGENT ?? "SSLConf/0.1 (+https://sslconf.com)";
 const cipherProbeConcurrency = Number(process.env.TLS_SCAN_CIPHER_CONCURRENCY ?? 6);
+const cipherProbeTimeoutMs = Number(process.env.TLS_SCAN_CIPHER_TIMEOUT_MS ?? 3500);
 const ocspTimeoutMs = Number(process.env.TLS_SCAN_OCSP_TIMEOUT_MS ?? 6000);
 const maxOcspBytes = Number(process.env.TLS_SCAN_OCSP_MAX_BYTES ?? 250_000);
 const hstsPreloadTimeoutMs = Number(process.env.TLS_SCAN_HSTS_PRELOAD_TIMEOUT_MS ?? 5000);
@@ -395,8 +396,12 @@ async function mapWithConcurrency<T, R>(items: T[], concurrency: number, mapper:
   return results;
 }
 
-async function probeTls12Cipher(host: string, port: number, cipher: Omit<Tls12CipherSuite, "weak" | "weakness">) {
-  const lookup = await publicLookupFor(host, "cipher probe target");
+async function probeTls12Cipher(
+  host: string,
+  port: number,
+  cipher: Omit<Tls12CipherSuite, "weak" | "weakness">,
+  lookup: Awaited<ReturnType<typeof publicLookupFor>>
+) {
   return new Promise<Tls12CipherSuite | null>((resolve) => {
     let socket: tls.TLSSocket;
     try {
@@ -405,7 +410,7 @@ async function probeTls12Cipher(host: string, port: number, cipher: Omit<Tls12Ci
         port,
         servername: isIP(host) ? undefined : host,
         rejectUnauthorized: false,
-        timeout: scanTimeoutMs,
+        timeout: cipherProbeTimeoutMs,
         minVersion: "TLSv1.2",
         maxVersion: "TLSv1.2",
         ciphers: cipher.opensslName,
@@ -430,8 +435,12 @@ async function probeTls12Cipher(host: string, port: number, cipher: Omit<Tls12Ci
   });
 }
 
-async function negotiateTls12Cipher(host: string, port: number, ciphers: string[]) {
-  const lookup = await publicLookupFor(host, "cipher order probe target");
+async function negotiateTls12Cipher(
+  host: string,
+  port: number,
+  ciphers: string[],
+  lookup: Awaited<ReturnType<typeof publicLookupFor>>
+) {
   return new Promise<string | undefined>((resolve) => {
     let socket: tls.TLSSocket;
     try {
@@ -440,7 +449,7 @@ async function negotiateTls12Cipher(host: string, port: number, ciphers: string[
         port,
         servername: isIP(host) ? undefined : host,
         rejectUnauthorized: false,
-        timeout: scanTimeoutMs,
+        timeout: cipherProbeTimeoutMs,
         minVersion: "TLSv1.2",
         maxVersion: "TLSv1.2",
         ciphers: ciphers.join(":"),
@@ -467,12 +476,14 @@ async function negotiateTls12Cipher(host: string, port: number, ciphers: string[
 }
 
 async function enumerateTls12Ciphers(host: string, port: number): Promise<TlsScanResponse["tls12Ciphers"]> {
-  const supported = (await mapWithConcurrency(tls12CipherCatalog, cipherProbeConcurrency, (cipher) => probeTls12Cipher(host, port, cipher)))
+  // Resolve once and reuse the validated public addresses for every handshake.
+  const lookup = await publicLookupFor(host, "cipher probe target");
+  const supported = (await mapWithConcurrency(tls12CipherCatalog, cipherProbeConcurrency, (cipher) => probeTls12Cipher(host, port, cipher, lookup)))
     .filter((cipher): cipher is Tls12CipherSuite => Boolean(cipher));
 
   const supportedOpenSsl = supported.map((cipher) => cipher.opensslName);
-  const preferredCipher = supportedOpenSsl.length > 0 ? await negotiateTls12Cipher(host, port, supportedOpenSsl) : undefined;
-  const reversePreferredCipher = supportedOpenSsl.length > 1 ? await negotiateTls12Cipher(host, port, [...supportedOpenSsl].reverse()) : undefined;
+  const preferredCipher = supportedOpenSsl.length > 0 ? await negotiateTls12Cipher(host, port, supportedOpenSsl, lookup) : undefined;
+  const reversePreferredCipher = supportedOpenSsl.length > 1 ? await negotiateTls12Cipher(host, port, [...supportedOpenSsl].reverse(), lookup) : undefined;
   const serverOrder = supportedOpenSsl.length <= 1 || !preferredCipher || !reversePreferredCipher
     ? "unknown"
     : preferredCipher === reversePreferredCipher
