@@ -43,12 +43,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </span>
             </a>
             <div className="flex items-center gap-3">
-              <div className="hidden items-center divide-x divide-line border-x border-line md:flex">
-                <a href={`${prefix || ""}/check`} className="px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-ink/60 transition hover:bg-mint hover:text-signal">
-                  {copy[locale].navChain}
-                </a>
+              <div className="hidden items-center divide-x divide-line border-x border-line lg:flex">
                 <a href={`${prefix || ""}/scan`} className="px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-ink/60 transition hover:bg-mint hover:text-signal">
                   {copy[locale].navScan}
+                </a>
+                <a href={`${prefix || ""}/decode`} className="px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-ink/60 transition hover:bg-mint hover:text-signal">
+                  {copy[locale].navDecoder}
+                </a>
+                <a href={`${prefix || ""}/check`} className="px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-ink/60 transition hover:bg-mint hover:text-signal">
+                  {copy[locale].navChain}
                 </a>
               </div>
               <span className="hidden text-xs font-black uppercase tracking-[0.16em] text-ink/55 sm:block">{copy[locale].navTag}</span>

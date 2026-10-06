@@ -194,3 +194,10 @@ export const tlsScanSchema = z.object({
   message: "Puerto no permitido para esta utilidad.",
   path: ["host"]
 });
+
+export const certificateDecodeSchema = z.object({
+  certificate: z.string().min(1).max(65_536).refine((value) => !/-----BEGIN (?:RSA |EC |ENCRYPTED )?PRIVATE KEY-----/i.test(value), {
+    message: "Invalid certificate."
+  }),
+  locale: z.enum(["en", "es"]).optional().default("en")
+});

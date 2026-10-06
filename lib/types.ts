@@ -34,6 +34,28 @@ export type TLSChainResponse = {
   steps: ChainStep[];
 };
 
+export type DecodedCertificateResponse = {
+  subject: string;
+  issuer: string;
+  serialNumber: string;
+  validFrom: string;
+  validTo: string;
+  fingerprint256: string;
+  fingerprint512?: string;
+  key: {
+    type?: string;
+    bits?: number;
+    curve?: string;
+  };
+  signatureAlgorithm?: string;
+  certificateAuthority: boolean;
+  subjectAltNames: string[];
+  authorityInfoAccess: string[];
+  crlDistributionPoints: string[];
+  keyUsage: string[];
+  extendedKeyUsage: string[];
+};
+
 export type TlsProtocolName = "SSLv3" | "TLSv1" | "TLSv1.1" | "TLSv1.2" | "TLSv1.3";
 
 export type TlsProtocolProbe = {

@@ -3,14 +3,14 @@ import type { Locale } from "./i18n";
 
 const maxJsonBodyBytes = Number(process.env.API_JSON_BODY_MAX_BYTES ?? 4096);
 
-export async function readSmallJsonBody(request: NextRequest) {
+export async function readSmallJsonBody(request: NextRequest, maxBytes = maxJsonBodyBytes) {
   const contentLength = Number(request.headers.get("content-length") ?? 0);
-  if (contentLength > maxJsonBodyBytes) {
+  if (contentLength > maxBytes) {
     throw new Error("request body too large");
   }
 
   const text = await request.text();
-  if (Buffer.byteLength(text, "utf8") > maxJsonBodyBytes) {
+  if (Buffer.byteLength(text, "utf8") > maxBytes) {
     throw new Error("request body too large");
   }
   if (!text.trim()) return null;
@@ -28,6 +28,9 @@ export function apiErrorMessage(error: unknown, locale: Locale, fallback: string
 
   if (lower.includes("body too large")) {
     return locale === "es" ? "La petición es demasiado grande." : "The request body is too large.";
+  }
+  if (lower.includes("invalid certificate")) {
+    return locale === "es" ? "El certificado no tiene un formato válido." : "The certificate has an invalid format.";
   }
   if (lower.includes("private or reserved ip")) {
     return locale === "es" ? "El destino resuelve a una IP privada o reservada y no se permite escanearlo." : "The target resolves to a private or reserved IP address and cannot be scanned.";
@@ -61,6 +64,7 @@ export function apiErrorStatus(error: unknown) {
   const message = error instanceof Error ? error.message.toLowerCase() : "";
   if (
     message.includes("body too large") ||
+    message.includes("invalid certificate") ||
     message.includes("private or reserved ip") ||
     message.includes("does not resolve in dns") ||
     message.includes("port is not allowed") ||

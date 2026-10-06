@@ -29,10 +29,11 @@ export function localeFromAcceptLanguage(header: string | null) {
 export const copy = {
   en: {
     navTag: "TLS tools",
+    navDecoder: "Certificate Decoder",
     navChain: "CA Bundle Generator",
     navScan: "SSL/TLS Server Test",
     homeTitle: "SSL/TLS diagnostics for certificates, chains and server configuration.",
-    homeDescription: "Run focused SSL/TLS tools from one console: grade a public HTTPS endpoint, inspect protocols and HSTS, or rebuild the correct CA bundle for your server.",
+    homeDescription: "Run focused SSL/TLS tools from one console: grade a public HTTPS endpoint, decode a certificate, or rebuild the correct CA bundle for your server.",
     homeFeaturedLabel: "Featured tool",
     homeFeaturedTool: "SSL/TLS Server Test",
     homePrimaryAction: "Run SSL/TLS Server Test",
@@ -40,7 +41,8 @@ export const copy = {
     homeToolsTitle: "More tools",
     homeTools: [
       ["SSL/TLS Server Test", "Grade a public HTTPS endpoint and review certificate trust, protocols, redirects, HSTS, OCSP, HTTP/2 and recommendations.", "Run SSL/TLS Server Test"],
-      ["CA Bundle Generator", "Rebuild the correct intermediate CA bundle from the leaf certificate, AIA issuers and trusted CA paths.", "Open CA Bundle Generator"]
+      ["CA Bundle Generator", "Rebuild the correct intermediate CA bundle from the leaf certificate, AIA issuers and trusted CA paths.", "Open CA Bundle Generator"],
+      ["Certificate Decoder", "Inspect a PEM certificate or Base64-encoded DER without sending it to any external certificate authority.", "Open Certificate Decoder"]
     ],
     checksTitle: "What the analysis covers",
     checks: [
@@ -142,15 +144,36 @@ export const copy = {
     scanHttpsFlow: "HTTPS flow",
     scanFinalUrl: "Final URL",
     scanSkipped: "Skipped",
+    decoderTitle: "Certificate Decoder.",
+    decoderDescription: "Inspect a PEM certificate or Base64-encoded DER and review its identity, validity, key material and relevant X.509 extensions.",
+    decoderInputLabel: "PEM certificate or Base64-encoded DER",
+    decoderPlaceholder: "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----",
+    decoderSubmit: "Decode certificate",
+    decoderPrivacy: "Processed in memory only. The certificate is not stored or sent to a certificate authority.",
+    decoderLoading: "Decoding certificate",
+    decoderResultTitle: "Certificate details",
+    decoderIdentity: "Identity",
+    decoderCryptography: "Cryptography",
+    decoderExtensions: "Extensions",
+    decoderKeyUsage: "Key usage",
+    decoderExtendedKeyUsage: "Extended key usage",
+    decoderSan: "Subject alternative names",
+    decoderAia: "Authority information access",
+    decoderCrl: "CRL distribution points",
+    decoderCertificateAuthority: "Certificate authority",
+    decoderNoValues: "Not present",
+    decoderYes: "Yes",
+    decoderNo: "No",
     supported: "Supported",
     notSupported: "Not supported"
   },
   es: {
     navTag: "Herramientas TLS",
+    navDecoder: "Decodificador de certificados",
     navChain: "Generador de CA bundle",
     navScan: "Análisis SSL/TLS",
     homeTitle: "Diagnóstico SSL/TLS para certificados, cadenas y configuración de servidor.",
-    homeDescription: "Ejecuta herramientas SSL/TLS desde una consola: puntúa un endpoint HTTPS público, revisa protocolos y HSTS, o reconstruye el CA bundle correcto para tu servidor.",
+    homeDescription: "Ejecuta herramientas SSL/TLS desde una consola: puntúa un endpoint HTTPS público, decodifica un certificado o reconstruye el CA bundle correcto para tu servidor.",
     homeFeaturedLabel: "Herramienta principal",
     homeFeaturedTool: "Análisis SSL/TLS",
     homePrimaryAction: "Analizar dominio",
@@ -158,7 +181,8 @@ export const copy = {
     homeToolsTitle: "Más herramientas",
     homeTools: [
       ["Análisis SSL/TLS", "Calcula una nota para un endpoint HTTPS público y revisa confianza, protocolos, redirecciones, HSTS, OCSP, HTTP/2 y recomendaciones.", "Analizar dominio"],
-      ["Generador de CA bundle", "Reconstruye el CA bundle intermedio correcto desde el certificado leaf, AIA issuers y rutas CA confiables.", "Abrir generador de CA bundle"]
+      ["Generador de CA bundle", "Reconstruye el CA bundle intermedio correcto desde el certificado leaf, AIA issuers y rutas CA confiables.", "Abrir generador de CA bundle"],
+      ["Decodificador de certificados", "Inspecciona un certificado PEM o DER codificado en Base64 sin enviarlo a ninguna autoridad certificadora externa.", "Abrir decodificador"]
     ],
     checksTitle: "Qué analiza",
     checks: [
@@ -259,6 +283,26 @@ export const copy = {
     scanHttpsFlow: "Flujo HTTPS",
     scanFinalUrl: "URL final",
     scanSkipped: "Omitido",
+    decoderTitle: "Decodificador de certificados.",
+    decoderDescription: "Inspecciona un certificado PEM o DER codificado en Base64 y revisa identidad, validez, clave y extensiones X.509 relevantes.",
+    decoderInputLabel: "Certificado PEM o DER codificado en Base64",
+    decoderPlaceholder: "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----",
+    decoderSubmit: "Decodificar certificado",
+    decoderPrivacy: "Procesado solo en memoria. El certificado no se guarda ni se envía a ninguna autoridad certificadora.",
+    decoderLoading: "Decodificando certificado",
+    decoderResultTitle: "Detalles del certificado",
+    decoderIdentity: "Identidad",
+    decoderCryptography: "Criptografía",
+    decoderExtensions: "Extensiones",
+    decoderKeyUsage: "Uso de clave",
+    decoderExtendedKeyUsage: "Uso extendido de clave",
+    decoderSan: "Nombres alternativos del sujeto",
+    decoderAia: "Información de acceso de autoridad",
+    decoderCrl: "Puntos de distribución CRL",
+    decoderCertificateAuthority: "Autoridad certificadora",
+    decoderNoValues: "No presente",
+    decoderYes: "Sí",
+    decoderNo: "No",
     supported: "Soportado",
     notSupported: "No soportado"
   }

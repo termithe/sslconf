@@ -67,11 +67,12 @@ SSL/TLS Server Test / Análisis SSL/TLS
 CA Bundle Generator / Generador de CA bundle
 ```
 
-La home (`/` y `/es`) no abre ya directamente el generador de CA bundle. Ahora funciona como consola de herramientas con dos accesos principales:
+La home (`/` y `/es`) no abre ya directamente el generador de CA bundle. Ahora funciona como consola de herramientas con una utilidad principal y dos herramientas secundarias:
 
 ```text
 SSL/TLS Server Test / Análisis SSL/TLS
 CA Bundle Generator / Generador de CA bundle
+Certificate Decoder / Decodificador de certificados
 ```
 
 `SSL/TLS Server Test` / `Análisis SSL/TLS` se muestra como la herramienta destacada porque es la utilidad más general para diagnosticar un sitio público. La portada adapta el bloque lateral a sus comprobaciones reales: postura TLS, señales de transporte y fixes accionables. `CA Bundle Generator` queda como herramienta secundaria en `/check` y `/es/check`.
@@ -192,7 +193,47 @@ http2.alpnProtocols
 
 Si no negocia `h2`, genera recomendación de baja severidad con snippets nginx/Apache. De momento no penaliza la nota.
 
-## Herramienta 1: CA Bundle Generator
+## Herramienta 1: Certificate Decoder / Decodificador de certificados
+
+La utilidad vive en:
+
+```text
+/decode
+/es/decode
+```
+
+Acepta un único certificado X.509 en formato PEM o DER codificado en Base64. No acepta claves privadas: las entradas con cabeceras `PRIVATE KEY` se rechazan antes de interpretar el certificado.
+
+El análisis se realiza únicamente en memoria en el runtime Node.js. No se almacenan certificados, no se usan ficheros temporales, no hay caché y no se consulta ninguna CA, DNS o servicio externo. La respuesta incluye:
+
+```text
+subject e issuer
+serial, validez y huellas SHA-256 / SHA-512
+tipo, tamaño o curva de clave pública
+algoritmo de firma
+indicador de autoridad certificadora
+SAN, AIA, CRL distribution points
+key usage y extended key usage
+```
+
+Endpoint:
+
+```text
+POST /api/certificate/decode
+```
+
+Payload:
+
+```json
+{
+  "certificate": "-----BEGIN CERTIFICATE-----\\n...\\n-----END CERTIFICATE-----",
+  "locale": "es"
+}
+```
+
+El body máximo es `CERTIFICATE_DECODE_BODY_MAX_BYTES=70000` bytes. El endpoint aplica `RATE_LIMIT_DECODE_MAX=30` peticiones por cliente y ventana, no registra el contenido del certificado y responde con `Cache-Control: no-store`.
+
+## Herramienta 2: CA Bundle Generator
 
 El CA Bundle Generator no copia ciegamente la cadena instalada en el servidor. El flujo actual es:
 
@@ -251,6 +292,7 @@ El idioma por defecto es inglés:
 ```text
 /
 /check
+/decode
 ```
 
 La versión española vive en:
@@ -258,6 +300,7 @@ La versión española vive en:
 ```text
 /es
 /es/check
+/es/decode
 /es/scan
 ```
 
@@ -709,7 +752,7 @@ Puertos permitidos actualmente:
 443, 465, 636, 8443, 993, 995
 ```
 
-## Herramienta 2: SSL/TLS Server Test
+## Herramienta 3: SSL/TLS Server Test
 
 La segunda utilidad pública vive en:
 
@@ -993,6 +1036,7 @@ TLS_SCAN_OCSP_TIMEOUT_MS=6000
 TLS_SCAN_OCSP_MAX_BYTES=250000
 TLS_SCAN_HSTS_PRELOAD_TIMEOUT_MS=5000
 TLS_SCAN_HSTS_PRELOAD_MAX_BYTES=50000
+CERTIFICATE_DECODE_BODY_MAX_BYTES=70000
 NEXT_PUBLIC_SITE_URL=https://sslconf.com
 ```
 
@@ -1003,6 +1047,7 @@ El rate limit se aplica tanto por cliente como por destino. El segundo límite u
 ```text
 SSL/TLS Server Test: 12 comprobaciones por destino/minuto
 CA Bundle Generator: 30 comprobaciones por destino/minuto
+Certificate Decoder: 30 comprobaciones por cliente/minuto
 ```
 
 El límite por destino se evalúa solo después de validar el hostname y puerto. En despliegue con varias instancias Vercel requiere `RATE_LIMIT_REDIS_REST_URL` y `RATE_LIMIT_REDIS_REST_TOKEN` para ser compartido entre instancias.
