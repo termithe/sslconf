@@ -68,7 +68,7 @@ CA Bundle Generator / Generador de CA bundle
 CSR Decoder / Decodificador de CSR
 ```
 
-Solo se muestran accesos accionables: el rótulo informativo `TLS tools` / `Herramientas TLS` se eliminó para no aparentar un enlace sin destino. La marca conserva un margen explícito respecto a la navegación y vuelve a la portada del idioma activo.
+La cabecera conserva `SSL/TLS Server Test` / `Análisis SSL/TLS` como acceso directo y agrupa el resto de herramientas en un menú desplegable accionable `Tools` / `Herramientas`: CA bundle, decodificadores de certificado y CSR, comprobador de certificado y clave, y generador de CSR. Así la navegación se mantiene utilizable sin superar el ancho disponible. La marca conserva un margen explícito respecto a la navegación y vuelve a la portada del idioma activo.
 
 La suite incluye además dos utilidades criptográficas:
 

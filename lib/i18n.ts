@@ -28,6 +28,7 @@ export function localeFromAcceptLanguage(header: string | null) {
 
 export const copy = {
   en: {
+    navTools: "Tools",
     navCsr: "CSR Decoder",
     navDecoder: "Certificate Decoder",
     navChain: "CA Bundle Generator",
@@ -208,6 +209,7 @@ export const copy = {
     notSupported: "Not supported"
   },
   es: {
+    navTools: "Herramientas",
     navCsr: "Decodificador de CSR",
     navDecoder: "Decodificador de certificados",
     navChain: "Generador de CA bundle",

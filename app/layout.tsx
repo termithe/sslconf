@@ -43,19 +43,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </span>
             </a>
             <div className="ml-auto flex items-center gap-3">
-              <div className="hidden items-center divide-x divide-line border-x border-line lg:flex">
+              <div className="hidden items-center border-x border-line lg:flex">
                 <a href={`${prefix || ""}/scan`} className="px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-ink/60 transition hover:bg-mint hover:text-signal">
                   {copy[locale].navScan}
                 </a>
-                <a href={`${prefix || ""}/csr`} className="px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-ink/60 transition hover:bg-mint hover:text-signal">
-                  {copy[locale].navCsr}
-                </a>
-                <a href={`${prefix || ""}/decode`} className="px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-ink/60 transition hover:bg-mint hover:text-signal">
-                  {copy[locale].navDecoder}
-                </a>
-                <a href={`${prefix || ""}/check`} className="px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-ink/60 transition hover:bg-mint hover:text-signal">
-                  {copy[locale].navChain}
-                </a>
+                <details className="group relative border-l border-line">
+                  <summary className="flex cursor-pointer list-none items-center gap-2 px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-ink/60 transition hover:bg-mint hover:text-signal">
+                    {copy[locale].navTools}
+                    <span className="text-base leading-none transition group-open:rotate-45">+</span>
+                  </summary>
+                  <div className="absolute right-0 top-full z-50 mt-px w-72 border border-line bg-white p-1 shadow-[0_12px_28px_rgba(22,33,45,0.12)]">
+                    <HeaderToolLink href={`${prefix || ""}/check`} label={copy[locale].navChain} />
+                    <HeaderToolLink href={`${prefix || ""}/decode`} label={copy[locale].navDecoder} />
+                    <HeaderToolLink href={`${prefix || ""}/csr`} label={copy[locale].navCsr} />
+                    <HeaderToolLink href={`${prefix || ""}/match`} label={locale === "es" ? "Comprobador de certificado y clave" : "Certificate & Key Matcher"} />
+                    <HeaderToolLink href={`${prefix || ""}/csr/generate`} label={locale === "es" ? "Generador de CSR" : "CSR Generator"} />
+                  </div>
+                </details>
               </div>
               <LanguageSwitcher />
             </div>
@@ -68,4 +72,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </body>
     </html>
   );
+}
+
+function HeaderToolLink({ href, label }: { href: string; label: string }) {
+  return <a href={href} className="block px-3 py-2.5 text-xs font-black uppercase tracking-[0.1em] text-ink/65 transition hover:bg-mint hover:text-signal">{label}</a>;
 }
