@@ -31,12 +31,6 @@ export function HomeContent({ locale }: { locale: Locale }) {
             </div>
             <div className="mt-6">
               <TLSServerScanForm locale={locale} />
-              <div className="mt-3 flex">
-                <a href={`${prefix}/check`} className="inline-flex h-11 items-center justify-center gap-2 border border-line bg-white px-4 font-black text-night transition hover:border-signal hover:text-signal">
-                  {text.homeSecondaryAction}
-                  <ArrowRight size={17} />
-                </a>
-              </div>
             </div>
           </div>
 
