@@ -81,6 +81,8 @@ CSR Decoder / Decodificador de CSR
 
 La cabecera usa una composición de una columna hasta pantallas `xl`, antes de mostrar el panel lateral de comprobaciones. Así el título y el formulario principal conservan suficiente anchura y se evita dejar palabras aisladas en líneas separadas en portátiles y tablets.
 
+El texto de apoyo de la portada se mantiene deliberadamente breve para priorizar el formulario del análisis: resume análisis HTTPS, decodificación de certificados y generación de CA bundles sin introducir una línea final aislada.
+
 Los nombres visibles se mantienen unificados en cabecera, botones de home, tarjetas, títulos, estados de carga y metadatos. Se evita mezclar `Server Test`, `Test de servidor` y `Análisis SSL/TLS`, así como `Chain Builder`, `Generador de cadena` y `Generar CA bundle` para la misma utilidad.
 
 En `SSL/TLS Server Test` / `Análisis SSL/TLS`, cuando hay resultados, el informe se renderiza a ancho completo debajo del bloque introductorio. Esto evita que métricas, protocolos, certificado y findings queden encerrados en una columna estrecha. Los errores crudos de OpenSSL en protocolos no soportados se resumen en mensajes legibles para no romper la maquetación.
