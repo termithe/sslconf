@@ -181,6 +181,21 @@ export type TlsScanCertificate = {
   signatureAlgorithm?: string;
 };
 
+export type TlsEndpointProfile = {
+  address: string;
+  family: 4 | 6;
+  status: "complete" | "error";
+  error?: string;
+  grade?: "A+" | "A" | "B" | "C" | "D" | "E" | "F" | "T" | "M";
+  score?: number;
+  trusted?: boolean;
+  hostnameValid?: boolean;
+  certificate?: Pick<TlsScanCertificate, "subject" | "issuer" | "validTo" | "fingerprint256">;
+  cipher?: string;
+  protocols?: Array<Pick<TlsProtocolProbe, "name" | "supported" | "cipher">>;
+  differences: string[];
+};
+
 export type TlsScanResponse = {
   queryId: string;
   host: string;
@@ -195,6 +210,14 @@ export type TlsScanResponse = {
   summary: string;
   assessedAt: string;
   ipAddresses: string[];
+  endpointCoverage: {
+    totalAddresses: number;
+    scannedAddresses: number;
+    truncated: boolean;
+    consistent: boolean;
+    hasErrors: boolean;
+    endpoints: TlsEndpointProfile[];
+  };
   certificate: TlsScanCertificate;
   chain: {
     verified: boolean;

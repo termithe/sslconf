@@ -8,7 +8,7 @@ import forge from "node-forge";
 import type { Locale } from "./i18n";
 import { getServerCertificates, inspectTlsChain, verifyServerTrust } from "./tls";
 import { assertPublicHostname, publicLookupFor, publicLookupForUrl, resolvePublicHostname } from "./validation";
-import type { Tls12CipherSuite, TlsGradeItem, TlsProtocolDetails, TlsProtocolName, TlsProtocolProbe, TlsRecommendation, TlsRedirectCheck, TlsScanFinding, TlsScanResponse } from "./types";
+import type { Tls12CipherSuite, TlsEndpointProfile, TlsGradeItem, TlsProtocolDetails, TlsProtocolName, TlsProtocolProbe, TlsRecommendation, TlsRedirectCheck, TlsScanFinding, TlsScanResponse } from "./types";
 
 const scanTimeoutMs = Number(process.env.TLS_SCAN_TIMEOUT_MS ?? 8000);
 const httpTimeoutMs = Number(process.env.TLS_SCAN_HTTP_TIMEOUT_MS ?? 6000);
@@ -19,6 +19,9 @@ const ocspTimeoutMs = Number(process.env.TLS_SCAN_OCSP_TIMEOUT_MS ?? 6000);
 const maxOcspBytes = Number(process.env.TLS_SCAN_OCSP_MAX_BYTES ?? 250_000);
 const hstsPreloadTimeoutMs = Number(process.env.TLS_SCAN_HSTS_PRELOAD_TIMEOUT_MS ?? 5000);
 const maxHstsPreloadBytes = Number(process.env.TLS_SCAN_HSTS_PRELOAD_MAX_BYTES ?? 50_000);
+const endpointProbeTimeoutMs = Number(process.env.TLS_SCAN_ENDPOINT_TIMEOUT_MS ?? 3500);
+const maxEndpointProfiles = Number(process.env.TLS_SCAN_ENDPOINT_MAX ?? 6);
+const endpointProbeConcurrency = Number(process.env.TLS_SCAN_ENDPOINT_CONCURRENCY ?? 6);
 
 const protocolVersions: Array<{ name: TlsProtocolName; minVersion: tls.SecureVersion; maxVersion: tls.SecureVersion }> = [
   { name: "TLSv1", minVersion: "TLSv1", maxVersion: "TLSv1" },
@@ -248,6 +251,117 @@ async function protocolProbe(host: string, port: number, version: { minVersion: 
     socket.once("error", (error) => {
       resolve({ name: version.name, supported: false, error: error.message });
     });
+  });
+}
+
+type PublicEndpointAddress = { address: string; family: number };
+
+function fixedLookup(address: PublicEndpointAddress) {
+  return function lookupEndpoint(
+    _hostname: string,
+    options: unknown,
+    callback?: (error: NodeJS.ErrnoException | null, address: string | { address: string; family: number }[], family?: number) => void
+  ) {
+    const lookupCallback = typeof options === "function" ? options as typeof callback : callback;
+    const lookupOptions = typeof options === "object" && options ? options as { all?: boolean } : {};
+    if (lookupOptions.all) lookupCallback?.(null, [{ address: address.address, family: address.family }]);
+    else lookupCallback?.(null, address.address, address.family);
+  };
+}
+
+async function endpointProtocolProbe(host: string, port: number, address: PublicEndpointAddress, version: { name: "TLSv1.2" | "TLSv1.3"; minVersion: tls.SecureVersion; maxVersion: tls.SecureVersion }) {
+  return new Promise<Pick<TlsProtocolProbe, "name" | "supported" | "cipher">>((resolve) => {
+    let settled = false;
+    function finish(result: Pick<TlsProtocolProbe, "name" | "supported" | "cipher">) {
+      if (settled) return;
+      settled = true;
+      resolve(result);
+    }
+
+    const socket = tls.connect({
+      host,
+      port,
+      servername: isIP(host) ? undefined : host,
+      rejectUnauthorized: false,
+      timeout: endpointProbeTimeoutMs,
+      minVersion: version.minVersion,
+      maxVersion: version.maxVersion,
+      lookup: fixedLookup(address)
+    });
+    socket.once("secureConnect", () => {
+      const cipher = socket.getCipher();
+      socket.end();
+      finish({ name: version.name, supported: true, cipher: cipher?.standardName ?? cipher?.name });
+    });
+    socket.once("timeout", () => {
+      socket.destroy();
+      finish({ name: version.name, supported: false });
+    });
+    socket.once("error", () => finish({ name: version.name, supported: false }));
+  });
+}
+
+async function endpointPrimaryProbe(host: string, port: number, address: PublicEndpointAddress) {
+  return new Promise<{
+    trusted: boolean;
+    hostnameValid: boolean;
+    certificate: TlsEndpointProfile["certificate"];
+    cipher?: string;
+  }>((resolve, reject) => {
+    let settled = false;
+    function fail(error: Error) {
+      if (settled) return;
+      settled = true;
+      reject(error);
+    }
+    function finish(result: {
+      trusted: boolean;
+      hostnameValid: boolean;
+      certificate: TlsEndpointProfile["certificate"];
+      cipher?: string;
+    }) {
+      if (settled) return;
+      settled = true;
+      resolve(result);
+    }
+
+    const socket = tls.connect({
+      host,
+      port,
+      servername: isIP(host) ? undefined : host,
+      rejectUnauthorized: false,
+      timeout: endpointProbeTimeoutMs,
+      lookup: fixedLookup(address)
+    });
+    socket.once("secureConnect", () => {
+      try {
+        const peer = socket.getPeerCertificate(true);
+        if (!peer || !peer.raw) throw new Error("No certificate presented");
+        const certificate = new X509Certificate(peer.raw);
+        const identityError = isIP(host) ? undefined : tls.checkServerIdentity(host, peer);
+        const cipher = socket.getCipher();
+        socket.end();
+        finish({
+          trusted: socket.authorized,
+          hostnameValid: !identityError,
+          certificate: {
+            subject: certificate.subject,
+            issuer: certificate.issuer,
+            validTo: certificate.validTo,
+            fingerprint256: certificate.fingerprint256
+          },
+          cipher: cipher?.standardName ?? cipher?.name
+        });
+      } catch (error) {
+        socket.destroy();
+        fail(error instanceof Error ? error : new Error("Endpoint certificate could not be read"));
+      }
+    });
+    socket.once("timeout", () => {
+      socket.destroy();
+      fail(new Error("TLS connection timed out"));
+    });
+    socket.once("error", (error) => fail(error));
   });
 }
 
@@ -1088,6 +1202,123 @@ function gradeFromScore(score: number) {
   return "F";
 }
 
+function endpointCopy(locale: Locale) {
+  return locale === "es"
+    ? {
+        certificateDiffers: "El certificado presentado difiere del endpoint principal.",
+        trustDiffers: "La cadena no valida contra una raíz confiable.",
+        hostnameDiffers: "El certificado no cubre el hostname solicitado.",
+        tls13Differs: "TLS 1.3 no está disponible en este endpoint.",
+        tls12Differs: "La disponibilidad de TLS 1.2 difiere del endpoint principal.",
+        weakCipher: "El endpoint negoció un cipher débil o heredado.",
+        globalPenalty: "Un endpoint público ofrece una configuración TLS más débil",
+        globalPenaltyDetail: (address: string) => `La nota global usa el peor endpoint confirmado. Revisa ${address}.`,
+        globalRecommendation: ["Corregir endpoint TLS inconsistente", "Una IP pública difiere de la configuración TLS principal.", "Alinea el certificado, la cadena y las políticas TLS en todos los nodos del balanceador, CDN o IPv6."]
+      }
+    : {
+        certificateDiffers: "The presented certificate differs from the primary endpoint.",
+        trustDiffers: "The chain does not validate to a trusted root.",
+        hostnameDiffers: "The certificate does not cover the requested hostname.",
+        tls13Differs: "TLS 1.3 is unavailable on this endpoint.",
+        tls12Differs: "TLS 1.2 availability differs from the primary endpoint.",
+        weakCipher: "The endpoint negotiated a weak or legacy cipher.",
+        globalPenalty: "A public endpoint exposes a weaker TLS configuration",
+        globalPenaltyDetail: (address: string) => `The global grade uses the weakest confirmed endpoint. Review ${address}.`,
+        globalRecommendation: ["Fix inconsistent TLS endpoint", "A public IP differs from the primary TLS configuration.", "Align certificate, chain and TLS policies across every load-balancer, CDN or IPv6 node."]
+      };
+}
+
+async function scanEndpointProfile(host: string, port: number, address: PublicEndpointAddress, baseline: TlsScanResponse, locale: Locale): Promise<TlsEndpointProfile> {
+  const text = endpointCopy(locale);
+  try {
+    const [primary, protocols] = await Promise.all([
+      endpointPrimaryProbe(host, port, address),
+      Promise.all(protocolVersions
+        .filter((version) => version.name === "TLSv1.2" || version.name === "TLSv1.3")
+        .map((version) => endpointProtocolProbe(host, port, address, version as { name: "TLSv1.2" | "TLSv1.3"; minVersion: tls.SecureVersion; maxVersion: tls.SecureVersion })))
+    ]);
+
+    const differences: string[] = [];
+    let score = baseline.score;
+    const baselineSupports = (name: TlsProtocolName) => baseline.protocols.some((protocol) => protocol.name === name && protocol.supported);
+    const endpointSupports = (name: TlsProtocolName) => protocols.some((protocol) => protocol.name === name && protocol.supported);
+
+    if (primary.certificate?.fingerprint256 !== baseline.certificate.fingerprint256) differences.push(text.certificateDiffers);
+    if (!primary.trusted) differences.push(text.trustDiffers);
+    if (!primary.hostnameValid) differences.push(text.hostnameDiffers);
+    if (baselineSupports("TLSv1.3") && !endpointSupports("TLSv1.3")) {
+      differences.push(text.tls13Differs);
+      score -= 5;
+    }
+    if (baselineSupports("TLSv1.2") !== endpointSupports("TLSv1.2")) differences.push(text.tls12Differs);
+    if (!weakCipher(baseline.protocols.find((protocol) => protocol.supported)?.cipher) && weakCipher(primary.cipher)) {
+      differences.push(text.weakCipher);
+      score -= 15;
+    }
+
+    if (!primary.hostnameValid) score = 0;
+    else if (!primary.trusted) score = 0;
+    score = Math.max(0, score);
+    const grade = !primary.hostnameValid ? "M" : !primary.trusted ? "T" : gradeFromScore(score);
+
+    return {
+      address: address.address,
+      family: address.family === 6 ? 6 : 4,
+      status: "complete",
+      grade,
+      score,
+      trusted: primary.trusted,
+      hostnameValid: primary.hostnameValid,
+      certificate: primary.certificate,
+      cipher: primary.cipher,
+      protocols,
+      differences
+    };
+  } catch {
+    return {
+      address: address.address,
+      family: address.family === 6 ? 6 : 4,
+      status: "error",
+      error: locale === "es" ? "No completó el handshake TLS dentro del tiempo de prueba." : "The TLS handshake did not complete within the test window.",
+      differences: []
+    };
+  }
+}
+
+async function attachEndpointCoverage(response: TlsScanResponse, addresses: PublicEndpointAddress[], locale: Locale): Promise<TlsScanResponse> {
+  const uniqueAddresses = Array.from(new Map(addresses.map((address) => [address.address, address])).values());
+  const selectedAddresses = uniqueAddresses.slice(0, Math.max(1, maxEndpointProfiles));
+  const endpoints = await mapWithConcurrency(selectedAddresses, Math.max(1, endpointProbeConcurrency), (address) => scanEndpointProfile(response.host, response.port, address, response, locale));
+  const complete = endpoints.filter((endpoint) => endpoint.status === "complete" && endpoint.grade && typeof endpoint.score === "number");
+  response.endpointCoverage = {
+    totalAddresses: uniqueAddresses.length,
+    scannedAddresses: selectedAddresses.length,
+    truncated: selectedAddresses.length < uniqueAddresses.length,
+    consistent: complete.length > 0 && complete.every((endpoint) => endpoint.differences.length === 0),
+    hasErrors: endpoints.some((endpoint) => endpoint.status === "error"),
+    endpoints
+  };
+
+  const forcedMismatch = complete.find((endpoint) => endpoint.grade === "M");
+  const forcedTrustFailure = complete.find((endpoint) => endpoint.grade === "T");
+  const weakest = complete.reduce<TlsEndpointProfile | undefined>((current, endpoint) => !current || (endpoint.score ?? 101) < (current.score ?? 101) ? endpoint : current, undefined);
+  const target = forcedMismatch ?? forcedTrustFailure ?? weakest;
+  if (!target || target.grade === response.grade || (target.score ?? response.score) >= response.score) return response;
+
+  const text = endpointCopy(locale);
+  const nextScore = target.grade === "M" || target.grade === "T" ? 0 : target.score ?? response.score;
+  const nextGrade = target.grade === "M" || target.grade === "T" ? target.grade : gradeFromScore(nextScore);
+  const points = -(response.score - nextScore || response.score);
+  response.score = nextScore;
+  response.grade = nextGrade;
+  response.gradeBreakdown.finalScore = nextScore;
+  response.gradeBreakdown.items.push({ label: text.globalPenalty, points, detail: text.globalPenaltyDetail(target.address) });
+  response.summary = scanText(locale).summary(nextGrade);
+  response.findings.push({ level: target.grade === "M" || target.grade === "T" ? "fail" : "warning", title: text.globalPenalty, detail: text.globalPenaltyDetail(target.address) });
+  response.recommendations.push(makeRecommendation(target.grade === "M" || target.grade === "T" ? "critical" : "high", text.globalRecommendation));
+  return response;
+}
+
 export async function scanTlsServer(host: string, port: number, locale: Locale = "en"): Promise<TlsScanResponse> {
   const queryId = crypto.randomUUID();
   const text = scanText(locale);
@@ -1131,7 +1362,7 @@ export async function scanTlsServer(host: string, port: number, locale: Locale =
     const [label, penaltyDetail] = text.penaltyHostname;
     findings.push({ level: "fail", title, detail });
     recommendations.push(makeRecommendation("critical", text.recHostname));
-    return {
+    return attachEndpointCoverage({
       queryId,
       host,
       port,
@@ -1145,6 +1376,7 @@ export async function scanTlsServer(host: string, port: number, locale: Locale =
       summary: text.summary("M"),
       assessedAt: new Date().toISOString(),
       ipAddresses: addresses.map((address) => address.address),
+      endpointCoverage: { totalAddresses: 0, scannedAddresses: 0, truncated: false, consistent: false, hasErrors: false, endpoints: [] },
       certificate: certificateDto(leaf),
       chain: {
         verified: trust.verified,
@@ -1166,7 +1398,7 @@ export async function scanTlsServer(host: string, port: number, locale: Locale =
       alpn,
       findings,
       recommendations
-    };
+    }, addresses, locale);
   }
 
   if (!trust.verified) {
@@ -1446,7 +1678,7 @@ export async function scanTlsServer(host: string, port: number, locale: Locale =
   score = Math.max(0, Math.min(100, score));
   const grade = trust.verified ? gradeFromScore(score) : "T";
 
-  return {
+  return attachEndpointCoverage({
     queryId,
     host,
     port,
@@ -1462,6 +1694,7 @@ export async function scanTlsServer(host: string, port: number, locale: Locale =
     summary: text.summary(grade),
     assessedAt: new Date().toISOString(),
     ipAddresses: addresses.map((address) => address.address),
+    endpointCoverage: { totalAddresses: 0, scannedAddresses: 0, truncated: false, consistent: false, hasErrors: false, endpoints: [] },
     certificate: certificateDto(leaf),
     chain: {
         verified: trust.verified,
@@ -1483,7 +1716,7 @@ export async function scanTlsServer(host: string, port: number, locale: Locale =
     alpn,
     findings,
     recommendations
-  };
+  }, addresses, locale);
 }
 
 function makeRecommendation(severity: TlsRecommendation["severity"], text: string[], config?: TlsRecommendation["config"]): TlsRecommendation {

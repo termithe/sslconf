@@ -844,6 +844,8 @@ redirección HTTPS y HSTS en respuestas 301/302
 host canónico final
 longitud de cadena de redirecciones
 caducidad próxima
+perfil TLS directo por cada IP pública resuelta (IPv4 e IPv6)
+comparación de certificado, confianza, hostname, TLS 1.2 y TLS 1.3 entre endpoints
 nota A+, A, B, C, D, E, F, T o M
 desglose de puntuación y penalizaciones
 recomendaciones accionables por severidad
@@ -861,6 +863,15 @@ M = mismatch de hostname
 La puntuación actual es propia de SSLConf. No pretende ser byte a byte equivalente a SSL Labs todavía. Faltan fases más profundas como simulación completa de clientes antiguos, checks exhaustivos de vulnerabilidades históricas, downgrade tests con bajo nivel de OpenSSL y análisis PQC.
 
 La nota representa seguridad TLS, no una política universal de compatibilidad. Un endpoint que ofrece solo TLS 1.3 mantiene un aviso de compatibilidad para clientes heredados, pero no pierde puntos ni baja de letra por ese único motivo. `A+` exige `100/100`; HSTS ausente o corto resta 5 puntos y deja el resultado en `A`, alineando este caso con el criterio práctico de SSL Labs.
+
+### Endpoints públicos por IP
+
+Además del informe completo por hostname, el Server Test conecta directamente a cada IP pública resuelta y conserva el hostname original como SNI. Así detecta nodos de balanceador, CDN o IPv6 con certificados, confianza o soporte TLS distinto.
+
+- La nota global adopta la peor nota confirmada entre los endpoints analizados.
+- Una IP que no completa el handshake se muestra como cobertura parcial informativa y **no** reduce la nota global.
+- Para proteger duración y carga del escaneo, el número de IPs queda limitado por `TLS_SCAN_ENDPOINT_MAX` (valor inicial: `6`). El informe indica siempre si hubo direcciones sin analizar.
+- El perfil individual comprueba confianza, cobertura del hostname, certificado negociado, cipher por defecto y TLS 1.2/TLS 1.3. Las señales HTTP, HSTS, CAA y redirecciones son propias del hostname y no se repiten para cada IP.
 
 Validación de referencia realizada el 2026-10-05:
 
@@ -1090,6 +1101,9 @@ TLS_SCAN_OCSP_TIMEOUT_MS=6000
 TLS_SCAN_OCSP_MAX_BYTES=250000
 TLS_SCAN_HSTS_PRELOAD_TIMEOUT_MS=5000
 TLS_SCAN_HSTS_PRELOAD_MAX_BYTES=50000
+TLS_SCAN_ENDPOINT_TIMEOUT_MS=3500
+TLS_SCAN_ENDPOINT_MAX=6
+TLS_SCAN_ENDPOINT_CONCURRENCY=6
 CERTIFICATE_DECODE_BODY_MAX_BYTES=70000
 CSR_DECODE_BODY_MAX_BYTES=70000
 NEXT_PUBLIC_SITE_URL=https://sslconf.com

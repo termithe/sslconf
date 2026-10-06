@@ -4,7 +4,7 @@ import { AlertTriangle, CheckCircle2, Copy, Download, Info, Link2, RotateCcw, Sh
 import type React from "react";
 import { useState } from "react";
 import { copy, type Locale } from "@/lib/i18n";
-import type { TlsRecommendation, TlsRedirectCheck, TlsScanFinding, TlsScanResponse } from "@/lib/types";
+import type { TlsEndpointProfile, TlsRecommendation, TlsRedirectCheck, TlsScanFinding, TlsScanResponse } from "@/lib/types";
 
 const findingStyles = {
   pass: { icon: CheckCircle2, className: "border-secure/25 bg-secure/8 text-secure" },
@@ -56,6 +56,8 @@ export function TLSServerScanResult({ result, locale = "en" }: { result: TlsScan
           </div>
         </div>
       </div>
+
+      <EndpointCoverage coverage={result.endpointCoverage} locale={locale} />
 
       <div className="report-actions p-4">
         <div className="flex flex-wrap items-center gap-2">
@@ -277,6 +279,59 @@ export function TLSServerScanResult({ result, locale = "en" }: { result: TlsScan
         </div>
       </div>
     </section>
+  );
+}
+
+function EndpointCoverage({ coverage, locale }: { coverage: TlsScanResponse["endpointCoverage"]; locale: Locale }) {
+  const text = copy[locale];
+  const status = coverage.hasErrors ? text.scanEndpointPartial : coverage.consistent ? text.scanEndpointConsistent : text.scanEndpointInconsistent;
+  const statusClass = coverage.hasErrors || !coverage.consistent ? "border-warn/30 bg-warn/10 text-warn" : "border-secure/25 bg-secure/8 text-secure";
+
+  return (
+    <Panel title={text.scanEndpoints}>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p className="max-w-3xl text-sm font-bold leading-6 text-ink/65">{text.scanEndpointsSummary}</p>
+        <span className="border border-line bg-white px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-ink/55">
+          {text.scanEndpointsScanned} {coverage.scannedAddresses}/{coverage.totalAddresses}
+        </span>
+      </div>
+      <div className={`mt-4 border-l-4 p-4 text-sm font-bold leading-6 ${statusClass}`}>{status}</div>
+      {coverage.truncated ? <p className="mt-3 text-sm font-bold leading-6 text-warn">{text.scanEndpointsTruncated}</p> : null}
+      <div className="mt-4 grid gap-4 lg:grid-cols-2">
+        {coverage.endpoints.map((endpoint) => <EndpointCard key={endpoint.address} endpoint={endpoint} locale={locale} />)}
+      </div>
+    </Panel>
+  );
+}
+
+function EndpointCard({ endpoint, locale }: { endpoint: TlsEndpointProfile; locale: Locale }) {
+  const text = copy[locale];
+  const gradeClass = endpoint.grade === "A+" || endpoint.grade === "A"
+    ? "bg-secure text-white"
+    : endpoint.grade === "B" || endpoint.grade === "C"
+      ? "bg-warn text-night"
+      : "bg-fault text-white";
+  const protocolList = endpoint.protocols?.filter((protocol) => protocol.supported).map((protocol) => protocol.name).join(", ") || "-";
+
+  return (
+    <article className="border border-line bg-white/75 p-4">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <p className="font-mono text-base font-black text-night">{endpoint.address}</p>
+          <p className="mt-1 text-xs font-black uppercase tracking-[0.14em] text-ink/45">IPv{endpoint.family}</p>
+        </div>
+        {endpoint.status === "complete" && endpoint.grade ? <span className={`px-3 py-2 text-sm font-black ${gradeClass}`}>{endpoint.grade} {endpoint.score}/100</span> : <span className="border border-fault/25 bg-fault/8 px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-fault">{text.scanEndpointUnreachable}</span>}
+      </div>
+      {endpoint.status === "error" ? <p className="mt-4 text-sm font-bold leading-6 text-ink/65">{endpoint.error}</p> : (
+        <div className="mt-4 space-y-2 text-sm font-bold leading-6 text-ink/65">
+          <KeyValue label={text.scanChain} value={endpoint.trusted ? text.scanTrusted : text.scanNotTrusted} />
+          <KeyValue label={text.scanProtocols} value={protocolList} />
+          <KeyValue label={text.scanCertificate} value={endpoint.certificate?.subject ?? "-"} />
+          <KeyValue label="SHA256" value={endpoint.certificate?.fingerprint256 ?? "-"} />
+          {endpoint.differences.length ? <div className="border-t border-line pt-3"><p className="text-xs font-black uppercase tracking-[0.14em] text-warn">{text.scanEndpointDifferences}</p><ul className="mt-2 space-y-1"><>{endpoint.differences.map((difference) => <li key={difference}>{difference}</li>)}</></ul></div> : null}
+        </div>
+      )}
+    </article>
   );
 }
 
