@@ -81,6 +81,8 @@ El comprobador recibe un certificado PEM y una clave privada PEM, deriva ambas c
 
 El generador de CSR usa Web Crypto en el navegador: crea RSA 2048/3072 o ECDSA P-256/P-384, permite Subject y SAN DNS, y genera una solicitud PKCS#10 junto con una clave privada PKCS#8 PEM. La clave privada no pasa por ninguna API de SSLConf. El usuario debe descargarla y custodiarla antes de cerrar la página, ya que no se puede recuperar.
 
+Los campos de entrada PEM y CSR conservan los saltos de línea originales y no aplican corte automático dentro de las cadenas Base64. Si una línea excede el ancho disponible, el campo muestra desplazamiento horizontal en lugar de dividirla carácter a carácter.
+
 La home (`/` y `/es`) no abre ya directamente el generador de CA bundle. Ahora funciona como consola de herramientas con una utilidad principal y dos herramientas secundarias:
 
 ```text

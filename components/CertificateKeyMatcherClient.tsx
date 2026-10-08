@@ -72,7 +72,7 @@ export function CertificateKeyMatcherClient({ locale }: { locale: Locale }) {
 }
 
 function PemInput({ id, label, value, onChange, placeholder, sensitive = false }: { id: string; label: string; value: string; onChange: (value: string) => void; placeholder: string; sensitive?: boolean }) {
-  return <div><label htmlFor={id} className="mb-2 block text-xs font-black uppercase tracking-[0.2em] text-ink/55">{label}</label><textarea id={id} value={value} onChange={(event) => onChange(event.target.value)} placeholder={placeholder} spellCheck={false} className={`min-h-64 w-full resize-y border border-line bg-white px-4 py-3 font-mono text-sm leading-6 text-night outline-none transition focus:border-signal focus:ring-4 focus:ring-signal/15 ${sensitive ? "selection:bg-warn/25" : ""}`} /></div>;
+  return <div><label htmlFor={id} className="mb-2 block text-xs font-black uppercase tracking-[0.2em] text-ink/55">{label}</label><textarea id={id} value={value} onChange={(event) => onChange(event.target.value)} placeholder={placeholder} spellCheck={false} wrap="off" className={`min-h-64 w-full resize-y overflow-x-auto whitespace-pre break-normal border border-line bg-white px-4 py-3 font-mono text-sm leading-6 text-night outline-none transition [overflow-wrap:normal] [word-break:normal] focus:border-signal focus:ring-4 focus:ring-signal/15 ${sensitive ? "selection:bg-warn/25" : ""}`} /></div>;
 }
 
 function MatchResult({ result, locale }: { result: CertificateKeyMatchResponse; locale: Locale }) {

@@ -60,7 +60,8 @@ export function CsrDecoderClient({ locale }: { locale: Locale }) {
               onChange={(event) => setCsr(event.target.value)}
               placeholder={text.csrPlaceholder}
               spellCheck={false}
-              className="min-h-56 w-full resize-y border border-line bg-white px-4 pb-3 pr-14 pt-3 font-mono text-sm leading-6 text-night outline-none transition focus:border-signal focus:ring-4 focus:ring-signal/15"
+              wrap="off"
+              className="min-h-56 w-full resize-y overflow-x-auto whitespace-pre break-normal border border-line bg-white px-4 pb-3 pr-14 pt-3 font-mono text-sm leading-6 text-night outline-none transition [overflow-wrap:normal] [word-break:normal] focus:border-signal focus:ring-4 focus:ring-signal/15"
             />
             <button type="button" onClick={clearCsr} disabled={!csr && !error && !result} title={text.csrClear} aria-label={text.csrClear} className="absolute right-3 top-3 grid h-9 w-9 place-items-center border border-line bg-white text-ink/55 transition hover:border-fault hover:text-fault disabled:cursor-not-allowed disabled:opacity-35">
               <Trash2 size={17} />

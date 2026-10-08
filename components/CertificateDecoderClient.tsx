@@ -60,7 +60,8 @@ export function CertificateDecoderClient({ locale }: { locale: Locale }) {
               onChange={(event) => setCertificate(event.target.value)}
               placeholder={text.decoderPlaceholder}
               spellCheck={false}
-              className="min-h-56 w-full resize-y border border-line bg-white px-4 pb-3 pr-14 pt-3 font-mono text-sm leading-6 text-night outline-none transition focus:border-signal focus:ring-4 focus:ring-signal/15"
+              wrap="off"
+              className="min-h-56 w-full resize-y overflow-x-auto whitespace-pre break-normal border border-line bg-white px-4 pb-3 pr-14 pt-3 font-mono text-sm leading-6 text-night outline-none transition [overflow-wrap:normal] [word-break:normal] focus:border-signal focus:ring-4 focus:ring-signal/15"
             />
             <button
               type="button"
