@@ -30,7 +30,9 @@ export const copy = {
   en: {
     navTools: "Tools",
     navCsr: "CSR Decoder",
+    navCsrGenerator: "CSR Generator",
     navDecoder: "Certificate Decoder",
+    navMatcher: "Certificate & Key Matcher",
     navChain: "CA Bundle Generator",
     navScan: "SSL/TLS Server Test",
     homeTitle: "SSL/TLS diagnostics for certificates and servers.",
@@ -211,7 +213,9 @@ export const copy = {
   es: {
     navTools: "Herramientas",
     navCsr: "Decodificador de CSR",
+    navCsrGenerator: "Generador de CSR",
     navDecoder: "Decodificador de certificados",
+    navMatcher: "Comprobador de certificado y clave",
     navChain: "Generador de CA bundle",
     navScan: "Análisis SSL/TLS",
     homeTitle: "Diagnóstico SSL/TLS de certificados y servidores.",

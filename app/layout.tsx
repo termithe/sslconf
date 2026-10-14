@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
+import { Menu } from "lucide-react";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { copy, type Locale } from "@/lib/i18n";
 import "./globals.css";
@@ -31,7 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang={locale}>
       <body className="min-h-screen antialiased">
         <header className="sticky top-0 z-40 border-b border-line bg-[#fbfcfd]/95 backdrop-blur">
-          <nav className="mx-auto flex max-w-7xl items-center gap-8 px-4 py-5">
+          <nav className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-3 sm:gap-8 sm:py-5">
             <a href={prefix || "/"} className="flex items-center gap-3" aria-label="SSLConf">
               <span className="relative grid h-9 w-9 shrink-0 place-items-center border border-night bg-night">
                 <span className="absolute top-2 h-3 w-4 border-2 border-mint border-b-0" />
@@ -43,6 +44,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </span>
             </a>
             <div className="ml-auto flex items-center gap-3">
+              <details className="group relative lg:hidden">
+                <summary title={locale === "es" ? "Abrir menú" : "Open menu"} aria-label={locale === "es" ? "Abrir menú" : "Open menu"} className="grid h-9 w-9 cursor-pointer list-none place-items-center border border-line bg-white text-ink/65 transition hover:border-signal hover:bg-mint hover:text-signal">
+                  <Menu size={18} aria-hidden="true" />
+                </summary>
+                <div className="absolute right-0 top-full z-50 mt-2 w-[min(22rem,calc(100vw-2rem))] border border-line bg-white p-1 shadow-[0_12px_28px_rgba(22,33,45,0.12)]">
+                  <HeaderToolLink href={`${prefix || ""}/scan`} label={copy[locale].navScan} />
+                  <HeaderToolLink href={`${prefix || ""}/check`} label={copy[locale].navChain} />
+                  <HeaderToolLink href={`${prefix || ""}/decode`} label={copy[locale].navDecoder} />
+                  <HeaderToolLink href={`${prefix || ""}/csr`} label={copy[locale].navCsr} />
+                  <HeaderToolLink href={`${prefix || ""}/match`} label={copy[locale].navMatcher} />
+                  <HeaderToolLink href={`${prefix || ""}/csr/generate`} label={copy[locale].navCsrGenerator} />
+                </div>
+              </details>
               <div className="hidden items-center border-x border-line lg:flex">
                 <a href={`${prefix || ""}/scan`} className="px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-ink/60 transition hover:bg-mint hover:text-signal">
                   {copy[locale].navScan}
@@ -56,8 +70,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <HeaderToolLink href={`${prefix || ""}/check`} label={copy[locale].navChain} />
                     <HeaderToolLink href={`${prefix || ""}/decode`} label={copy[locale].navDecoder} />
                     <HeaderToolLink href={`${prefix || ""}/csr`} label={copy[locale].navCsr} />
-                    <HeaderToolLink href={`${prefix || ""}/match`} label={locale === "es" ? "Comprobador de certificado y clave" : "Certificate & Key Matcher"} />
-                    <HeaderToolLink href={`${prefix || ""}/csr/generate`} label={locale === "es" ? "Generador de CSR" : "CSR Generator"} />
+                    <HeaderToolLink href={`${prefix || ""}/match`} label={copy[locale].navMatcher} />
+                    <HeaderToolLink href={`${prefix || ""}/csr/generate`} label={copy[locale].navCsrGenerator} />
                   </div>
                 </details>
               </div>
