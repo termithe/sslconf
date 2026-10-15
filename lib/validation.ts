@@ -195,6 +195,8 @@ export const tlsScanSchema = z.object({
   path: ["host"]
 });
 
+export const tlsInstallationSchema = tlsScanSchema;
+
 export const certificateDecodeSchema = z.object({
   certificate: z.string().min(1).max(65_536).refine((value) => !/-----BEGIN (?:RSA |EC |ENCRYPTED )?PRIVATE KEY-----/i.test(value), {
     message: "Invalid certificate."

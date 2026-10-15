@@ -9,7 +9,7 @@ export function middleware(request: NextRequest) {
 
   requestHeaders.set("x-sslconf-locale", isSpanishPath(pathname) ? "es" : "en");
 
-  if ((pathname === "/" || pathname === "/check" || pathname === "/scan") && selectedLocale === "es" && !isSpanishPath(pathname)) {
+  if ((pathname === "/" || pathname === "/check" || pathname === "/scan" || pathname === "/installation") && selectedLocale === "es" && !isSpanishPath(pathname)) {
     const url = request.nextUrl.clone();
     url.pathname = pathname === "/" ? "/es" : `/es${pathname}`;
     return NextResponse.redirect(url);

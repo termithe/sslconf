@@ -88,6 +88,58 @@ export type CertificateKeyMatchResponse = {
   };
 };
 
+export type TlsInstallationCheck = {
+  id: "hostname" | "validity" | "trust" | "server-chain" | "root" | "endpoints";
+  status: "pass" | "warning" | "fail";
+  title: string;
+  detail: string;
+};
+
+export type TlsInstallationEndpoint = {
+  address: string;
+  family: 4 | 6;
+  status: "complete" | "error";
+  fingerprint256?: string;
+  hostnameValid?: boolean;
+  validTo?: string;
+  error?: string;
+};
+
+export type TlsInstallationResponse = {
+  queryId: string;
+  host: string;
+  port: number;
+  status: "valid" | "needs-attention" | "invalid";
+  summary: string;
+  assessedAt: string;
+  ipAddresses: string[];
+  certificate: {
+    subject: string;
+    issuer: string;
+    validFrom: string;
+    validTo: string;
+    fingerprint256: string;
+    subjectAltName?: string;
+    keyType?: string;
+    keyBits?: number;
+  };
+  hostnameValid: boolean;
+  trusted: boolean;
+  trustError?: string;
+  certificatesProvided: number;
+  rootCertificateProvided: boolean;
+  daysRemaining: number;
+  endpointCoverage: {
+    totalAddresses: number;
+    scannedAddresses: number;
+    truncated: boolean;
+    consistent: boolean;
+    hasErrors: boolean;
+    endpoints: TlsInstallationEndpoint[];
+  };
+  checks: TlsInstallationCheck[];
+};
+
 export type TlsProtocolName = "SSLv3" | "TLSv1" | "TLSv1.1" | "TLSv1.2" | "TLSv1.3";
 
 export type TlsProtocolProbe = {

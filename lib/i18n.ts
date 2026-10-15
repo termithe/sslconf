@@ -33,6 +33,7 @@ export const copy = {
     navCsrGenerator: "CSR Generator",
     navDecoder: "Certificate Decoder",
     navMatcher: "Certificate & Key Matcher",
+    navInstallation: "Installation Validator",
     navChain: "CA Bundle Generator",
     navScan: "SSL/TLS Server Test",
     homeTitle: "SSL/TLS diagnostics for certificates and servers.",
@@ -44,6 +45,7 @@ export const copy = {
     homeToolsTitle: "More tools",
     homeTools: [
       ["SSL/TLS Server Test", "Assess an HTTPS endpoint: certificate, protocols, HSTS and CAA.", "Run SSL/TLS Server Test"],
+      ["Installation Validator", "Check the certificate that every public HTTPS endpoint actually delivers.", "Validate installation"],
       ["CA Bundle Generator", "Generate the correct CA bundle from the leaf certificate.", "Open CA Bundle Generator"],
       ["Certificate Decoder", "Inspect PEM or Base64 DER certificates: identity, validity and extensions.", "Open Certificate Decoder"],
       ["CSR Decoder", "Validate PKCS#10 CSRs: public key, signature and alternative names.", "Open CSR Decoder"],
@@ -216,6 +218,7 @@ export const copy = {
     navCsrGenerator: "Generador de CSR",
     navDecoder: "Decodificador de certificados",
     navMatcher: "Comprobador de certificado y clave",
+    navInstallation: "Validador de instalación",
     navChain: "Generador de CA bundle",
     navScan: "Análisis SSL/TLS",
     homeTitle: "Diagnóstico SSL/TLS de certificados y servidores.",
@@ -227,6 +230,7 @@ export const copy = {
     homeToolsTitle: "Más herramientas",
     homeTools: [
       ["Análisis SSL/TLS", "Evalúa un endpoint HTTPS: certificado, protocolos, HSTS y CAA.", "Analizar dominio"],
+      ["Validador de instalación", "Comprueba el certificado que entrega realmente cada endpoint HTTPS público.", "Validar instalación"],
       ["Generador de CA bundle", "Genera el CA bundle correcto desde el certificado leaf.", "Abrir generador de CA bundle"],
       ["Decodificador de certificados", "Inspecciona certificados PEM o DER: identidad, validez y extensiones.", "Abrir decodificador"],
       ["Decodificador de CSR", "Valida CSRs PKCS#10: clave pública, firma y nombres alternativos.", "Abrir decodificador de CSR"],
