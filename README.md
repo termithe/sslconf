@@ -110,7 +110,7 @@ Node puede añadir la raíz de su almacén de confianza al recorrer `issuerCerti
 
 La utilidad vive en `/headers` y `/es/headers`. Consulta solamente la respuesta HTTPS final, siguiendo como máximo `HTTP_HEADERS_MAX_REDIRECTS` redirecciones HTTPS públicas en los puertos `443` y `8443`. Evalúa HSTS, CSP, protección contra clickjacking, `nosniff`, `Referrer-Policy`, `Permissions-Policy`, COOP y los atributos `Secure`, `HttpOnly` y `SameSite` de las cookies que emita esa respuesta. No registra ni expone el valor de las cookies ni descarga el cuerpo HTTP.
 
-La puntuación es propia de esta herramienta y no modifica la nota del Análisis SSL/TLS. La ausencia de HSTS, CSP, protección de frames o `nosniff` afecta más a la nota; permisos, aislamiento de ventana y cookies no observadas se tratan de forma proporcional o informativa.
+La puntuación es propia de esta herramienta y no modifica la nota del Análisis SSL/TLS. Solo bajan la nota HSTS ausente o corto, CSP ausente o permisiva, falta de protección de frames y falta de `nosniff`. `includeSubDomains`, `Referrer-Policy`, `Permissions-Policy`, COOP y los atributos de cookies se muestran como recomendaciones sin penalización, porque dependen de la arquitectura y de requisitos funcionales de cada sitio.
 
 La cabecera usa una composición de una columna hasta pantallas `xl`, antes de mostrar el panel lateral de comprobaciones. Así el título y el formulario principal conservan suficiente anchura y se evita dejar palabras aisladas en líneas separadas en portátiles y tablets.
 

@@ -127,7 +127,15 @@ export async function analyzeHttpSecurityHeaders(host: string, port: number, loc
   const cookieFlags = cookies.map((cookie) => /;\s*secure(?:;|$)/i.test(cookie) && /;\s*httponly(?:;|$)/i.test(cookie) && /;\s*samesite=/i.test(cookie));
   checks.push(check("cookies", cookies.length === 0 ? "info" : cookieFlags.every(Boolean) ? "pass" : "warning", cookies.length === 0 ? text.cookiesNone : cookieFlags.every(Boolean) ? text.cookiesSecure : text.cookiesWeak));
 
-  const penalties = checks.reduce((total, item) => total + (item.status === "fail" ? item.id === "hsts" || item.id === "csp" ? 20 : item.id === "frame-protection" ? 15 : 10 : item.status === "warning" ? item.id === "permissions-policy" || item.id === "cookies" ? 5 : 8 : 0), 0);
+  // Only baseline controls with broad, direct browser-security impact lower the grade.
+  // Other checks remain visible as operational recommendations because they are context-dependent.
+  const penalties = checks.reduce((total, item) => total + (
+    item.id === "hsts" && item.status === "fail" ? 15 :
+    item.id === "csp" && item.status === "fail" ? 20 :
+    item.id === "csp" && item.status === "warning" ? 8 :
+    item.id === "frame-protection" && item.status === "fail" ? 10 :
+    item.id === "nosniff" && item.status === "fail" ? 5 : 0
+  ), 0);
   const score = Math.max(0, 100 - penalties);
   const grade = score === 100 ? "A+" : score >= 90 ? "A" : score >= 75 ? "B" : score >= 60 ? "C" : "D";
   const observed = Object.fromEntries(Object.entries({ "strict-transport-security": hsts, "content-security-policy": csp, "x-frame-options": xfo, "x-content-type-options": nosniff, "referrer-policy": referrer, "permissions-policy": permissions, "cross-origin-opener-policy": coop }).filter(([, value]) => value).map(([name, value]) => [name, clipped(value)]));
