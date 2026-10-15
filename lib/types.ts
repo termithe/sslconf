@@ -139,6 +139,27 @@ export type TlsInstallationResponse = {
   checks: TlsInstallationCheck[];
 };
 
+export type HttpSecurityHeaderCheck = {
+  id: "hsts" | "csp" | "frame-protection" | "nosniff" | "referrer-policy" | "permissions-policy" | "coop" | "cookies";
+  status: "pass" | "warning" | "fail" | "info";
+  title: string;
+  detail: string;
+};
+
+export type HttpSecurityHeadersResponse = {
+  queryId: string;
+  host: string;
+  port: number;
+  score: number;
+  grade: "A+" | "A" | "B" | "C" | "D";
+  assessedAt: string;
+  finalUrl: string;
+  statusCode: number;
+  redirects: number;
+  checks: HttpSecurityHeaderCheck[];
+  observed: Record<string, string>;
+};
+
 export type TlsProtocolName = "SSLv3" | "TLSv1" | "TLSv1.1" | "TLSv1.2" | "TLSv1.3";
 
 export type TlsProtocolProbe = {

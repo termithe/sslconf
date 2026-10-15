@@ -33,6 +33,7 @@ export const copy = {
     navCsrGenerator: "CSR Generator",
     navDecoder: "Certificate Decoder",
     navMatcher: "Certificate & Key Matcher",
+    navHeaders: "Security Headers Analyzer",
     navInstallation: "Installation Validator",
     navChain: "CA Bundle Generator",
     navScan: "SSL/TLS Server Test",
@@ -46,6 +47,7 @@ export const copy = {
     homeTools: [
       ["SSL/TLS Server Test", "Assess an HTTPS endpoint: certificate, protocols, HSTS and CAA.", "Run SSL/TLS Server Test"],
       ["Installation Validator", "Check the certificate that every public HTTPS endpoint actually delivers.", "Validate installation"],
+      ["Security Headers Analyzer", "Review HSTS, CSP, browser isolation and cookie attributes returned by HTTPS.", "Analyze headers"],
       ["CA Bundle Generator", "Generate the correct CA bundle from the leaf certificate.", "Open CA Bundle Generator"],
       ["Certificate Decoder", "Inspect PEM or Base64 DER certificates: identity, validity and extensions.", "Open Certificate Decoder"],
       ["CSR Decoder", "Validate PKCS#10 CSRs: public key, signature and alternative names.", "Open CSR Decoder"],
@@ -218,6 +220,7 @@ export const copy = {
     navCsrGenerator: "Generador de CSR",
     navDecoder: "Decodificador de certificados",
     navMatcher: "Comprobador de certificado y clave",
+    navHeaders: "Analizador de cabeceras",
     navInstallation: "Validador de instalación",
     navChain: "Generador de CA bundle",
     navScan: "Análisis SSL/TLS",
@@ -231,6 +234,7 @@ export const copy = {
     homeTools: [
       ["Análisis SSL/TLS", "Evalúa un endpoint HTTPS: certificado, protocolos, HSTS y CAA.", "Analizar dominio"],
       ["Validador de instalación", "Comprueba el certificado que entrega realmente cada endpoint HTTPS público.", "Validar instalación"],
+      ["Analizador de cabeceras", "Revisa HSTS, CSP, aislamiento del navegador y atributos de cookies entregados por HTTPS.", "Analizar cabeceras"],
       ["Generador de CA bundle", "Genera el CA bundle correcto desde el certificado leaf.", "Abrir generador de CA bundle"],
       ["Decodificador de certificados", "Inspecciona certificados PEM o DER: identidad, validez y extensiones.", "Abrir decodificador"],
       ["Decodificador de CSR", "Valida CSRs PKCS#10: clave pública, firma y nombres alternativos.", "Abrir decodificador de CSR"],

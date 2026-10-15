@@ -51,6 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <div className="absolute right-0 top-full z-50 mt-2 w-[min(22rem,calc(100vw-2rem))] border border-line bg-white p-1 shadow-[0_12px_28px_rgba(22,33,45,0.12)]">
                   <HeaderToolLink href={`${prefix || ""}/scan`} label={copy[locale].navScan} />
                   <HeaderToolLink href={`${prefix || ""}/installation`} label={copy[locale].navInstallation} />
+                  <HeaderToolLink href={`${prefix || ""}/headers`} label={copy[locale].navHeaders} />
                   <HeaderToolLink href={`${prefix || ""}/check`} label={copy[locale].navChain} />
                   <HeaderToolLink href={`${prefix || ""}/decode`} label={copy[locale].navDecoder} />
                   <HeaderToolLink href={`${prefix || ""}/csr`} label={copy[locale].navCsr} />
@@ -69,6 +70,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   </summary>
                   <div className="absolute right-0 top-full z-50 mt-px w-72 border border-line bg-white p-1 shadow-[0_12px_28px_rgba(22,33,45,0.12)]">
                     <HeaderToolLink href={`${prefix || ""}/installation`} label={copy[locale].navInstallation} />
+                    <HeaderToolLink href={`${prefix || ""}/headers`} label={copy[locale].navHeaders} />
                     <HeaderToolLink href={`${prefix || ""}/check`} label={copy[locale].navChain} />
                     <HeaderToolLink href={`${prefix || ""}/decode`} label={copy[locale].navDecoder} />
                     <HeaderToolLink href={`${prefix || ""}/csr`} label={copy[locale].navCsr} />

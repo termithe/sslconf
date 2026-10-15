@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import type { NextRequest } from "next/server";
 
-type RateLimitScope = "chain" | "scan" | "installation" | "decode" | "csr" | "key-match";
+type RateLimitScope = "chain" | "scan" | "installation" | "headers" | "decode" | "csr" | "key-match";
 type RateLimitSource = "memory" | "redis" | "memory-fallback";
 
 type RateLimitEntry = {
@@ -29,6 +29,7 @@ function scopeLimit(scope: RateLimitScope) {
   const fallback = Number(process.env.RATE_LIMIT_MAX ?? 20);
   if (scope === "scan") return Number(process.env.RATE_LIMIT_SCAN_MAX ?? fallback);
   if (scope === "installation") return Number(process.env.RATE_LIMIT_INSTALLATION_MAX ?? fallback);
+  if (scope === "headers") return Number(process.env.RATE_LIMIT_HEADERS_MAX ?? fallback);
   if (scope === "decode") return Number(process.env.RATE_LIMIT_DECODE_MAX ?? fallback);
   if (scope === "csr") return Number(process.env.RATE_LIMIT_CSR_MAX ?? fallback);
   if (scope === "key-match") return Number(process.env.RATE_LIMIT_KEY_MATCH_MAX ?? fallback);
@@ -39,6 +40,7 @@ function targetScopeLimit(scope: RateLimitScope) {
   const fallback = Number(process.env.RATE_LIMIT_TARGET_MAX ?? 30);
   if (scope === "scan") return Number(process.env.RATE_LIMIT_TARGET_SCAN_MAX ?? fallback);
   if (scope === "installation") return Number(process.env.RATE_LIMIT_TARGET_INSTALLATION_MAX ?? fallback);
+  if (scope === "headers") return Number(process.env.RATE_LIMIT_TARGET_HEADERS_MAX ?? fallback);
   if (scope === "decode") return Number(process.env.RATE_LIMIT_DECODE_MAX ?? fallback);
   if (scope === "csr") return Number(process.env.RATE_LIMIT_CSR_MAX ?? fallback);
   if (scope === "key-match") return Number(process.env.RATE_LIMIT_KEY_MATCH_MAX ?? fallback);

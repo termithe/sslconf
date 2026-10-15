@@ -27,7 +27,7 @@ curl -sS -I http://127.0.0.1:3017/scan
 
 Regla de mantenimiento: cada cambio importante debe actualizar este README para conservar el hilo de decisiones, comportamiento y despliegue.
 
-Ultima verificación correcta tras añadir SSL/TLS Server Test, Validador de instalación TLS, ajustar su maquetación, añadir el desglose `Why this grade?`, aceptar URLs `https://`, agrupar recomendaciones accionables por severidad, añadir `How to improve this grade`, copiar fixes accionables, exportar informe HTML imprimible, guardar escaneos recientes en localStorage, reforzar SSRF/rangos reservados/puertos por fase/body limit, añadir telemetría mínima de API con `requestId`, añadir `/api/health` y healthcheck Docker, comprobar redirecciones HTTP/HTTPS, detectar OCSP stapling, convertir HTTP/2/ALPN en check explícito, enumerar ciphers TLS 1.2, recalibrar TLS 1.2 como compatibilidad heredada sin penalización, colorear el panel de nota por severidad, convertir la home en una suite de herramientas y destacar `SSL/TLS Server Test` / `Análisis SSL/TLS` como utilidad principal:
+Ultima verificación correcta tras añadir SSL/TLS Server Test, Validador de instalación TLS, Analizador de cabeceras de seguridad HTTP, ajustar su maquetación, añadir el desglose `Why this grade?`, aceptar URLs `https://`, agrupar recomendaciones accionables por severidad, añadir `How to improve this grade`, copiar fixes accionables, exportar informe HTML imprimible, guardar escaneos recientes en localStorage, reforzar SSRF/rangos reservados/puertos por fase/body limit, añadir telemetría mínima de API con `requestId`, añadir `/api/health` y healthcheck Docker, comprobar redirecciones HTTP/HTTPS, detectar OCSP stapling, convertir HTTP/2/ALPN en check explícito, enumerar ciphers TLS 1.2, recalibrar TLS 1.2 como compatibilidad heredada sin penalización, colorear el panel de nota por severidad, convertir la home en una suite de herramientas y destacar `SSL/TLS Server Test` / `Análisis SSL/TLS` como utilidad principal:
 
 ```bash
 npm run typecheck
@@ -65,11 +65,12 @@ La cabecera funciona como suite de herramientas e incluye nombres unificados:
 ```text
 SSL/TLS Server Test / Análisis SSL/TLS
 TLS Installation Validator / Validador de instalación TLS
+HTTP Security Headers Analyzer / Analizador de cabeceras de seguridad
 CA Bundle Generator / Generador de CA bundle
 CSR Decoder / Decodificador de CSR
 ```
 
-La cabecera conserva `SSL/TLS Server Test` / `Análisis SSL/TLS` como acceso directo y agrupa el resto de herramientas en un menú desplegable accionable `Tools` / `Herramientas`: validador de instalación, CA bundle, decodificadores de certificado y CSR, comprobador de certificado y clave, y generador de CSR. En móvil se muestra un icono de menú que reúne los siete accesos, incluido el análisis principal, para que ninguna utilidad dependa de la portada. Así la navegación se mantiene utilizable sin superar el ancho disponible. La marca conserva un margen explícito respecto a la navegación y vuelve a la portada del idioma activo.
+La cabecera conserva `SSL/TLS Server Test` / `Análisis SSL/TLS` como acceso directo y agrupa el resto de herramientas en un menú desplegable accionable `Tools` / `Herramientas`: validador de instalación, analizador de cabeceras, CA bundle, decodificadores de certificado y CSR, comprobador de certificado y clave, y generador de CSR. En móvil se muestra un icono de menú que reúne los ocho accesos, incluido el análisis principal, para que ninguna utilidad dependa de la portada. Así la navegación se mantiene utilizable sin superar el ancho disponible. La marca conserva un margen explícito respecto a la navegación y vuelve a la portada del idioma activo.
 
 La suite incluye además dos utilidades criptográficas:
 
@@ -89,6 +90,7 @@ La home (`/` y `/es`) no abre ya directamente el generador de CA bundle. Ahora f
 ```text
 SSL/TLS Server Test / Análisis SSL/TLS
 TLS Installation Validator / Validador de instalación TLS
+HTTP Security Headers Analyzer / Analizador de cabeceras de seguridad
 CA Bundle Generator / Generador de CA bundle
 Certificate Decoder / Decodificador de certificados
 CSR Decoder / Decodificador de CSR
@@ -103,6 +105,12 @@ La utilidad vive en `/installation` y `/es/installation`. Está pensada para la 
 Para un hostname público en los puertos `443` o `8443`, comprueba cobertura de CN/SAN, fechas de validez y días restantes, confianza de la cadena realmente servida, número de certificados presentados y el certificado que presenta cada IP pública resuelta. Usa SNI con el hostname original y conecta directamente a cada IP ya validada para detectar diferencias tras balanceadores o CDN. Las IPs sin respuesta y los conjuntos que exceden `TLS_INSTALLATION_ENDPOINT_MAX` quedan como advertencia, no como instalación completamente validada. La cadena no confiable, el hostname no cubierto, un certificado fuera de validez o certificados distintos entre endpoints son fallos.
 
 Node puede añadir la raíz de su almacén de confianza al recorrer `issuerCertificate`, aunque el servidor no la haya enviado. Por ese motivo SSLConf excluye las raíces autofirmadas de esa representación y no las muestra como certificados servidos. La herramienta no emite una advertencia sobre "raíz enviada" sin una captura fiable del mensaje TLS real, evitando falsos positivos.
+
+## Analizador de cabeceras de seguridad HTTP
+
+La utilidad vive en `/headers` y `/es/headers`. Consulta solamente la respuesta HTTPS final, siguiendo como máximo `HTTP_HEADERS_MAX_REDIRECTS` redirecciones HTTPS públicas en los puertos `443` y `8443`. Evalúa HSTS, CSP, protección contra clickjacking, `nosniff`, `Referrer-Policy`, `Permissions-Policy`, COOP y los atributos `Secure`, `HttpOnly` y `SameSite` de las cookies que emita esa respuesta. No registra ni expone el valor de las cookies ni descarga el cuerpo HTTP.
+
+La puntuación es propia de esta herramienta y no modifica la nota del Análisis SSL/TLS. La ausencia de HSTS, CSP, protección de frames o `nosniff` afecta más a la nota; permisos, aislamiento de ventana y cookies no observadas se tratan de forma proporcional o informativa.
 
 La cabecera usa una composición de una columna hasta pantallas `xl`, antes de mostrar el panel lateral de comprobaciones. Así el título y el formulario principal conservan suficiente anchura y se evita dejar palabras aisladas en líneas separadas en portátiles y tablets.
 
@@ -374,6 +382,7 @@ El idioma por defecto es inglés:
 /decode
 /csr
 /installation
+/headers
 ```
 
 La versión española vive en:
@@ -385,11 +394,12 @@ La versión española vive en:
 /es/csr
 /es/scan
 /es/installation
+/es/headers
 ```
 
 `/check` y `/es/check` abren el generador de CA bundle con el formulario vacío cuando no hay `host`. El análisis solo se ejecuta al llegar con `?host=...`.
 
-El middleware lee `Accept-Language` y, si el navegador prefiere español y no hay una cookie de idioma previa, redirige `/` a `/es`, `/check` a `/es/check`, `/scan` a `/es/scan` e `/installation` a `/es/installation`, conservando la query string. El selector `EN/ES` guarda la preferencia en la cookie:
+El middleware lee `Accept-Language` y, si el navegador prefiere español y no hay una cookie de idioma previa, redirige `/` a `/es`, `/check` a `/es/check`, `/scan` a `/es/scan`, `/installation` a `/es/installation` y `/headers` a `/es/headers`, conservando la query string. El selector `EN/ES` guarda la preferencia en la cookie:
 
 ```text
 sslconf_locale
@@ -560,12 +570,14 @@ RATE_LIMIT_WINDOW_SECONDS=60
 RATE_LIMIT_MAX=20
 RATE_LIMIT_SCAN_MAX=12
 RATE_LIMIT_INSTALLATION_MAX=18
+RATE_LIMIT_HEADERS_MAX=20
 RATE_LIMIT_CHAIN_MAX=20
 RATE_LIMIT_KEY_MATCH_MAX=20
 RATE_LIMIT_TARGET_WINDOW_SECONDS=60
 RATE_LIMIT_TARGET_MAX=30
 RATE_LIMIT_TARGET_SCAN_MAX=12
 RATE_LIMIT_TARGET_INSTALLATION_MAX=18
+RATE_LIMIT_TARGET_HEADERS_MAX=20
 RATE_LIMIT_TARGET_CHAIN_MAX=30
 RATE_LIMIT_KEY_SALT=<secreto-propio>
 RATE_LIMIT_REDIS_REST_URL=<upstash-rest-url>
@@ -574,6 +586,9 @@ RATE_LIMIT_REDIS_TIMEOUT_MS=1500
 RATE_LIMIT_REDIS_FAIL_OPEN=1
 TLS_SCAN_CACHE_TTL_SECONDS=300
 TLS_INSTALLATION_CACHE_TTL_SECONDS=300
+HTTP_HEADERS_CACHE_TTL_SECONDS=300
+HTTP_HEADERS_TIMEOUT_MS=6000
+HTTP_HEADERS_MAX_REDIRECTS=6
 TLS_INSTALLATION_ENDPOINT_TIMEOUT_MS=5000
 TLS_INSTALLATION_ENDPOINT_MAX=8
 TLS_INSTALLATION_ENDPOINT_CONCURRENCY=4
@@ -602,6 +617,7 @@ Las rutas fijan el runtime y duración máxima de forma explícita:
 ```text
 POST /api/tls/scan: Node.js, 45 segundos
 POST /api/tls/installation: Node.js, 30 segundos
+POST /api/http/headers: Node.js, 20 segundos
 POST /api/tls/chain: Node.js, 60 segundos
 ```
 
@@ -613,7 +629,7 @@ Los límites evitan que los timeouts internos de TLS, HTTP, AIA y OCSP acumulen 
 2. Crear una base Redis REST compatible con Upstash y copiar URL/token como secretos de producción.
 3. Copiar `.env.example` a las variables del proyecto, sustituyendo `RATE_LIMIT_KEY_SALT` y `SSLCONF_LOG_SALT` por dos valores aleatorios distintos. Nunca subir `.env.local` ni tokens al repositorio.
 4. Configurar `NEXT_PUBLIC_SITE_URL` con la URL Preview para pruebas, y con `https://sslconf.com` solo en Production.
-5. Desplegar primero un Preview. Validar `GET /api/health`, un SSL/TLS Server Test, un Validador de instalación TLS, un CA Bundle Generator y que los endpoints devuelvan `X-SSLConf-Request-Id` y `X-RateLimit-Source: redis`.
+5. Desplegar primero un Preview. Validar `GET /api/health`, un SSL/TLS Server Test, un Validador de instalación TLS, un Analizador de cabeceras, un CA Bundle Generator y que los endpoints devuelvan `X-SSLConf-Request-Id` y `X-RateLimit-Source: redis`.
 6. Asociar `sslconf.com`, comprobar el certificado emitido por Vercel y desplegar Production.
 7. Configurar monitorización externa contra `https://sslconf.com/api/health`.
 
@@ -709,6 +725,7 @@ Los destinos se validan por fase:
 ```text
 entrada SSL/TLS Server Test: 443, 8443
 entrada Validador de instalación TLS: 443, 8443
+entrada Analizador de cabeceras: 443, 8443
 entrada CA Bundle Generator: 443, 465, 636, 8443, 993, 995
 AIA / CA Issuers: http/https en 80 o 443
 OCSP responder: http/https en 80 o 443
@@ -767,6 +784,7 @@ Las rutas API aplican rate limit por IP y herramienta:
 ```text
 /api/tls/scan  -> scope scan
 /api/tls/installation -> scope installation
+/api/http/headers -> scope headers
 /api/tls/chain -> scope chain
 ```
 
@@ -785,6 +803,7 @@ RATE_LIMIT_WINDOW_SECONDS=60
 RATE_LIMIT_MAX=20
 RATE_LIMIT_SCAN_MAX=12
 RATE_LIMIT_INSTALLATION_MAX=18
+RATE_LIMIT_HEADERS_MAX=20
 RATE_LIMIT_CHAIN_MAX=20
 RATE_LIMIT_KEY_MATCH_MAX=20
 RATE_LIMIT_KEY_SALT=change-me-in-production
