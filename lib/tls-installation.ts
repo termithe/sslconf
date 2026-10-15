@@ -19,14 +19,6 @@ function certificateKeyBits(cert: X509Certificate) {
   return details && "modulusLength" in details ? details.modulusLength : undefined;
 }
 
-function isSelfSignedRoot(cert: X509Certificate) {
-  try {
-    return cert.ca && cert.subject === cert.issuer && cert.verify(cert.publicKey);
-  } catch {
-    return false;
-  }
-}
-
 function copy(locale: Locale) {
   const es = locale === "es";
   return {
@@ -38,7 +30,6 @@ function copy(locale: Locale) {
     expired: es ? ["Certificado caducado o aún no válido", "Las fechas de validez del certificado impiden una instalación válida."] : ["Expired or not-yet-valid certificate", "The certificate validity dates prevent a valid installation."],
     expiring: (days: number) => es ? ["Certificado próximo a caducar", `Caduca en ${days} días; planifica la renovación.`] : ["Certificate expires soon", `It expires in ${days} days; plan renewal.`],
     serverChain: (count: number) => es ? ["Cadena enviada por el servidor", `El servidor presenta ${count} certificado${count === 1 ? "" : "s"}, incluido el certificado del sitio.`] : ["Server-supplied chain", `The server presents ${count} certificate${count === 1 ? "" : "s"}, including the site certificate.`],
-    rootIncluded: es ? ["Certificado raíz enviado", "El servidor parece enviar una raíz autofirmada. Los clientes ya disponen de ella; retírala del fullchain o bundle servido."] : ["Root certificate supplied", "The server appears to send a self-signed root. Clients already have it; remove it from the served fullchain or bundle."],
     endpointsConsistent: es ? ["Endpoints públicos coherentes", "Todas las IP públicas comprobadas presentan el mismo certificado y cubren el hostname."] : ["Consistent public endpoints", "All checked public IPs present the same certificate and cover the hostname."],
     endpointsDifferent: es ? ["Endpoints públicos diferentes", "Alguna IP pública presenta otro certificado o no cubre el hostname. Revisa balanceadores, CDN y nodos de backend."] : ["Public endpoints differ", "One or more public IPs present another certificate or do not cover the hostname. Review load balancers, CDN and backend nodes."],
     endpointsPartial: es ? ["Endpoints públicos sin confirmar", "No se pudo completar la comprobación en alguna IP pública. Confírmala desde la red afectada."] : ["Public endpoints not fully confirmed", "The check could not complete on one or more public IPs. Confirm them from the affected network."],
@@ -129,7 +120,6 @@ export async function validateTlsInstallation(host: string, port: number, locale
   const remainingDays = daysUntil(leaf.validTo);
   const now = Date.now();
   const validNow = new Date(leaf.validFrom).getTime() <= now && now <= new Date(leaf.validTo).getTime();
-  const rootCertificateProvided = certificates.slice(1).some(isSelfSignedRoot);
   const text = copy(locale);
   const checks: TlsInstallationCheck[] = [];
 
@@ -137,7 +127,6 @@ export async function validateTlsInstallation(host: string, port: number, locale
   checks.push(makeCheck("validity", !validNow ? "fail" : remainingDays <= 30 ? "warning" : "pass", !validNow ? text.expired : remainingDays <= 30 ? text.expiring(Math.max(0, remainingDays)) : text.valid));
   checks.push(makeCheck("trust", trust.verified ? "pass" : "fail", trust.verified ? text.trusted : text.untrusted));
   checks.push(makeCheck("server-chain", "pass", text.serverChain(certificates.length)));
-  if (rootCertificateProvided) checks.push(makeCheck("root", "warning", text.rootIncluded));
   const endpointsFullyCovered = addresses.length <= selectedAddresses.length;
   const endpointStatus = !endpointsFullyCovered || hasEndpointErrors
     ? "warning"
@@ -171,7 +160,6 @@ export async function validateTlsInstallation(host: string, port: number, locale
     trusted: trust.verified,
     trustError: trust.error,
     certificatesProvided: certificates.length,
-    rootCertificateProvided,
     daysRemaining: remainingDays,
     endpointCoverage: {
       totalAddresses: addresses.length,

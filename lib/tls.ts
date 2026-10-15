@@ -196,8 +196,12 @@ export async function getServerCertificates(host: string, port: number) {
       let current: tls.DetailedPeerCertificate | undefined = detailed;
 
       while (current?.raw && !seen.has(current.fingerprint256)) {
+        const certificate = new X509Certificate(current.raw);
+        // Node/OpenSSL can append the local trust anchor to issuerCertificate.
+        // A self-signed root here is therefore not evidence that the peer sent it.
+        if (certs.length > 0 && isSelfSignedRoot(certificate)) break;
         seen.add(current.fingerprint256);
-        certs.push(new X509Certificate(current.raw));
+        certs.push(certificate);
         if (!current.issuerCertificate || current.issuerCertificate === current) break;
         current = current.issuerCertificate;
       }

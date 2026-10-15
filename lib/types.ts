@@ -89,7 +89,7 @@ export type CertificateKeyMatchResponse = {
 };
 
 export type TlsInstallationCheck = {
-  id: "hostname" | "validity" | "trust" | "server-chain" | "root" | "endpoints";
+  id: "hostname" | "validity" | "trust" | "server-chain" | "endpoints";
   status: "pass" | "warning" | "fail";
   title: string;
   detail: string;
@@ -127,7 +127,6 @@ export type TlsInstallationResponse = {
   trusted: boolean;
   trustError?: string;
   certificatesProvided: number;
-  rootCertificateProvided: boolean;
   daysRemaining: number;
   endpointCoverage: {
     totalAddresses: number;
