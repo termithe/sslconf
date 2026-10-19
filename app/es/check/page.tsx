@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
+import { pageMetadata, type SeoSearchParams } from "@/lib/seo";
 import { TLSChainClient } from "@/components/TLSChainClient";
 import { TLSChainForm } from "@/components/TLSChainForm";
 import { copy } from "@/lib/i18n";
 
-export const metadata: Metadata = {
-  title: "Resultado de cadena TLS",
-  robots: { index: false, follow: false }
-};
+export function generateMetadata({ searchParams }: { searchParams: SeoSearchParams }): Metadata {
+  return pageMetadata("/es/check", "Generador de CA bundle y comprobador de cadena TLS", "Reconstruye una cadena de certificados TLS y descarga sus certificados CA intermedios en un bundle PEM para Apache o nginx.", searchParams);
+}
 
 export default function SpanishCheckPage({ searchParams }: { searchParams: { host?: string; includeRoot?: string } }) {
   const host = searchParams.host?.trim() ?? "";
@@ -27,7 +27,7 @@ export default function SpanishCheckPage({ searchParams }: { searchParams: { hos
                 {text.resultTitle}
               </h1>
               <p className="mt-5 max-w-2xl text-lg font-semibold leading-relaxed text-ink/70">
-                {text.homeTools[1][1]}
+                {text.homeTools[3][1]}
               </p>
               <div className="mt-8"><TLSChainForm defaultHost={host} defaultIncludeRoot={includeRoot} locale="es" /></div>
             </div>

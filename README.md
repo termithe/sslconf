@@ -4,6 +4,12 @@ Utilidad web para inspeccionar certificados TLS, reconstruir cadenas CA mediante
 
 ## Estado actual para retomar trabajo
 
+SEO (2026-10-19): auditoria y plan en [SEO-PLAN.md](SEO-PLAN.md). Implementados metadatos compartidos en `lib/seo.ts`, canonicas a `https://www.sslconf.com`, alternates EN/ES/x-default y titulos/descripciones por herramienta. `/sitemap.xml` incluye las 18 paginas EN/ES sin consultas; `/robots.txt` permite rastrear paginas y excluye `/api/`. Las herramientas sin `host` son indexables (incluido CA bundle); cualquier URL con parametro `host` usa `noindex, follow`, sin canonical ni hreflang para evitar senales contradictorias. No bloquear estas consultas en robots: el buscador necesita leer noindex. Se mantiene la deteccion de idioma existente; las URL ES son explicitas y las inglesas accesibles sin Accept-Language español o con preferencia EN.
+
+Tras publicar: enviar `https://www.sslconf.com/sitemap.xml` en Search Console y solicitar inspeccion de la home y herramientas principales. No se ha enviado automaticamente ni se garantiza indexacion. Rollback del bloque SEO: revertir el commit correspondiente y redesplegar; no requiere cambios DNS. El origen SEO se fija en `lib/seo.ts` para evitar que una variable antigua apunte a otro hostname.
+
+Verificacion reproducible: `node scripts/check-seo.mjs http://localhost:3024` contra la compilacion local, o `node scripts/check-seo.mjs https://www.sslconf.com` tras desplegar. Comprueba las 18 paginas, consultas noindex, idiomas, sitemap, robots y 404 sin lanzar escaneos TLS.
+
 Proyecto local:
 
 ```text

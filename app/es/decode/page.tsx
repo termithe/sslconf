@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
+import { pageMetadata, type SeoSearchParams } from "@/lib/seo";
 import { CertificateDecoderClient } from "@/components/CertificateDecoderClient";
 import { copy } from "@/lib/i18n";
 
-export const metadata: Metadata = {
-  title: "Decodificador de certificados",
-  description: "Decodifica un certificado PEM o DER codificado en Base64 e inspecciona identidad, validez, huellas y extensiones X.509."
-};
+export function generateMetadata({ searchParams }: { searchParams: SeoSearchParams }): Metadata {
+  return pageMetadata("/es/decode", "Decodificador de certificados", "Decodifica un certificado PEM o DER codificado en Base64 e inspecciona identidad, validez, huellas y extensiones X.509.", searchParams);
+}
 
 export default function SpanishDecodePage() {
   const text = copy.es;

@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
+import { pageMetadata, type SeoSearchParams } from "@/lib/seo";
 import { CsrDecoderClient } from "@/components/CsrDecoderClient";
 import { copy } from "@/lib/i18n";
 
-export const metadata: Metadata = {
-  title: "Decodificador y validador de CSR",
-  description: "Decodifica y valida solicitudes PKCS#10, incluida su firma, clave pública y nombres alternativos solicitados."
-};
+export function generateMetadata({ searchParams }: { searchParams: SeoSearchParams }): Metadata {
+  return pageMetadata("/es/csr", "Decodificador y validador de CSR", "Decodifica y valida solicitudes PKCS#10, incluida su firma, clave pública y nombres alternativos solicitados.", searchParams);
+}
 
 export default function SpanishCsrPage() {
   const text = copy.es;

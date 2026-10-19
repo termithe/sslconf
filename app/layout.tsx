@@ -4,9 +4,10 @@ import { Menu } from "lucide-react";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { copy, type Locale } from "@/lib/i18n";
 import "./globals.css";
+import { siteOrigin } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://sslconf.com"),
+  metadataBase: new URL(siteOrigin),
   title: {
     default: "SSLConf",
     template: "%s | SSLConf"

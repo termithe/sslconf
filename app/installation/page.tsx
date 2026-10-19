@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
+import { pageMetadata, type SeoSearchParams } from "@/lib/seo";
 import { TLSInstallationValidator } from "@/components/TLSInstallationValidator";
 
-export const metadata: Metadata = { title: "TLS Installation Validator", description: "Validate the certificate installation delivered by a public HTTPS endpoint." };
+export function generateMetadata({ searchParams }: { searchParams: SeoSearchParams }): Metadata {
+  return pageMetadata("/installation", "TLS Installation Validator", "Validate the certificate installation delivered by a public HTTPS endpoint.", searchParams);
+}
 
 export default function InstallationPage({ searchParams }: { searchParams: { host?: string } }) {
   const host = searchParams.host?.trim() ?? "";

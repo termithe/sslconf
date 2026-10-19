@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
+import { pageMetadata, type SeoSearchParams } from "@/lib/seo";
 import { TLSChainClient } from "@/components/TLSChainClient";
 import { TLSChainForm } from "@/components/TLSChainForm";
 import { copy } from "@/lib/i18n";
 
-export const metadata: Metadata = {
-  title: "TLS chain result",
-  robots: { index: false, follow: false }
-};
+export function generateMetadata({ searchParams }: { searchParams: SeoSearchParams }): Metadata {
+  return pageMetadata("/check", "CA Bundle Generator and TLS Chain Checker", "Rebuild a TLS certificate chain and download its intermediate CA certificates as a PEM bundle for Apache or nginx.", searchParams);
+}
 
 export default function CheckPage({ searchParams }: { searchParams: { host?: string; includeRoot?: string } }) {
   const host = searchParams.host?.trim() ?? "";
@@ -27,7 +27,7 @@ export default function CheckPage({ searchParams }: { searchParams: { host?: str
                 {text.resultTitle}
               </h1>
               <p className="mt-5 max-w-2xl text-lg font-semibold leading-relaxed text-ink/70">
-                {text.homeTools[1][1]}
+                {text.homeTools[3][1]}
               </p>
               <div className="mt-8"><TLSChainForm defaultHost={host} defaultIncludeRoot={includeRoot} locale="en" /></div>
             </div>

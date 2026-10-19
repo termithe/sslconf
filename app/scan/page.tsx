@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
+import { pageMetadata, type SeoSearchParams } from "@/lib/seo";
 import { TLSServerScanClient } from "@/components/TLSServerScanClient";
 import { TLSServerScanForm } from "@/components/TLSServerScanForm";
 import { copy } from "@/lib/i18n";
 
-export const metadata: Metadata = {
-  title: "SSL/TLS Server Test",
-  description: "Scan a public HTTPS endpoint and grade its TLS certificate, protocol support, HSTS and CAA configuration."
-};
+export function generateMetadata({ searchParams }: { searchParams: SeoSearchParams }): Metadata {
+  return pageMetadata("/scan", "SSL/TLS Server Test", "Scan a public HTTPS endpoint and grade its TLS certificate, protocol support, HSTS and CAA configuration.", searchParams);
+}
 
 export default function ScanPage({ searchParams }: { searchParams: { host?: string } }) {
   const host = searchParams.host?.trim() ?? "";

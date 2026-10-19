@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
+import { pageMetadata, type SeoSearchParams } from "@/lib/seo";
 import { CsrDecoderClient } from "@/components/CsrDecoderClient";
 import { copy } from "@/lib/i18n";
 
-export const metadata: Metadata = {
-  title: "CSR Decoder and Validator",
-  description: "Decode and validate PKCS#10 certificate signing requests, including signature, public key and subject alternative names."
-};
+export function generateMetadata({ searchParams }: { searchParams: SeoSearchParams }): Metadata {
+  return pageMetadata("/csr", "CSR Decoder and Validator", "Decode and validate PKCS#10 certificate signing requests, including signature, public key and subject alternative names.", searchParams);
+}
 
 export default function CsrPage() {
   const text = copy.en;

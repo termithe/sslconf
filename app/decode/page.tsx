@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
+import { pageMetadata, type SeoSearchParams } from "@/lib/seo";
 import { CertificateDecoderClient } from "@/components/CertificateDecoderClient";
 import { copy } from "@/lib/i18n";
 
-export const metadata: Metadata = {
-  title: "Certificate Decoder",
-  description: "Decode a PEM certificate or Base64-encoded DER and inspect X.509 identity, validity, fingerprints and extensions."
-};
+export function generateMetadata({ searchParams }: { searchParams: SeoSearchParams }): Metadata {
+  return pageMetadata("/decode", "Certificate Decoder", "Decode a PEM certificate or Base64-encoded DER and inspect X.509 identity, validity, fingerprints and extensions.", searchParams);
+}
 
 export default function DecodePage() {
   const text = copy.en;
