@@ -947,6 +947,7 @@ Además del informe completo por hostname, el Server Test conecta directamente a
 - Una IP que no completa el handshake se muestra como cobertura parcial informativa y **no** reduce la nota global.
 - Para proteger duración y carga del escaneo, el número de IPs queda limitado por `TLS_SCAN_ENDPOINT_MAX` (valor inicial: `6`). El informe indica siempre si hubo direcciones sin analizar.
 - El perfil individual comprueba confianza, cobertura del hostname, certificado negociado, cipher por defecto y TLS 1.2/TLS 1.3. Las señales HTTP, HSTS, CAA y redirecciones son propias del hostname y no se repiten para cada IP.
+- El panel resume IPs coincidentes, diferentes y sin respuesta. Una diferencia confirmada tiene prioridad visual sobre una cobertura parcial, para no ocultar un nodo de CDN o balanceador que entregue una configuración distinta. Cada IP muestra nota, confianza, cobertura del hostname, protocolos, cipher negociado, caducidad y una huella SHA-256 abreviada del certificado.
 
 Validación de referencia realizada el 2026-10-05:
 

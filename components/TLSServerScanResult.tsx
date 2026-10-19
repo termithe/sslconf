@@ -285,8 +285,17 @@ export function TLSServerScanResult({ result, locale = "en" }: { result: TlsScan
 
 function EndpointCoverage({ coverage, locale }: { coverage: TlsScanResponse["endpointCoverage"]; locale: Locale }) {
   const text = copy[locale];
-  const status = coverage.hasErrors ? text.scanEndpointPartial : coverage.consistent ? text.scanEndpointConsistent : text.scanEndpointInconsistent;
-  const statusClass = coverage.hasErrors || !coverage.consistent ? "border-warn/30 bg-warn/10 text-warn" : "border-secure/25 bg-secure/8 text-secure";
+  const completed = coverage.endpoints.filter((endpoint) => endpoint.status === "complete");
+  const different = completed.filter((endpoint) => endpoint.differences.length > 0);
+  const matching = completed.length - different.length;
+  const unavailable = coverage.endpoints.length - completed.length;
+  const hasDifferences = different.length > 0;
+  const status = hasDifferences ? text.scanEndpointInconsistent : coverage.hasErrors ? text.scanEndpointPartial : text.scanEndpointConsistent;
+  const statusClass = hasDifferences
+    ? "border-fault/30 bg-fault/8 text-fault"
+    : coverage.hasErrors
+      ? "border-warn/30 bg-warn/10 text-warn"
+      : "border-secure/25 bg-secure/8 text-secure";
 
   return (
     <Panel title={text.scanEndpoints}>
@@ -298,11 +307,22 @@ function EndpointCoverage({ coverage, locale }: { coverage: TlsScanResponse["end
       </div>
       <div className={`mt-4 border-l-4 p-4 text-sm font-bold leading-6 ${statusClass}`}>{status}</div>
       {coverage.truncated ? <p className="mt-3 text-sm font-bold leading-6 text-warn">{text.scanEndpointsTruncated}</p> : null}
+      <div className="mt-4 grid grid-cols-2 divide-x divide-y divide-line border border-line sm:grid-cols-4">
+        <EndpointMetric label={text.scanEndpointsScanned} value={`${coverage.scannedAddresses}/${coverage.totalAddresses}`} />
+        <EndpointMetric label={text.scanEndpointsMatching} value={String(matching)} tone="secure" />
+        <EndpointMetric label={text.scanEndpointsDifferent} value={String(different.length)} tone={hasDifferences ? "fault" : "muted"} />
+        <EndpointMetric label={text.scanEndpointsUnavailable} value={String(unavailable)} tone={unavailable ? "warn" : "muted"} />
+      </div>
       <div className="mt-4 grid gap-4 lg:grid-cols-2">
         {coverage.endpoints.map((endpoint) => <EndpointCard key={endpoint.address} endpoint={endpoint} locale={locale} />)}
       </div>
     </Panel>
   );
+}
+
+function EndpointMetric({ label, value, tone = "muted" }: { label: string; value: string; tone?: "secure" | "fault" | "warn" | "muted" }) {
+  const color = tone === "secure" ? "text-secure" : tone === "fault" ? "text-fault" : tone === "warn" ? "text-warn" : "text-ink/65";
+  return <div className="min-w-0 p-4"><p className="text-[11px] font-black uppercase tracking-[0.12em] text-ink/45">{label}</p><p className={`mt-1 text-2xl font-black ${color}`}>{value}</p></div>;
 }
 
 function EndpointCard({ endpoint, locale }: { endpoint: TlsEndpointProfile; locale: Locale }) {
@@ -313,6 +333,8 @@ function EndpointCard({ endpoint, locale }: { endpoint: TlsEndpointProfile; loca
       ? "bg-warn text-night"
       : "bg-fault text-white";
   const protocolList = endpoint.protocols?.filter((protocol) => protocol.supported).map((protocol) => protocol.name).join(", ") || "-";
+  const negotiatedCipher = endpoint.protocols?.find((protocol) => protocol.supported)?.cipher ?? endpoint.cipher ?? "-";
+  const matchesPrimary = endpoint.status === "complete" && endpoint.differences.length === 0;
 
   return (
     <article className="border border-line bg-white/75 p-4">
@@ -321,19 +343,34 @@ function EndpointCard({ endpoint, locale }: { endpoint: TlsEndpointProfile; loca
           <p className="font-mono text-base font-black text-night">{endpoint.address}</p>
           <p className="mt-1 text-xs font-black uppercase tracking-[0.14em] text-ink/45">IPv{endpoint.family}</p>
         </div>
-        {endpoint.status === "complete" && endpoint.grade ? <span className={`px-3 py-2 text-sm font-black ${gradeClass}`}>{endpoint.grade} {endpoint.score}/100</span> : <span className="border border-fault/25 bg-fault/8 px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-fault">{text.scanEndpointUnreachable}</span>}
+        {endpoint.status === "complete" && endpoint.grade ? <span className={`px-3 py-2 text-sm font-black ${gradeClass}`}>{endpoint.grade} {endpoint.score}/100</span> : <span className="border border-warn/30 bg-warn/10 px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-warn">{text.scanEndpointUnreachable}</span>}
       </div>
       {endpoint.status === "error" ? <p className="mt-4 text-sm font-bold leading-6 text-ink/65">{endpoint.error}</p> : (
         <div className="mt-4 space-y-2 text-sm font-bold leading-6 text-ink/65">
+          <p className={`border-l-2 pl-3 text-xs font-black uppercase tracking-[0.12em] ${matchesPrimary ? "border-secure text-secure" : "border-fault text-fault"}`}>{matchesPrimary ? text.scanEndpointMatches : text.scanEndpointReview}</p>
           <KeyValue label={text.scanChain} value={endpoint.trusted ? text.scanTrusted : text.scanNotTrusted} />
+          <KeyValue label={text.scanEndpointHostname} value={endpoint.hostnameValid ? text.hostnameValid : text.hostnameInvalid} />
           <KeyValue label={text.scanProtocols} value={protocolList} />
+          <KeyValue label={text.scanEndpointCipher} value={negotiatedCipher} />
           <KeyValue label={text.scanCertificate} value={endpoint.certificate?.subject ?? "-"} />
-          <KeyValue label="SHA256" value={endpoint.certificate?.fingerprint256 ?? "-"} />
+          <KeyValue label={text.scanEndpointExpires} value={formatEndpointDate(endpoint.certificate?.validTo, locale)} />
+          <KeyValue label={text.scanEndpointFingerprint} value={shortFingerprint(endpoint.certificate?.fingerprint256)} />
           {endpoint.differences.length ? <div className="border-t border-line pt-3"><p className="text-xs font-black uppercase tracking-[0.14em] text-warn">{text.scanEndpointDifferences}</p><ul className="mt-2 space-y-1"><>{endpoint.differences.map((difference) => <li key={difference}>{difference}</li>)}</></ul></div> : null}
         </div>
       )}
     </article>
   );
+}
+
+function shortFingerprint(fingerprint?: string) {
+  if (!fingerprint || fingerprint.length < 23) return fingerprint ?? "-";
+  return `${fingerprint.slice(0, 11)}...${fingerprint.slice(-11)}`;
+}
+
+function formatEndpointDate(value: string | undefined, locale: Locale) {
+  if (!value) return "-";
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? value : date.toLocaleDateString(locale === "es" ? "es-ES" : "en-US", { year: "numeric", month: "short", day: "numeric" });
 }
 
 function ClientCompatibility({ profiles, locale }: { profiles: TlsScanResponse["clientCompatibility"]; locale: Locale }) {
