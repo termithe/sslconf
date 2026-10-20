@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
-import { Menu } from "lucide-react";
+import { Mail, Menu, ShieldCheck } from "lucide-react";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { copy, type Locale } from "@/lib/i18n";
 import "./globals.css";
@@ -85,9 +85,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </nav>
         </header>
         {children}
-        <footer className="border-t border-line px-4 py-8 text-center text-xs font-bold uppercase tracking-[0.16em] text-ink/45">
-          SSLConf
-        </footer>
+        <SiteFooter locale={locale} prefix={prefix} />
       </body>
     </html>
   );
@@ -95,4 +93,45 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 function HeaderToolLink({ href, label }: { href: string; label: string }) {
   return <a href={href} className="block px-3 py-2.5 text-xs font-black uppercase tracking-[0.1em] text-ink/65 transition hover:bg-mint hover:text-signal">{label}</a>;
+}
+
+function SiteFooter({ locale, prefix }: { locale: Locale; prefix: string }) {
+  const footer = copy[locale];
+  const toolLinks = [
+    { href: `${prefix}/scan`, label: footer.footerServerTest },
+    { href: `${prefix}/check`, label: footer.footerChainBuilder },
+    { href: `${prefix}/headers`, label: footer.footerHeaders }
+  ];
+  const year = new Date().getFullYear();
+
+  return (
+    <footer className="mt-12 border-t-2 border-night bg-white px-4">
+      <div className="mx-auto grid max-w-7xl gap-10 py-10 sm:grid-cols-2 lg:grid-cols-[minmax(0,1.45fr)_minmax(0,0.8fr)_minmax(0,0.8fr)] lg:gap-12">
+        <section aria-label="SSLConf" className="max-w-sm">
+          <div className="flex items-center gap-3">
+            <span className="grid h-8 w-8 place-items-center border border-night bg-night text-mint"><ShieldCheck size={17} aria-hidden="true" /></span>
+            <span className="text-sm font-black tracking-[0.08em] text-night">SSL<span className="text-signal">CONF</span></span>
+          </div>
+          <p className="mt-4 text-sm font-semibold leading-6 text-ink/65">{footer.footerSummary}</p>
+        </section>
+        <nav aria-label={footer.footerTools}>
+          <p className="text-xs font-black uppercase tracking-[0.16em] text-ink/45">{footer.footerTools}</p>
+          <ul className="mt-4 space-y-2.5">
+            {toolLinks.map((link) => <li key={link.href}><a href={link.href} className="text-sm font-bold text-ink/70 transition hover:text-signal">{link.label}</a></li>)}
+          </ul>
+        </nav>
+        <section aria-labelledby="footer-security-title">
+          <p id="footer-security-title" className="text-xs font-black uppercase tracking-[0.16em] text-ink/45">{footer.footerSecurity}</p>
+          <div className="mt-4 space-y-2.5">
+            <a href="mailto:contacto@sslconf.com" className="flex w-fit items-center gap-2 text-sm font-bold text-ink/70 transition hover:text-signal"><Mail size={15} aria-hidden="true" />{footer.footerContact}</a>
+            <a href="/.well-known/security.txt" className="block w-fit text-sm font-bold text-ink/70 transition hover:text-signal">{footer.footerSecurityTxt}</a>
+          </div>
+        </section>
+      </div>
+      <div className="mx-auto flex max-w-7xl flex-col gap-2 border-t border-line py-4 text-xs font-bold text-ink/45 sm:flex-row sm:items-center sm:justify-between">
+        <span>{footer.footerCopyright}</span>
+        <span>&copy; {year}</span>
+      </div>
+    </footer>
+  );
 }

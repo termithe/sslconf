@@ -3,10 +3,9 @@
 Actualizado: 2026-10-20.
 
 ## Objetivo actual
-- Publicar /.well-known/security.txt en www.sslconf.com, autorizado por el usuario.
-- Contacto confirmado operativo por el usuario: contacto@sslconf.com.
-- Archivo estático en public/.well-known/security.txt; Dockerfile copia public/.
-- Renovar Expires antes de 2027-04-20. README documenta mantenimiento y rollback.
+- Añadir un pie de página profesional y compartido a todas las rutas.
+- El footer enlaza herramientas principales, contacto de seguridad y security.txt,
+  con texto localizado EN/ES y sin páginas legales ficticias.
 
 ## Contexto conocido
 - Proyecto: /home/victorcancela/tls-chain-inspector; Next.js 14, React 18,
@@ -38,7 +37,9 @@ Actualizado: 2026-10-20.
 ## Verificación y límites
 - Verificado en producción local (compilación existente): HTTP 200, text/plain
   y contenido correcto con Accept-Language: es; servidor de prueba detenido.
-- Pendiente comprobar URL pública tras el despliegue por Git/Vercel.
+- Publicado por Git/Vercel: commit 0311e69, despliegue Ready.
+- Verificada https://www.sslconf.com/.well-known/security.txt: HTTP 200,
+  text/plain y contenido idéntico al archivo con Accept-Language en y es.
 - En la sesión anterior constan build y script SEO correctos en local y producción;
   no se han repetido ni revalidado el despliegue en esta tarea.
 - Al inicio había README modificado y AGENTS.md/SESSION_SUMMARY.md sin seguimiento,
@@ -54,3 +55,5 @@ Actualizado: 2026-10-20.
   añaden enlaces desde el informe; actualizar sitemap y prueba SEO al añadir páginas.
 - Después: guías fullchain.pem frente a ca-bundle.crt y cadena SSL incompleta.
 - La metodología está propuesta, no implementada en esta tarea.
+- Footer verificado en producción local: build, typecheck y lint correctos;
+  HTML de / y /es contiene los enlaces y textos esperados. Pendiente despliegue.
