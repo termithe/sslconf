@@ -24,6 +24,9 @@ Actualizado: 2026-10-20.
 - Commit referido: 9856bac, publicado y verificado en la sesión anterior.
 - El usuario confirma propiedad de Search Console creada y los cuatro pasos
   de envío de sitemap/inspección realizados. No hay acceso a sus resultados.
+- Páginas operativas de privacidad y uso responsable publicadas en EN/ES:
+  `/privacy`, `/es/privacy`, `/acceptable-use`, `/es/acceptable-use`.
+  El footer las enlaza y el sitemap contiene 24 URLs indexables.
 
 ## Decisiones vigentes
 - Responder en castellano y recomendar modelo/razonamiento antes de trabajar,
@@ -54,5 +57,13 @@ Actualizado: 2026-10-20.
 - Footer publicado: commit 79fe9ed y despliegue Vercel Ready.
 - Verificado en https://www.sslconf.com/ y /es: HTTP 200 y textos/enlaces
   del footer correctos. Build, typecheck y lint locales correctos.
-- Pendiente de verificación/publicación en esta tarea: páginas EN/ES de
-  privacidad y uso responsable, sus enlaces de footer y sitemap de 24 URLs.
+- Commit funcional publicado: `eefdf21` (`Add privacy and responsible use pages`).
+  Despliegue Vercel Ready y verificado en producción: cuatro páginas HTTP 200,
+  contenido EN/ES, SEO de 24 rutas, sitemap, robots y redirección 308 del ápice
+  hacia `www`.
+
+## Siguientes opciones
+- Publicar las primeras guías técnicas EN/ES sobre `fullchain.pem`, CA bundles,
+  HSTS o CAA, con ejemplos revisados y enlaces desde las herramientas.
+- Revisar resultados de indexación y rendimiento en Search Console cuando haya
+  pasado tiempo suficiente para el rastreo.
