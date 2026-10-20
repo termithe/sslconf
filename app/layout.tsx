@@ -100,14 +100,18 @@ function SiteFooter({ locale, prefix }: { locale: Locale; prefix: string }) {
   const toolLinks = [
     { href: `${prefix}/scan`, label: footer.footerServerTest },
     { href: `${prefix}/check`, label: footer.footerChainBuilder },
-    { href: `${prefix}/headers`, label: footer.footerHeaders },
-    { href: `${prefix}/methodology`, label: footer.footerMethodology }
+    { href: `${prefix}/headers`, label: footer.footerHeaders }
+  ];
+  const informationLinks = [
+    { href: `${prefix}/methodology`, label: footer.footerMethodology },
+    { href: `${prefix}/privacy`, label: footer.footerPrivacy },
+    { href: `${prefix}/acceptable-use`, label: footer.footerAcceptableUse }
   ];
   const year = new Date().getFullYear();
 
   return (
     <footer className="mt-12 border-t-2 border-night bg-white px-4">
-      <div className="mx-auto grid max-w-7xl gap-10 py-10 sm:grid-cols-2 lg:grid-cols-[minmax(0,1.45fr)_minmax(0,0.8fr)_minmax(0,0.8fr)] lg:gap-12">
+      <div className="mx-auto grid max-w-7xl gap-10 py-10 sm:grid-cols-2 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,0.8fr)_minmax(0,0.9fr)_minmax(0,0.8fr)] lg:gap-10">
         <section aria-label="SSLConf" className="max-w-sm">
           <div className="flex items-center gap-3">
             <span className="grid h-8 w-8 place-items-center border border-night bg-night text-mint"><ShieldCheck size={17} aria-hidden="true" /></span>
@@ -119,6 +123,12 @@ function SiteFooter({ locale, prefix }: { locale: Locale; prefix: string }) {
           <p className="text-xs font-black uppercase tracking-[0.16em] text-ink/45">{footer.footerTools}</p>
           <ul className="mt-4 space-y-2.5">
             {toolLinks.map((link) => <li key={link.href}><a href={link.href} className="text-sm font-bold text-ink/70 transition hover:text-signal">{link.label}</a></li>)}
+          </ul>
+        </nav>
+        <nav aria-label={footer.footerInformation}>
+          <p className="text-xs font-black uppercase tracking-[0.16em] text-ink/45">{footer.footerInformation}</p>
+          <ul className="mt-4 space-y-2.5">
+            {informationLinks.map((link) => <li key={link.href}><a href={link.href} className="text-sm font-bold text-ink/70 transition hover:text-signal">{link.label}</a></li>)}
           </ul>
         </nav>
         <section aria-labelledby="footer-security-title">

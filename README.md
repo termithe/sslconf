@@ -1239,3 +1239,27 @@ La ruta API declara explícitamente:
 ```ts
 export const runtime = "nodejs";
 ```
+
+## Privacidad y uso responsable
+
+SSLConf publica avisos operativos bilingües en las rutas indexables:
+
+```text
+/privacy
+/es/privacy
+/acceptable-use
+/es/acceptable-use
+```
+
+El footer enlaza estas páginas junto con la metodología, el contacto de seguridad y `/.well-known/security.txt`. Las cuatro rutas se incluyen en el sitemap y en la comprobación SEO, que pasa de 20 a 24 páginas indexables.
+
+La página de privacidad documenta únicamente comportamientos verificables del código actual: los diagnósticos reciben hostname, puerto e idioma; los decodificadores y el comprobador certificado-clave procesan el material pegado en memoria con respuesta `no-store`, sin registrar su contenido; y el generador de CSR crea la clave privada en el navegador, sin enviarla a la API. El comprobador certificado-clave sí recibe la clave privada aportada por el usuario, por lo que no debe utilizarse con una clave de producción cuya divulgación no sea aceptable.
+
+También documenta la telemetría mínima de aplicación (ID de solicitud, herramienta, hostname/puerto, estado, duración, caché y hash abreviado de IP), las cachés en memoria de corta duración de los análisis públicos y el almacenamiento local del navegador:
+
+```text
+cookie: sslconf_locale
+localStorage: sslconf_recent_scan_hosts (hasta 6 hostnames)
+```
+
+La política no promete plazos de retención de proveedores de alojamiento ni equivalencias legales; debe revisarse antes de añadir cuentas, pagos, analítica, publicidad u otros flujos de datos. La página de uso responsable delimita los análisis a endpoints públicos autorizados, prohíbe automatización abusiva y elusión de controles, y explica que las notas son evidencia técnica puntual bajo la metodología propia de SSLConf.

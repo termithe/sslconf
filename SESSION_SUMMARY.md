@@ -3,8 +3,8 @@
 Actualizado: 2026-10-20.
 
 ## Objetivo actual
-- Publicar la metodología EN/ES del Análisis SSL/TLS basada en el motor real.
-- Rutas propuestas: /methodology y /es/methodology; enlazadas desde la nota y footer.
+- Mantener y evolucionar el conjunto de herramientas SSL/TLS públicas de SSLConf.
+- Ya existen páginas públicas EN/ES de metodología, privacidad y uso responsable.
 
 ## Contexto conocido
 - Proyecto: /home/victorcancela/tls-chain-inspector; Next.js 14, React 18,
@@ -18,7 +18,7 @@ Actualizado: 2026-10-20.
 
 ## Último trabajo funcional conocido por la conversación
 - SEO técnico implementado: metadatos compartidos, canónicas, hreflang,
-  sitemap de 18 páginas y robots; consultas con host llevan noindex, follow.
+  sitemap de 24 páginas y robots; consultas con host llevan noindex, follow.
 - Archivos: lib/seo.ts, app/sitemap.ts, app/robots.ts,
   scripts/check-seo.mjs y SEO-PLAN.md.
 - Commit referido: 9856bac, publicado y verificado en la sesión anterior.
@@ -48,14 +48,11 @@ Actualizado: 2026-10-20.
   remoto, estado de indexación y métricas de Search Console.
 
 ## Pendientes
-- Propuesta siguiente: metodología del análisis en inglés y castellano,
-  contrastando checks, límites y cálculo de nota con lib/tls-scan.ts antes de redactar.
-- Revisar componentes/TLSServerScanResult.tsx y lib/i18n.ts únicamente si se
-  añaden enlaces desde el informe; actualizar sitemap y prueba SEO al añadir páginas.
-- Después: guías fullchain.pem frente a ca-bundle.crt y cadena SSL incompleta.
 - Metodología publicada: commit 53e2336 y despliegue Vercel Ready.
 - Verificadas en producción /methodology y /es/methodology; sitemap con 20 URLs,
   incluidas sus dos versiones. Build, typecheck, lint y comprobación SEO local correctos.
 - Footer publicado: commit 79fe9ed y despliegue Vercel Ready.
 - Verificado en https://www.sslconf.com/ y /es: HTTP 200 y textos/enlaces
   del footer correctos. Build, typecheck y lint locales correctos.
+- Pendiente de verificación/publicación en esta tarea: páginas EN/ES de
+  privacidad y uso responsable, sus enlaces de footer y sitemap de 24 URLs.
