@@ -53,8 +53,9 @@ Actualizado: 2026-10-20.
 - Revisar componentes/TLSServerScanResult.tsx y lib/i18n.ts únicamente si se
   añaden enlaces desde el informe; actualizar sitemap y prueba SEO al añadir páginas.
 - Después: guías fullchain.pem frente a ca-bundle.crt y cadena SSL incompleta.
-- La metodología incluye reglas, cobertura y límites; build, typecheck, lint y
-  comprobación SEO local correctos. Pendiente despliegue y verificación pública.
+- Metodología publicada: commit 53e2336 y despliegue Vercel Ready.
+- Verificadas en producción /methodology y /es/methodology; sitemap con 20 URLs,
+  incluidas sus dos versiones. Build, typecheck, lint y comprobación SEO local correctos.
 - Footer publicado: commit 79fe9ed y despliegue Vercel Ready.
 - Verificado en https://www.sslconf.com/ y /es: HTTP 200 y textos/enlaces
   del footer correctos. Build, typecheck y lint locales correctos.
