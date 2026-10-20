@@ -1,0 +1,4 @@
+Contact: mailto:contacto@sslconf.com
+Expires: 2027-04-20T00:00:00Z
+Preferred-Languages: es, en
+Canonical: https://www.sslconf.com/.well-known/security.txt
