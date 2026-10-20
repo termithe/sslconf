@@ -100,7 +100,8 @@ function SiteFooter({ locale, prefix }: { locale: Locale; prefix: string }) {
   const toolLinks = [
     { href: `${prefix}/scan`, label: footer.footerServerTest },
     { href: `${prefix}/check`, label: footer.footerChainBuilder },
-    { href: `${prefix}/headers`, label: footer.footerHeaders }
+    { href: `${prefix}/headers`, label: footer.footerHeaders },
+    { href: `${prefix}/methodology`, label: footer.footerMethodology }
   ];
   const year = new Date().getFullYear();
 

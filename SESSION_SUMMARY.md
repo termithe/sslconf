@@ -3,9 +3,8 @@
 Actualizado: 2026-10-20.
 
 ## Objetivo actual
-- Añadir un pie de página profesional y compartido a todas las rutas.
-- El footer enlaza herramientas principales, contacto de seguridad y security.txt,
-  con texto localizado EN/ES y sin páginas legales ficticias.
+- Publicar la metodología EN/ES del Análisis SSL/TLS basada en el motor real.
+- Rutas propuestas: /methodology y /es/methodology; enlazadas desde la nota y footer.
 
 ## Contexto conocido
 - Proyecto: /home/victorcancela/tls-chain-inspector; Next.js 14, React 18,
@@ -54,7 +53,8 @@ Actualizado: 2026-10-20.
 - Revisar componentes/TLSServerScanResult.tsx y lib/i18n.ts únicamente si se
   añaden enlaces desde el informe; actualizar sitemap y prueba SEO al añadir páginas.
 - Después: guías fullchain.pem frente a ca-bundle.crt y cadena SSL incompleta.
-- La metodología está propuesta, no implementada en esta tarea.
+- La metodología incluye reglas, cobertura y límites; build, typecheck, lint y
+  comprobación SEO local correctos. Pendiente despliegue y verificación pública.
 - Footer publicado: commit 79fe9ed y despliegue Vercel Ready.
 - Verificado en https://www.sslconf.com/ y /es: HTTP 200 y textos/enlaces
   del footer correctos. Build, typecheck y lint locales correctos.

@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 
 const base = process.argv[2] ?? "http://localhost:3024";
 const origin = "https://www.sslconf.com";
-const paths = ["/", "/scan", "/check", "/installation", "/headers", "/decode", "/csr", "/csr/generate", "/match"];
+const paths = ["/", "/scan", "/check", "/installation", "/headers", "/decode", "/csr", "/csr/generate", "/match", "/methodology"];
 const allPaths = paths.flatMap((path) => [path, path === "/" ? "/es" : `/es${path}`]);
 async function html(path) {
   const response = await fetch(base + path, { redirect: "manual" });

@@ -98,6 +98,7 @@ export function TLSServerScanResult({ result, locale = "en" }: { result: TlsScan
       </Panel>
 
       <Panel title={text.scanWhyGrade}>
+        <a href={locale === "es" ? "/es/methodology" : "/methodology"} className="mb-4 inline-flex text-sm font-black text-signal transition hover:text-night">{text.scanMethodology}</a>
         <div className="grid gap-4 lg:grid-cols-[220px_1fr_220px]">
           <ScoreBox label={text.scanBaseScore} value={String(result.gradeBreakdown.baseScore)} />
           <div className="space-y-3">

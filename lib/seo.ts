@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const siteOrigin = "https://www.sslconf.com";
-export const toolPaths = ["/", "/scan", "/check", "/installation", "/headers", "/decode", "/csr", "/csr/generate", "/match"] as const;
+export const toolPaths = ["/", "/scan", "/check", "/installation", "/headers", "/decode", "/csr", "/csr/generate", "/match", "/methodology"] as const;
 export type SeoSearchParams = Record<string, string | string[] | undefined>;
 
 export function languageUrls(path: string) {
