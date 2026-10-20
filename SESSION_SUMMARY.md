@@ -55,5 +55,6 @@ Actualizado: 2026-10-20.
   añaden enlaces desde el informe; actualizar sitemap y prueba SEO al añadir páginas.
 - Después: guías fullchain.pem frente a ca-bundle.crt y cadena SSL incompleta.
 - La metodología está propuesta, no implementada en esta tarea.
-- Footer verificado en producción local: build, typecheck y lint correctos;
-  HTML de / y /es contiene los enlaces y textos esperados. Pendiente despliegue.
+- Footer publicado: commit 79fe9ed y despliegue Vercel Ready.
+- Verificado en https://www.sslconf.com/ y /es: HTTP 200 y textos/enlaces
+  del footer correctos. Build, typecheck y lint locales correctos.
