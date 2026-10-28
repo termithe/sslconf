@@ -66,8 +66,10 @@ Actualizado: 2026-10-28.
   Despliegue Vercel Ready y verificado en producción: cuatro páginas HTTP 200,
   contenido EN/ES, SEO de 24 rutas, sitemap, robots y redirección 308 del ápice
   hacia `www`.
-- Pendiente de publicación en esta tarea: optimización SEO conservadora de la
-  home y metadata de herramientas, más actualización de la prueba SEO y plan.
+- Optimización SEO conservadora publicada: commit `7656c36`
+  (`Improve technical SEO metadata`). Vercel Ready; producción verificada con
+  title/H1/`WebSite` JSON-LD de la home, sitemap, robots, canonical, hreflang,
+  noindex de resultados y títulos únicos en las 24 rutas.
 
 ## Siguientes opciones
 - Publicar las primeras guías técnicas EN/ES sobre `fullchain.pem`, CA bundles,
