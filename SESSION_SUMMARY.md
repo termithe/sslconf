@@ -1,6 +1,6 @@
 # Estado de SSLConf
 
-Actualizado: 2026-10-20.
+Actualizado: 2026-10-28.
 
 ## Objetivo actual
 - Mantener y evolucionar el conjunto de herramientas SSL/TLS públicas de SSLConf.
@@ -27,6 +27,11 @@ Actualizado: 2026-10-20.
 - Páginas operativas de privacidad y uso responsable publicadas en EN/ES:
   `/privacy`, `/es/privacy`, `/acceptable-use`, `/es/acceptable-use`.
   El footer las enlaza y el sitemap contiene 24 URLs indexables.
+- Auditoría SEO técnica de 2026-10-28: producción con canonical `www`,
+  redirección 308 del ápice, sitemap/robots correctos, `hreflang` recíproco y
+  resultados con `host` en `noindex, follow`. La portada inglesa y metadatos
+  de herramientas se ajustaron a sus intenciones reales; se añadió `WebSite`
+  JSON-LD únicamente en la home.
 
 ## Decisiones vigentes
 - Responder en castellano y recomendar modelo/razonamiento antes de trabajar,
@@ -61,6 +66,8 @@ Actualizado: 2026-10-20.
   Despliegue Vercel Ready y verificado en producción: cuatro páginas HTTP 200,
   contenido EN/ES, SEO de 24 rutas, sitemap, robots y redirección 308 del ápice
   hacia `www`.
+- Pendiente de publicación en esta tarea: optimización SEO conservadora de la
+  home y metadata de herramientas, más actualización de la prueba SEO y plan.
 
 ## Siguientes opciones
 - Publicar las primeras guías técnicas EN/ES sobre `fullchain.pem`, CA bundles,

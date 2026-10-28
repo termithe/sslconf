@@ -3,7 +3,7 @@ import { pageMetadata, type SeoSearchParams } from "@/lib/seo";
 import { TLSInstallationValidator } from "@/components/TLSInstallationValidator";
 
 export function generateMetadata({ searchParams }: { searchParams: SeoSearchParams }): Metadata {
-  return pageMetadata("/installation", "TLS Installation Validator", "Validate the certificate installation delivered by a public HTTPS endpoint.", searchParams);
+  return pageMetadata("/installation", "SSL Installation Checker", "Verify the SSL certificate installation served by a public HTTPS endpoint, including hostname coverage, expiry, trust and endpoint consistency.", searchParams);
 }
 
 export default function InstallationPage({ searchParams }: { searchParams: { host?: string } }) {

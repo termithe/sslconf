@@ -92,7 +92,8 @@ Ejecutar desde el directorio del proyecto:
 | Estado Docker local | `docker compose ps` | Solo consulta |
 
 - No existe script `test` en `package.json`; no usar ni anunciar `npm test`.
-- La prueba SEO comprueba las 18 páginas EN/ES, metadatos, consultas `host`
+- La prueba SEO comprueba las 24 páginas EN/ES, metadatos, títulos únicos,
+  `WebSite` JSON-LD en la home, consultas `host`
   noindex, sitemap, robots, redirección de idioma y 404. No cubre el motor TLS.
 - No ejecutar build mientras esté activo `next dev` en este mismo directorio:
   comparten `.next` y pueden dejar el entorno incoherente.

@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
-import { pageMetadata, type SeoSearchParams } from "@/lib/seo";
+import { pageMetadata, siteOrigin, type SeoSearchParams } from "@/lib/seo";
 import { HomeContent } from "@/components/HomeContent";
+import { JsonLd } from "@/components/JsonLd";
 
 export function generateMetadata({ searchParams }: { searchParams: SeoSearchParams }): Metadata {
-  return pageMetadata("/", "SSL/TLS Tools: Server Test, Certificates and CSR", "Run SSL/TLS diagnostics, grade HTTPS server configuration and generate server-ready CA bundle PEM files.", searchParams);
+  return pageMetadata("/", "SSL Checker & TLS Diagnostic Tools", "Test SSL certificates, analyze TLS configurations, check HTTP security headers, decode certificates, generate CSRs and build CA bundles with free online tools.", searchParams);
 }
 
 export default function HomePage() {
-  return <HomeContent locale="en" />;
+  return <>
+    <JsonLd data={{ "@context": "https://schema.org", "@type": "WebSite", name: "SSLConf", url: `${siteOrigin}/` }} />
+    <HomeContent locale="en" />
+  </>;
 }

@@ -4,7 +4,7 @@ import { CertificateDecoderClient } from "@/components/CertificateDecoderClient"
 import { copy } from "@/lib/i18n";
 
 export function generateMetadata({ searchParams }: { searchParams: SeoSearchParams }): Metadata {
-  return pageMetadata("/decode", "Certificate Decoder", "Decode a PEM certificate or Base64-encoded DER and inspect X.509 identity, validity, fingerprints and extensions.", searchParams);
+  return pageMetadata("/decode", "SSL Certificate Decoder", "Decode a PEM certificate or Base64-encoded DER. Inspect X.509 subject, issuer, validity, fingerprints, public key and extensions.", searchParams);
 }
 
 export default function DecodePage() {

@@ -1,20 +1,18 @@
 # SEO y crecimiento de SSLConf
 
-Auditoria inicial: 2026-10-19. Canonico propuesto: https://www.sslconf.com.
-Estado: fundamentos implementados en codigo (canonicas www, idiomas, sitemap, robots y politica de consultas); pendiente confirmar publicacion y enviar sitemap en Search Console. Las evidencias siguientes reflejan el estado anterior a estas correcciones.
+Auditoría técnica revisada: 2026-10-28. Canónico: https://www.sslconf.com.
+Estado: fundamentos técnicos publicados y comprobados desde producción; pendiente obtener señales de rastreo, indexación e impresiones de Search Console.
 
 ## Evidencias verificadas
 
-- /robots.txt y /sitemap.xml responden 404. Esto no bloquea por si solo la indexacion, pero falta facilitar descubrimiento y reglas de rastreo.
-- /check y /es/check responden 200 con noindex,nofollow incluso sin parametros: la herramienta no es indexable.
-- / y /scan no publican canonical en el HTML consultado.
-- No se encontro configuracion hreflang en app; faltan alternates por idioma.
-- app/layout.tsx usa https://sslconf.com como metadataBase de respaldo, mientras el dominio publico redirige a www. Revisar tambien la variable de entorno de produccion.
-- La home publica el titulo SSL/TLS Tools; mejorar objetivo y marca.
-- /scan no distingue robots para URL con host. Definir paginas de herramientas indexables y resultados de consultas noindex,follow, sin incluir estos ultimos en sitemap.
-- El middleware redirige algunas rutas segun idioma. Revisar acceso estable a versiones EN/ES y enlazado reciproco sin perder la preferencia de idioma del usuario.
+- `https://www.sslconf.com` responde `200`; `https://sslconf.com` redirige con `308` al dominio canónico. Las páginas probadas sirven HTTPS y HSTS.
+- `/robots.txt` permite páginas públicas, excluye `/api/` e incluye el sitemap. `/sitemap.xml` responde `200` y enumera 24 URL canónicas EN/ES, con alternates recíprocos y `x-default`.
+- Las páginas indexables incluyen canonical autoreferenciada a `www`, `hreflang` EN/ES/x-default y contenido renderizado por servidor: title, meta description, H1 y enlaces navegables. Las consultas con `host` son `noindex, follow` y no publican canonical ni `hreflang`.
+- La home inglesa se orientó a `SSL Checker & TLS Diagnostic Tools`; cada herramienta inglesa tiene title y description propios según su capacidad real. No se modificaron URLs, lógica criptográfica ni llamadas de diagnóstico.
+- Se publica un único `WebSite` JSON-LD en la home canónica con nombre `SSLConf` y URL `https://www.sslconf.com/`. No se añaden FAQ, reseñas, valoraciones ni Schema de aplicación hasta que representen contenido visible suficiente.
+- La comprobación local `scripts/check-seo.mjs` valida 24 páginas, títulos únicos, JSON-LD de la home, canonical, `hreflang`, `noindex`, sitemap, robots, redirección de idioma y 404. No mide posiciones, Core Web Vitals de campo, backlinks ni cobertura de Google.
 
-No se ha comprobado Search Console, volumen de busquedas, ingresos, rendimiento de campo ni indexacion real en Google. Una consulta site: no sustituye Search Console.
+No se han comprobado todavía resultados de Search Console, volumen de búsquedas, ingresos, rendimiento de campo ni indexación real URL a URL. Una consulta `site:` no sustituye Search Console.
 
 ## Prioridades
 

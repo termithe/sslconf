@@ -4,7 +4,7 @@ import { CsrDecoderClient } from "@/components/CsrDecoderClient";
 import { copy } from "@/lib/i18n";
 
 export function generateMetadata({ searchParams }: { searchParams: SeoSearchParams }): Metadata {
-  return pageMetadata("/csr", "CSR Decoder and Validator", "Decode and validate PKCS#10 certificate signing requests, including signature, public key and subject alternative names.", searchParams);
+  return pageMetadata("/csr", "CSR Decoder & Validator", "Decode and validate a PKCS#10 certificate signing request. Inspect its signature, subject, public key and DNS subject alternative names.", searchParams);
 }
 
 export default function CsrPage() {

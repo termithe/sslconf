@@ -5,7 +5,7 @@ import { TLSChainForm } from "@/components/TLSChainForm";
 import { copy } from "@/lib/i18n";
 
 export function generateMetadata({ searchParams }: { searchParams: SeoSearchParams }): Metadata {
-  return pageMetadata("/check", "CA Bundle Generator and TLS Chain Checker", "Rebuild a TLS certificate chain and download its intermediate CA certificates as a PEM bundle for Apache or nginx.", searchParams);
+  return pageMetadata("/check", "CA Bundle Generator & TLS Chain Checker", "Build a server-ready PEM CA bundle from a public TLS certificate chain. Download the required intermediate certificates for Apache or nginx.", searchParams);
 }
 
 export default function CheckPage({ searchParams }: { searchParams: { host?: string; includeRoot?: string } }) {

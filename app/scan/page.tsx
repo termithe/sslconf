@@ -5,7 +5,7 @@ import { TLSServerScanForm } from "@/components/TLSServerScanForm";
 import { copy } from "@/lib/i18n";
 
 export function generateMetadata({ searchParams }: { searchParams: SeoSearchParams }): Metadata {
-  return pageMetadata("/scan", "SSL/TLS Server Test", "Scan a public HTTPS endpoint and grade its TLS certificate, protocol support, HSTS and CAA configuration.", searchParams);
+  return pageMetadata("/scan", "SSL Checker & TLS Server Test", "Test a public HTTPS endpoint for certificate trust, TLS protocol support, ciphers, HSTS, CAA and common configuration issues.", searchParams);
 }
 
 export default function ScanPage({ searchParams }: { searchParams: { host?: string } }) {

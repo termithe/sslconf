@@ -3,7 +3,7 @@ import { pageMetadata, type SeoSearchParams } from "@/lib/seo";
 import { CertificateKeyMatcherClient } from "@/components/CertificateKeyMatcherClient";
 
 export function generateMetadata({ searchParams }: { searchParams: SeoSearchParams }): Metadata {
-  return pageMetadata("/match", "Certificate and Private Key Matcher", "Check whether a PEM certificate and PEM private key belong to the same key pair.", searchParams);
+  return pageMetadata("/match", "Certificate & Private Key Matcher", "Check whether a PEM SSL certificate and PEM private key belong to the same key pair by comparing their public-key material.", searchParams);
 }
 
 export default function KeyMatcherPage() {
