@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { pageMetadata, type SeoSearchParams } from "@/lib/seo";
 import { TLSServerScanClient } from "@/components/TLSServerScanClient";
 import { TLSServerScanForm } from "@/components/TLSServerScanForm";
+import { ToolSeoContent } from "@/components/ToolSeoContent";
 import { copy } from "@/lib/i18n";
 
 export function generateMetadata({ searchParams }: { searchParams: SeoSearchParams }): Metadata {
@@ -35,6 +36,7 @@ export default function SpanishScanPage({ searchParams }: { searchParams: { host
             <TLSServerScanClient host={host} locale="es" />
           </section>
         ) : null}
+        {!host ? <ToolSeoContent locale="es" tool="scan" /> : null}
       </div>
     </main>
   );

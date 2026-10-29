@@ -1,6 +1,6 @@
 # Estado de SSLConf
 
-Actualizado: 2026-10-28.
+Actualizado: 2026-10-29.
 
 ## Objetivo actual
 - Mantener y evolucionar el conjunto de herramientas SSL/TLS públicas de SSLConf.
@@ -32,6 +32,9 @@ Actualizado: 2026-10-28.
   resultados con `host` en `noindex, follow`. La portada inglesa y metadatos
   de herramientas se ajustaron a sus intenciones reales; se añadió `WebSite`
   JSON-LD únicamente en la home.
+- Fase 2 de contenido SEO preparada para `/scan`, `/check`, `/decode` y `/csr`
+  en EN/ES. `ToolSeoContent` muestra explicaciones técnicas y tres enlaces
+  contextuales por herramienta solo en las páginas indexables sin `host`.
 
 ## Decisiones vigentes
 - Responder en castellano y recomendar modelo/razonamiento antes de trabajar,
@@ -70,6 +73,8 @@ Actualizado: 2026-10-28.
   (`Improve technical SEO metadata`). Vercel Ready; producción verificada con
   title/H1/`WebSite` JSON-LD de la home, sitemap, robots, canonical, hreflang,
   noindex de resultados y títulos únicos en las 24 rutas.
+- Pendiente de publicación en esta tarea: contenido SEO fase 2, documentación y
+  verificación de producción.
 
 ## Siguientes opciones
 - Publicar las primeras guías técnicas EN/ES sobre `fullchain.pem`, CA bundles,

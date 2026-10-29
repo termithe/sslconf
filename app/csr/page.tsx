@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata, type SeoSearchParams } from "@/lib/seo";
 import { CsrDecoderClient } from "@/components/CsrDecoderClient";
+import { ToolSeoContent } from "@/components/ToolSeoContent";
 import { copy } from "@/lib/i18n";
 
 export function generateMetadata({ searchParams }: { searchParams: SeoSearchParams }): Metadata {
@@ -17,6 +18,7 @@ export default function CsrPage() {
         <p className="mt-5 max-w-2xl text-lg font-semibold leading-relaxed text-ink/70">{text.csrDescription}</p>
       </section>
       <div className="mt-8"><CsrDecoderClient locale="en" /></div>
+      <ToolSeoContent locale="en" tool="csr" />
     </div></main>
   );
 }

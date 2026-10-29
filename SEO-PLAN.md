@@ -18,7 +18,7 @@ No se han comprobado todavía resultados de Search Console, volumen de búsqueda
 
 1. Fundamentos: canonical por pagina a www, hreflang EN/ES/x-default reciproco, sitemap, robots, metadata por herramienta y politica de indexacion de resultados. Verificar paginas reales y redirecciones antes de publicar.
 2. Medicion: propiedad de dominio Search Console por TXT, enviar sitemap, Bing Webmaster Tools y analitica de uso sin registrar PEM, claves privadas ni dominios consultados.
-3. Contenido: conservar el formulario principal visible. Publicar guias tecnicas enlazadas a las herramientas con ejemplos reproducibles y fuentes primarias. Mantener EN/ES con contenido revisado.
+3. Contenido: completada la primera capa en `/scan`, `/check`, `/decode` y `/csr`, con explicaciones técnicas y enlaces contextuales EN/ES bajo el formulario. Conservar el formulario principal visible. Siguiente paso: publicar guías técnicas enlazadas a las herramientas con ejemplos reproducibles y fuentes primarias.
 4. Credibilidad: metodologia de puntuacion y limitaciones, autor con experiencia verificable, contacto, privacidad y terminos. No prometer equivalencia con SSL Labs ni validacion mas amplia de la que realiza el motor.
 5. Distribucion: enlace contextual desde DNSRadar, demostraciones tecnicas y contribuciones utiles a comunidades. Sin enlaces comprados ni directorios masivos.
 

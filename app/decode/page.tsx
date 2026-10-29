@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata, type SeoSearchParams } from "@/lib/seo";
 import { CertificateDecoderClient } from "@/components/CertificateDecoderClient";
+import { ToolSeoContent } from "@/components/ToolSeoContent";
 import { copy } from "@/lib/i18n";
 
 export function generateMetadata({ searchParams }: { searchParams: SeoSearchParams }): Metadata {
@@ -21,6 +22,7 @@ export default function DecodePage() {
           <p className="mt-5 max-w-2xl text-lg font-semibold leading-relaxed text-ink/70">{text.decoderDescription}</p>
         </section>
         <div className="mt-8"><CertificateDecoderClient locale="en" /></div>
+        <ToolSeoContent locale="en" tool="decode" />
       </div>
     </main>
   );

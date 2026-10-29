@@ -18,6 +18,17 @@ El usuario confirma completados los pasos de envío de `https://www.sslconf.com/
 
 Verificación reproducible: `node scripts/check-seo.mjs http://localhost:3024` contra la compilación local, o `node scripts/check-seo.mjs https://www.sslconf.com` tras desplegar. Comprueba las 24 páginas, títulos únicos, `WebSite` JSON-LD, consultas `noindex`, idiomas, sitemap, robots y 404 sin lanzar escaneos TLS.
 
+SEO de contenido, fase 2 (2026-10-29): las URL indexables EN/ES de las cuatro herramientas prioritarias incluyen contenido técnico renderizado en servidor y enlaces contextuales rastreables, sin cambiar su lógica ni desplazar el formulario fuera de la primera zona de uso:
+
+```text
+/scan                  /es/scan
+/check                 /es/check
+/decode                /es/decode
+/csr                   /es/csr
+```
+
+El componente compartido `components/ToolSeoContent.tsx` mantiene contenido distinto por herramienta: alcance del análisis TLS, composición y uso de CA bundles, lectura de campos X.509 y validación de solicitudes PKCS#10. Cada bloque enlaza únicamente a herramientas relacionadas y existentes. Se muestra solo cuando no hay parámetro `host`, por lo que las URL de resultado siguen siendo `noindex, follow` y no incluyen contenido editorial duplicado. La comprobación adicional de fase 2 valida los encabezados y enlaces EN/ES, además de esa exclusión en resultados.
+
 Proyecto local:
 
 ```text

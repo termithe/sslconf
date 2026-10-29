@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { pageMetadata, type SeoSearchParams } from "@/lib/seo";
 import { TLSChainClient } from "@/components/TLSChainClient";
 import { TLSChainForm } from "@/components/TLSChainForm";
+import { ToolSeoContent } from "@/components/ToolSeoContent";
 import { copy } from "@/lib/i18n";
 
 export function generateMetadata({ searchParams }: { searchParams: SeoSearchParams }): Metadata {
@@ -38,6 +39,7 @@ export default function CheckPage({ searchParams }: { searchParams: { host?: str
             <TLSChainClient host={host} includeRoot={includeRoot} locale="en" />
           </>
         )}
+        {!host ? <ToolSeoContent locale="en" tool="check" /> : null}
       </div>
     </main>
   );
