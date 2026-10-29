@@ -73,8 +73,11 @@ Actualizado: 2026-10-29.
   (`Improve technical SEO metadata`). Vercel Ready; producción verificada con
   title/H1/`WebSite` JSON-LD de la home, sitemap, robots, canonical, hreflang,
   noindex de resultados y títulos únicos en las 24 rutas.
-- Pendiente de publicación en esta tarea: contenido SEO fase 2, documentación y
-  verificación de producción.
+- Contenido SEO fase 2 publicado: commit `e227c16`
+  (`Add contextual SEO content for core tools`). Despliegue Vercel Ready y
+  comprobación en `https://www.sslconf.com` correcta el 2026-10-29: SEO de
+  24 rutas, sitemap, robots, redirecciones, metadatos y contenido contextual
+  visible en `/scan`, `/check`, `/decode` y `/csr`.
 
 ## Siguientes opciones
 - Publicar las primeras guías técnicas EN/ES sobre `fullchain.pem`, CA bundles,
