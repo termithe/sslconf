@@ -103,7 +103,7 @@ export const copy = {
     issuer: "Issuer"
     ,
     scanTitle: "SSL/TLS Server Test.",
-    scanDescription: "Assess an HTTPS endpoint: certificate, protocols, HSTS and CAA.",
+    scanDescription: "Test a public HTTPS server for certificate trust, TLS protocols, ciphers and security configuration.",
     scanFormLabel: "Domain or HTTPS URL",
     scanFormPlaceholder: "Enter a domain or https:// URL",
     scanSubmit: "Run analysis",

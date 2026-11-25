@@ -6,7 +6,7 @@ import { ToolSeoContent } from "@/components/ToolSeoContent";
 import { copy } from "@/lib/i18n";
 
 export function generateMetadata({ searchParams }: { searchParams: SeoSearchParams }): Metadata {
-  return pageMetadata("/scan", "SSL Checker & TLS Server Test", "Test a public HTTPS endpoint for certificate trust, TLS protocol support, ciphers, HSTS, CAA and common configuration issues.", searchParams);
+  return pageMetadata("/scan", "SSL/TLS Server Test & Certificate Checker", "Test a public HTTPS server for certificate trust, TLS versions, ciphers, HSTS and common configuration issues. Get a security grade and recommendations.", searchParams);
 }
 
 export default function ScanPage({ searchParams }: { searchParams: { host?: string } }) {

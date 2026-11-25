@@ -23,8 +23,8 @@ type ToolContent = {
 const content: Record<Locale, Record<Tool, ToolContent>> = {
   en: {
     scan: {
-      title: "What this SSL/TLS checker reviews",
-      lead: "Run the test against a public HTTPS hostname to collect configuration evidence from the endpoint that responds to the scanner. The report separates confirmed findings from checks that could not complete within the available test window.",
+      title: "What the SSL/TLS server test checks",
+      lead: "Enter a public HTTPS hostname to test its certificate and TLS configuration. SSLConf reports a security grade and recommendations based on the checks it can complete; network restrictions or timeouts can leave individual results unknown.",
       sections: [
         { icon: ShieldCheck, title: "Certificate and trust", paragraphs: ["The test checks hostname coverage, certificate validity, public-key details and the supplied certificate chain. A hostname mismatch or an untrusted chain is reported distinctly because either condition prevents normal browser trust."] },
         { icon: Network, title: "Protocols, ciphers and transport", paragraphs: ["The scanner probes available TLS versions and negotiated ciphers, then reports transport signals such as compression, renegotiation, ALPN, session resumption and key-exchange details when they are observable."] },
@@ -49,7 +49,7 @@ const content: Record<Locale, Record<Tool, ToolContent>> = {
       related: [
         { href: "/installation", label: "SSL Installation Checker", description: "Verify the certificate chain currently delivered by the public endpoint." },
         { href: "/decode", label: "SSL Certificate Decoder", description: "Inspect issuer, AIA, validity and extensions from a PEM certificate." },
-        { href: "/scan", label: "SSL Checker", description: "Review chain trust alongside TLS protocols, ciphers and HTTPS policy." }
+        { href: "/scan", label: "SSL/TLS Server Test", description: "Test certificate trust, TLS protocols, ciphers and HTTPS policy on a public server." }
       ]
     },
     decode: {
