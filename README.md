@@ -1,5 +1,7 @@
 # SSLConf
 
+SEO de `/csr/generate` (2026-11-25): metadatos más descriptivos y guía en inglés bajo el formulario sobre SAN, algoritmos y protección de la clave; enlaces al decodificador CSR, comprobador de clave y validador de instalación. No modifica generación, tratamiento de claves, rutas ni canónicas. Revertir estos cambios y redesplegar para rollback. La indexación y las posiciones no están garantizadas.
+
 SEO de `/scan` (2026-11-25): título y descripción precisan que la herramienta analiza servidores HTTPS públicos, certificados, protocolos y configuración; el contenido explica la nota y las comprobaciones inconclusas. El enlace desde el generador CA identifica el SSL/TLS Server Test. No cambia el escáner, rutas ni canónicas. Validar con `node scripts/check-seo.mjs https://www.sslconf.com` tras publicar. Rollback: revertir estos cambios de contenido y redesplegar. Las posiciones y fragmentos de Google no están garantizados.
 
 Utilidad web para inspeccionar certificados TLS, reconstruir cadenas CA mediante AIA, generar un CA bundle PEM ordenado y evaluar la configuración TLS pública de un servidor.
