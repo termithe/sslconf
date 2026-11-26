@@ -5,7 +5,7 @@ import { ToolSeoContent } from "@/components/ToolSeoContent";
 import { copy } from "@/lib/i18n";
 
 export function generateMetadata({ searchParams }: { searchParams: SeoSearchParams }): Metadata {
-  return pageMetadata("/csr", "CSR Decoder & Validator", "Decode and validate a PKCS#10 certificate signing request. Inspect its signature, subject, public key and DNS subject alternative names.", searchParams);
+  return pageMetadata("/csr", "CSR Decoder & Validator - Check Certificate Requests", "Decode a PEM or Base64-encoded DER CSR and verify its signature. Inspect the subject, public key and DNS subject alternative names.", searchParams);
 }
 
 export default function CsrPage() {

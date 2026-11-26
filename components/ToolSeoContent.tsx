@@ -68,8 +68,8 @@ const content: Record<Locale, Record<Tool, ToolContent>> = {
       ]
     },
     csr: {
-      title: "Validate a certificate signing request before sending it",
-      lead: "A CSR is a PKCS#10 request containing the subject, public key and requested extensions that a certificate authority can use when issuing a certificate. It is not itself a TLS certificate.",
+      title: "How to decode and validate a CSR",
+      lead: "Paste a PEM or Base64-encoded DER certificate signing request into the field above and submit it to inspect its contents and signature. The CSR is sent to SSLConf for processing; never paste your private key. A CSR is a request for a certificate, not an issued TLS certificate.",
       sections: [
         { icon: BadgeCheck, title: "What a CSR contains", paragraphs: ["Review the subject and public key first, then inspect DNS Subject Alternative Names. Modern public certificates rely on SAN entries for hostname coverage, including the common name when it must be covered."] },
         { icon: ShieldCheck, title: "Signature validation", paragraphs: ["The validator checks that the CSR signature matches the public key embedded in the request. A valid signature confirms the request was formed consistently; it does not guarantee that a certificate authority will approve the names or organisation details."] },

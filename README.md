@@ -1,5 +1,7 @@
 # SSLConf
 
+SEO de `/csr` (2026-11-26): metadatos, encabezado y guía en inglés aclaran la decodificación de solicitudes PKCS#10, la comprobación de firma y el envío de la CSR a la API existente; se advierte de no compartir la clave privada. Se mantienen enlaces, rutas, canónicas y lógica de validación. Rollback: revertir los cambios y redesplegar. No se garantizan posiciones en buscadores.
+
 SEO de `/decode` (2026-11-25): metadatos más descriptivos y guía inglesa con instrucciones, límites de la decodificación y aviso de no enviar claves privadas. El certificado público se envía a la API existente; no se ha modificado su procesamiento, rutas ni canónicas. Rollback: revertir estos cambios y redesplegar. No se garantizan posiciones ni indexación.
 
 SEO de `/csr/generate` (2026-11-25): metadatos más descriptivos y guía en inglés bajo el formulario sobre SAN, algoritmos y protección de la clave; enlaces al decodificador CSR, comprobador de clave y validador de instalación. No modifica generación, tratamiento de claves, rutas ni canónicas. Revertir estos cambios y redesplegar para rollback. La indexación y las posiciones no están garantizadas.
