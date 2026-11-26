@@ -5,7 +5,7 @@ import { ToolSeoContent } from "@/components/ToolSeoContent";
 import { copy } from "@/lib/i18n";
 
 export function generateMetadata({ searchParams }: { searchParams: SeoSearchParams }): Metadata {
-  return pageMetadata("/decode", "SSL Certificate Decoder", "Decode a PEM certificate or Base64-encoded DER. Inspect X.509 subject, issuer, validity, fingerprints, public key and extensions.", searchParams);
+  return pageMetadata("/decode", "SSL Certificate Decoder - Inspect X.509 Certificates", "Decode an SSL certificate in PEM or Base64-encoded DER format. Inspect the issuer, validity dates, DNS names, public key and X.509 extensions.", searchParams);
 }
 
 export default function DecodePage() {

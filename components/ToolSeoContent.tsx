@@ -53,10 +53,10 @@ const content: Record<Locale, Record<Tool, ToolContent>> = {
       ]
     },
     decode: {
-      title: "Inspect an X.509 certificate before deployment",
-      lead: "Paste one certificate in PEM or Base64-encoded DER form to read the fields encoded in it. Decoding describes the certificate; it does not prove that a server is currently presenting that certificate or that it is trusted by every client.",
+      title: "How to decode an SSL certificate",
+      lead: "Paste one public X.509 certificate in PEM or Base64-encoded DER form into the field above and select Decode certificate. The certificate is sent to SSLConf for decoding; do not submit a private key. Decoding does not confirm what a live server presents or whether every client trusts the certificate.",
       sections: [
-        { icon: FileSearch, title: "Identity, issuer and validity", paragraphs: ["Check the subject, issuer, serial number, validity dates and SHA-256 fingerprint. For HTTPS, the DNS names in Subject Alternative Name are the names clients use to validate the hostname."] },
+        { icon: FileSearch, title: "Identity, issuer and validity", paragraphs: ["Check the subject, issuer, serial number, validity dates and SHA-256 fingerprint. For HTTPS, compare the hostname with the DNS names in Subject Alternative Name; an expired certificate or a missing matching name can cause connection warnings."] },
         { icon: KeyRound, title: "Public key and extensions", paragraphs: ["The decoder exposes the public-key algorithm and size, signature algorithm, key usage and common X.509 extensions. These fields help identify whether the certificate is intended for TLS server use and who issued it."] },
         { icon: BookOpenCheck, title: "PEM and DER input", paragraphs: ["PEM is the text form marked with BEGIN and END certificate lines. DER is binary; this tool accepts its Base64 representation so that it can be pasted safely into the browser."] }
       ],
